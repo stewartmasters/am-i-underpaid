@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BLOG_POSTS } from "@/data/blog-posts";
+import { getAllBlogPosts } from "@/lib/blogPosts";
 
 export const metadata: Metadata = {
   title: "Salary & Pay Blog",
@@ -8,6 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
+  const posts = getAllBlogPosts();
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       <div className="mb-10">
@@ -16,7 +18,7 @@ export default function BlogPage() {
       </div>
 
       <div className="space-y-6">
-        {BLOG_POSTS.map((post) => (
+        {posts.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`} className="group block p-6 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-sm transition-all">
             <div className="flex items-center gap-3 text-xs text-gray-400 mb-3">
               <time dateTime={post.date}>{new Date(post.date).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })}</time>

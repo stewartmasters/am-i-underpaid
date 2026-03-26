@@ -2,12 +2,13 @@ import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 import { generateSeoPages } from "@/lib/seo-pages";
-import { BLOG_POSTS } from "@/data/blog-posts";
+import { getAllBlogPosts } from "@/lib/blogPosts";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const seoPages = generateSeoPages();
+  const blogPosts = getAllBlogPosts();
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -23,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: p.type === "role-location" ? 0.9 : 0.7,
   }));
 
-  const blogRoutes: MetadataRoute.Sitemap = BLOG_POSTS.map((p) => ({
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((p) => ({
     url: `${BASE_URL}/blog/${p.slug}`,
     lastModified: new Date(p.date),
     changeFrequency: "monthly" as const,

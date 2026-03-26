@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BLOG_POSTS, getBlogPost } from "@/data/blog-posts";
+import { getAllBlogPosts, getBlogPostBySlug, getAllBlogSlugs } from "@/lib/blogPosts";
 
 export const revalidate = false;
 export const dynamic = "force-static";
@@ -12,12 +12,12 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
+  return getAllBlogSlugs();
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = getBlogPostBySlug(slug);
   if (!post) return {};
   return {
     title: post.title,
@@ -30,10 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = getBlogPostBySlug(slug);
   if (!post) notFound();
 
-  const otherPosts = BLOG_POSTS.filter((p) => p.slug !== slug).slice(0, 3);
+  const allPosts = getAllBlogPosts();
+  const otherPosts = allPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
