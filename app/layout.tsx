@@ -37,14 +37,12 @@ export const metadata: Metadata = {
     title: "Am I Underpaid? — Free Salary Checker",
     description:
       "Find out instantly if you're underpaid. Enter your role, location, and salary. Get your market rate and percentile in seconds.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Am I Underpaid? — Free Salary Checker" }],
     url: BASE_URL,
   },
   twitter: {
     card: "summary_large_image",
     title: "Am I Underpaid? — Free Salary Checker",
     description: "Find out instantly if you're underpaid. Takes 30 seconds.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
