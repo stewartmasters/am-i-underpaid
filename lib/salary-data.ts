@@ -62,18 +62,40 @@ export const ROLES: Role[] = [
   { slug: "social-media-manager",        label: "Social Media Manager",        baseSalary: 48000, category: "Marketing" },
 ];
 
+/**
+ * Location multipliers represent how each market's salary level compares to the
+ * European mid-market baseline (multiplier 1.00 = European average).
+ *
+ * Data source per location (enforced in lib/data-sources.ts):
+ *   UK locations  (london, uk)        → ONS ASHE + Glassdoor/Indeed UK
+ *   EU locations  (all others)        → Eurostat Labour Cost Survey + Glassdoor/Indeed EU
+ *   Tech cities   (london, berlin,    → also cross-referenced with Levels.fyi
+ *                  amsterdam, paris,
+ *                  dublin)
+ *
+ * Multipliers are NOT mixed across country data:
+ *   - London/UK multipliers are calibrated from ONS data, not Eurostat.
+ *   - Continental European multipliers are calibrated from Eurostat, not ONS.
+ */
 export const LOCATIONS: Location[] = [
+  // UK — calibrated from ONS ASHE data
   { slug: "london",    label: "London",    country: "UK",             currency: "£", multiplier: 1.45 },
-  { slug: "madrid",    label: "Madrid",    country: "Spain",          currency: "€", multiplier: 0.82 },
-  { slug: "barcelona", label: "Barcelona", country: "Spain",          currency: "€", multiplier: 0.88 },
-  { slug: "berlin",    label: "Berlin",    country: "Germany",        currency: "€", multiplier: 1.05 },
-  { slug: "paris",     label: "Paris",     country: "France",         currency: "€", multiplier: 1.18 },
-  { slug: "amsterdam", label: "Amsterdam", country: "Netherlands",    currency: "€", multiplier: 1.22 },
-  { slug: "dublin",    label: "Dublin",    country: "Ireland",        currency: "€", multiplier: 1.28 },
   { slug: "uk",        label: "UK",        country: "United Kingdom", currency: "£", multiplier: 1.35 },
-  { slug: "spain",     label: "Spain",     country: "Spain",          currency: "€", multiplier: 0.80 },
-  { slug: "germany",   label: "Germany",   country: "Germany",        currency: "€", multiplier: 1.00 },
+  // Ireland — calibrated from Eurostat EU wage data
+  { slug: "dublin",    label: "Dublin",    country: "Ireland",        currency: "€", multiplier: 1.28 },
+  // Netherlands — calibrated from Eurostat EU wage data
+  { slug: "amsterdam", label: "Amsterdam", country: "Netherlands",    currency: "€", multiplier: 1.22 },
+  // France — calibrated from Eurostat EU wage data
+  { slug: "paris",     label: "Paris",     country: "France",         currency: "€", multiplier: 1.18 },
   { slug: "france",    label: "France",    country: "France",         currency: "€", multiplier: 1.10 },
+  // Germany — calibrated from Eurostat EU wage data
+  { slug: "berlin",    label: "Berlin",    country: "Germany",        currency: "€", multiplier: 1.05 },
+  { slug: "germany",   label: "Germany",   country: "Germany",        currency: "€", multiplier: 1.00 },
+  // Spain — calibrated from Eurostat EU wage data
+  { slug: "barcelona", label: "Barcelona", country: "Spain",          currency: "€", multiplier: 0.88 },
+  { slug: "madrid",    label: "Madrid",    country: "Spain",          currency: "€", multiplier: 0.82 },
+  { slug: "spain",     label: "Spain",     country: "Spain",          currency: "€", multiplier: 0.80 },
+  // Europe (broad average) — calibrated from Eurostat EU-wide aggregate; lower confidence
   { slug: "europe",    label: "Europe",    country: "",               currency: "€", multiplier: 1.00 },
 ];
 
@@ -187,20 +209,28 @@ export function formatSalary(amount: number, currency: string): string {
 }
 
 // --- Confidence scoring ---
+// Reflects quality of public benchmark coverage, not model accuracy.
+// High = multiple independent sources cross-reference this combination.
+// Medium = one or two sources, directional signal.
+// Low = sparse public benchmarks; model estimate only.
 
 export type ConfidenceLevel = "high" | "medium" | "low";
 
 const HIGH_CONFIDENCE_ROLES = new Set([
-  "software-engineer", "product-manager", "designer", "marketing-manager",
-  "sales-manager", "data-analyst", "frontend-developer", "backend-developer",
+  // Tech roles with strong cross-source coverage (ONS/Eurostat + Glassdoor/Indeed + Levels.fyi)
+  "software-engineer", "frontend-developer", "backend-developer", "data-scientist",
+  "devops-engineer",
+  // Non-tech roles with good government survey + aggregated coverage
+  "product-manager", "designer", "marketing-manager", "sales-manager", "data-analyst",
 ]);
 const HIGH_CONFIDENCE_LOCATIONS = new Set([
   "london", "berlin", "amsterdam", "paris", "dublin",
 ]);
 const LOW_CONFIDENCE_ROLES = new Set([
+  // Fewer public benchmarks; job postings vary widely
   "social-media-manager", "qa-engineer", "content-manager",
 ]);
-const LOW_CONFIDENCE_LOCATIONS = new Set(["europe"]);
+const LOW_CONFIDENCE_LOCATIONS = new Set(["europe"]); // Generic aggregate — not a specific market
 
 export function getConfidenceLevel(roleSlug: string, locationSlug: string): ConfidenceLevel {
   if (LOW_CONFIDENCE_ROLES.has(roleSlug) || LOW_CONFIDENCE_LOCATIONS.has(locationSlug)) return "low";

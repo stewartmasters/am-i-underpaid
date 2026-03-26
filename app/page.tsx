@@ -3,6 +3,7 @@ import SalaryTool from "@/components/SalaryTool";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import TrustStrip from "@/components/TrustStrip";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Am I Underpaid? — Free Salary Checker",
@@ -51,7 +52,7 @@ export default function Home() {
               <span className="text-orange-500">in 30 seconds</span>
             </h1>
             <p className="text-lg text-gray-500 leading-relaxed">
-              Compare your salary against real market data across 12 European cities. Get your verdict instantly — no signup, no email.
+              Compare your salary against real market data across 12 locations in Europe. Get your verdict instantly — no signup, no email.
             </p>
 
             <div className="grid grid-cols-3 gap-4 pt-2">
@@ -67,13 +68,22 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="flex items-center gap-2 pt-1">
-              <div className="flex -space-x-1">
-                {["E", "O", "G", "I", "L"].map((l, i) => (
-                  <div key={i} className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-bold text-gray-600">{l}</div>
+            <div className="space-y-1.5 pt-1">
+              <p className="text-xs text-gray-400 font-medium">Benchmarked against public data from:</p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                {[
+                  { src: "/logos/eurostat.png",  alt: "Eurostat",   width: 72,  height: 20 },
+                  { src: "/logos/ons.png",        alt: "ONS",        width: 48,  height: 20 },
+                  { src: "/logos/glassdoor.svg",  alt: "Glassdoor",  width: 80,  height: 20 },
+                  { src: "/logos/indeed.png",     alt: "Indeed",     width: 56,  height: 20 },
+                  { src: "/logos/levelsfyi.svg",  alt: "Levels.fyi", width: 72,  height: 20 },
+                ].map(({ src, alt, width, height }) => (
+                  <Image key={alt} src={src} alt={alt} width={width} height={height}
+                    className="opacity-40 grayscale"
+                    style={{ objectFit: "contain", height: "18px", width: "auto" }}
+                  />
                 ))}
               </div>
-              <p className="text-xs text-gray-400">Data from Eurostat · ONS · Glassdoor · Indeed · Levels.fyi</p>
             </div>
 
             <div className="space-y-2 pt-2">

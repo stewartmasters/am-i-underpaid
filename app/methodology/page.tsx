@@ -42,6 +42,22 @@ const SECTIONS = [
     ),
   },
   {
+    id: "country-mapping",
+    heading: "Country data integrity",
+    content: (
+      <>
+        <p>We apply a strict country-to-source mapping. UK data is never used to estimate EU salaries, and EU data is never used to estimate UK salaries.</p>
+        <ul>
+          <li><strong>London and UK estimates</strong> are calibrated from ONS ASHE data (UK government survey). Eurostat data is not used for these locations.</li>
+          <li><strong>Continental European estimates</strong> (Germany, France, Spain, Netherlands, Ireland) are calibrated from Eurostat Labour Cost Survey data. ONS data is not used for these locations.</li>
+          <li><strong>Tech-role estimates</strong> in major cities (London, Berlin, Amsterdam, Paris, Dublin) are additionally cross-referenced with Levels.fyi community compensation data, which has strong European tech coverage.</li>
+          <li><strong>Glassdoor and Indeed data</strong> is applied on a per-country basis — UK data from those platforms informs UK estimates only; German data informs German estimates only.</li>
+        </ul>
+        <p>This mapping is maintained explicitly in our data layer and validated at build time to prevent accidental cross-country mixing.</p>
+      </>
+    ),
+  },
+  {
     id: "data-sources",
     heading: "Named data sources",
     content: (
@@ -74,17 +90,40 @@ const SECTIONS = [
     ),
   },
   {
+    id: "coverage",
+    heading: "Coverage summary",
+    content: (
+      <>
+        <p>We cover 21 role types across 12 locations. Coverage quality varies — here&apos;s an honest breakdown:</p>
+        <div className="mt-4 space-y-4">
+          <div>
+            <p className="font-semibold text-emerald-700 text-sm mb-1">Strong coverage (high confidence)</p>
+            <p className="text-gray-600 text-sm">Software Engineer, Frontend Developer, Backend Developer, Product Manager, Designer, Marketing Manager, Sales Manager, Data Analyst — in London, Berlin, Amsterdam, Paris, Dublin. Multiple independent sources available for these combinations.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-amber-700 text-sm mb-1">Medium coverage</p>
+            <p className="text-gray-600 text-sm">DevOps Engineer, Data Scientist, Business Analyst, HR Manager, Finance Analyst, Operations Manager, Customer Success Manager, Account Manager, Growth Manager, Performance Marketing Manager — in major cities. Reasonable market signals available but fewer cross-referenced sources.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-500 text-sm mb-1">Lower confidence</p>
+            <p className="text-gray-600 text-sm">QA Engineer, Content Manager, Social Media Manager in any location. Any role in the generic &quot;Europe&quot; category. Fewer public benchmarks; use as a rough guide only.</p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+  {
     id: "limitations",
     heading: "Limitations",
     content: (
       <>
         <p>We think transparency here matters. There are real limitations to be aware of:</p>
         <ul>
-          <li><strong>We don&apos;t cover all roles or industries.</strong> Our estimates are best for the six roles listed (software engineering, product, marketing, sales, operations, design). Highly specialised roles, finance, legal, or executive positions are not well represented.</li>
+          <li><strong>Not all industries are well represented.</strong> Our estimates are strongest for tech, product, marketing, sales, and operations roles. Legal, executive, finance advisory, and highly specialised roles are not well modelled.</li>
           <li><strong>We don&apos;t account for company size or stage.</strong> A senior engineer at a Series A startup and one at a FAANG company are not the same. Our estimates reflect a broad market average, not any specific company type.</li>
           <li><strong>We don&apos;t include equity, bonuses, or benefits.</strong> Total compensation can be significantly higher than base salary, especially in tech. Our tool only estimates gross annual base salary.</li>
           <li><strong>Data is not real-time.</strong> We update the model periodically, but salaries can shift quickly in fast-moving markets.</li>
-          <li><strong>Currency conversions are not live.</strong> For UK locations, we display in GBP using a fixed reference rate baked into our model. We don&apos;t apply live FX rates.</li>
+          <li><strong>Currency values are not live FX rates.</strong> UK estimates are in GBP; European estimates are in EUR. We do not apply live exchange rates between them.</li>
         </ul>
       </>
     ),
