@@ -37,6 +37,21 @@ const ROLE_CONTEXT: Record<string, string> = {
   "sales-manager":      "Sales manager compensation often includes a significant variable component. The base salary figures here reflect gross fixed pay, not on-target earnings.",
   "operations-manager": "Operations is a broad function, and salaries reflect that range. Tech and logistics companies tend to pay more than traditional industries for comparable seniority.",
   "designer":           "Design salaries have grown meaningfully as companies invest in product quality. Senior designers at product-led companies can earn close to engineering equivalents.",
+  "data-analyst":       "Data analysts are increasingly in demand as companies invest in data infrastructure. Salaries have risen sharply in recent years, particularly in tech and finance.",
+  "data-scientist":     "Data scientists command strong premiums across Europe, particularly in finance, tech, and healthcare. Senior roles often command equity and significant bonuses.",
+  "devops-engineer":    "DevOps and platform engineers are among the highest earners in tech, with consistent demand across markets. Remote work has further increased competition for this talent.",
+  "frontend-developer": "Frontend developers have seen strong salary growth driven by demand for polished user experiences. React expertise commands a premium in most markets.",
+  "backend-developer":  "Backend developers are core to most product teams, with salaries broadly similar to frontend roles. Experience with distributed systems or cloud infrastructure increases earning potential.",
+  "qa-engineer":        "QA engineering salaries vary more than other tech roles, ranging from junior automation roles to senior quality leads with significant influence and pay.",
+  "account-manager":    "Account manager salaries vary significantly based on deal size and industry. Enterprise-focused roles in SaaS typically pay the most in this category.",
+  "customer-success-manager": "Customer success roles have become more strategic and better paid as companies recognise their impact on retention and expansion revenue.",
+  "hr-manager":         "HR manager salaries reflect a role in transition — from administrative to strategic. People operations roles at tech companies increasingly pay closer to product and engineering.",
+  "finance-analyst":    "Finance analysts earn consistent salaries across most markets. Investment banking and fintech pay significantly above the averages shown here.",
+  "business-analyst":   "Business analysts sit at the intersection of strategy and operations, with salaries that vary widely depending on whether the role is closer to product, finance, or consulting.",
+  "growth-manager":     "Growth roles are relatively new and salaries reflect that — some companies pay engineering-level compensation, others treat it as a marketing function. Highly variable.",
+  "content-manager":    "Content manager salaries are lower than many digital roles, but senior content strategists in tech companies earn significantly more than traditional editorial roles.",
+  "performance-marketing-manager": "Performance marketing managers with strong paid media expertise are increasingly well-paid, particularly at companies with significant ad budgets.",
+  "social-media-manager": "Social media manager salaries are generally lower than other digital marketing roles, though senior strategists at consumer brands can earn considerably more.",
 };
 
 export function getLocationContext(locationSlug?: string): string {
@@ -47,6 +62,7 @@ export function getRoleContext(roleSlug?: string): string {
   return ROLE_CONTEXT[roleSlug ?? "software-engineer"] ?? ROLE_CONTEXT["software-engineer"];
 }
 
+// Null the cache whenever ROLES changes (module reload invalidates automatically)
 let _seoPageCache: SeoPage[] | null = null;
 
 export function generateSeoPages(): SeoPage[] {
@@ -95,6 +111,36 @@ export function generateSeoPages(): SeoPage[] {
     });
   }
 
+  // Seniority variation pages (high-priority role/location combos only)
+  const SENIORITY_COMBOS = [
+    { role: "software-engineer", location: "london" },
+    { role: "software-engineer", location: "berlin" },
+    { role: "product-manager",   location: "london" },
+    { role: "data-analyst",      location: "london" },
+    { role: "frontend-developer", location: "london" },
+  ];
+
+  for (const { role, location } of SENIORITY_COMBOS) {
+    const r = ROLES.find(x => x.slug === role);
+    const l = LOCATIONS.find(x => x.slug === location);
+    if (!r || !l) continue;
+    for (const level of ["junior", "mid", "senior"] as const) {
+      const levelLabel = level === "mid" ? "Mid-Level" : level.charAt(0).toUpperCase() + level.slice(1);
+      pages.push({
+        slug: `${role}-${location}-${level}`,
+        type: "role-location",
+        roleSlug: r.slug as RoleSlug,
+        locationSlug: l.slug as LocationSlug,
+        roleLabel: r.label,
+        locationLabel: l.label,
+        country: l.country,
+        h1: `${levelLabel} ${r.label} Salary in ${l.label} (${YEAR})`,
+        title: `${levelLabel} ${r.label} Salary in ${l.label} ${YEAR} — Am I Underpaid?`,
+        description: `What does a ${levelLabel.toLowerCase()} ${r.label} earn in ${l.label}? See the ${levelLabel.toLowerCase()} salary range for ${YEAR}. Check your percentile and find out if you're underpaid.`,
+      });
+    }
+  }
+
   _seoPageCache = pages;
   return pages;
 }
@@ -117,4 +163,21 @@ export function getRelatedPages(page: SeoPage, limit = 5): SeoPage[] {
   }
 
   return related.slice(0, limit);
+}
+
+// Content variation helpers — deterministic, based on slug hash
+function slugVariantIndex(slug: string, variants: number): number {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash * 31 + slug.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash) % variants;
+}
+
+export function getIntroVariant(slug: string): 0 | 1 | 2 {
+  return slugVariantIndex(slug, 3) as 0 | 1 | 2;
+}
+
+export function getFaqVariant(slug: string): 0 | 1 | 2 {
+  return slugVariantIndex(slug + "faq", 3) as 0 | 1 | 2;
 }

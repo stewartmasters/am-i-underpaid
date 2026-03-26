@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ROLES, LOCATIONS, calculateSalary, type SalaryResult } from "@/lib/salary-data";
+import { ROLES, LOCATIONS, calculateSalary, getConfidenceLevel, type SalaryResult, type ConfidenceLevel } from "@/lib/salary-data";
 import SalaryResultComponent from "./SalaryResult";
 
 interface Props {
@@ -15,6 +15,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
   const [years, setYears] = useState(5);
   const [currentSalary, setCurrentSalary] = useState("");
   const [result, setResult] = useState<SalaryResult | null>(null);
+  const [meta, setMeta] = useState<{ roleLabel?: string; locationLabel?: string; confidence?: ConfidenceLevel }>({});
   const [error, setError] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,6 +26,9 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
     const salary = parseInt(currentSalary.replace(/[^0-9]/g, ""), 10);
     if (!salary || salary < 10000 || salary > 2000000) return setError("Please enter a valid annual salary.");
     const res = calculateSalary(role, location, years, salary);
+    const rl = ROLES.find(r => r.slug === role)?.label;
+    const ll = LOCATIONS.find(l => l.slug === location)?.label;
+    setMeta({ roleLabel: rl, locationLabel: ll, confidence: getConfidenceLevel(role, location) });
     setResult(res);
   };
 
@@ -32,10 +36,20 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
     setResult(null);
     setCurrentSalary("");
     setError("");
+    setMeta({});
   };
 
   if (result) {
-    return <SalaryResultComponent result={result} yearsOfExp={years} onReset={handleReset} />;
+    return (
+      <SalaryResultComponent
+        result={result}
+        yearsOfExp={years}
+        onReset={handleReset}
+        roleLabel={meta.roleLabel}
+        locationLabel={meta.locationLabel}
+        confidenceLevel={meta.confidence}
+      />
+    );
   }
 
   return (
@@ -70,13 +84,13 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
       <div className="space-y-1.5">
         <label className="block text-sm font-semibold text-gray-700">Current salary (annual, gross)</label>
         <input type="text" inputMode="numeric" placeholder="e.g. 65000" value={currentSalary} onChange={(e) => setCurrentSalary(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
-        <p className="text-xs text-gray-400">Enter your gross annual salary in your local currency</p>
+        <p className="text-xs text-gray-400">Gross annual base salary, before bonus or equity</p>
       </div>
 
       {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
 
       <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors text-base shadow-sm shadow-orange-200">
-        Find out now →
+        Am I underpaid? &#8594;
       </button>
 
       <p className="text-xs text-gray-400 text-center">No signup required. Results are instant and private.</p>

@@ -5,6 +5,10 @@ export interface BlogPost {
   date: string;
   readTime: string;
   content: string;
+  primaryKeyword?: string;
+  cluster?: string;
+  relatedPages?: string[];
+  priority?: number;
 }
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -14,6 +18,10 @@ export const BLOG_POSTS: BlogPost[] = [
     description: "Most people suspect they're underpaid but never verify it. Here's how to find out — and what to do about it.",
     date: "2026-03-01",
     readTime: "5 min read",
+    primaryKeyword: "how to know if you are underpaid",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/salary-negotiation-tips", "/blog/how-to-increase-your-salary"],
+    priority: 10,
     content: `
       <p>Most people have a gut feeling they're underpaid. But gut feelings don't get you a raise. Data does.</p>
       <h2>Start with market data</h2>
@@ -39,6 +47,10 @@ export const BLOG_POSTS: BlogPost[] = [
     description: "Negotiating your salary is the highest-ROI action you can take. Here are 7 practical tips to get more.",
     date: "2026-03-05",
     readTime: "6 min read",
+    primaryKeyword: "salary negotiation tips",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/how-to-know-if-you-are-underpaid", "/blog/how-to-ask-for-a-raise"],
+    priority: 9,
     content: `
       <p>Negotiating your salary feels uncomfortable. But so does being €10,000 below market for years. Here's how to do it right.</p>
       <h2>1. Know your number before the conversation</h2>
@@ -64,6 +76,10 @@ export const BLOG_POSTS: BlogPost[] = [
     description: "A breakdown of average salaries across major European cities for tech, product, marketing, and more.",
     date: "2026-03-10",
     readTime: "7 min read",
+    primaryKeyword: "average salaries europe 2026",
+    cluster: "european-salaries",
+    relatedPages: ["/salary/europe", "/salary/london", "/salary/berlin", "/salary/amsterdam"],
+    priority: 8,
     content: `
       <p>Salaries vary wildly across Europe. A software engineer in London earns almost double what their counterpart in Madrid takes home.</p>
       <h2>Software Engineers</h2>
@@ -83,6 +99,10 @@ export const BLOG_POSTS: BlogPost[] = [
     description: "Switching jobs is the fastest way to a raise. But it's not the only one. Here's how to increase your salary where you are.",
     date: "2026-03-15",
     readTime: "5 min read",
+    primaryKeyword: "how to increase your salary",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/salary-negotiation-tips", "/blog/how-to-ask-for-a-raise"],
+    priority: 8,
     content: `
       <p>The conventional wisdom is: want more money? Change jobs. And it's true — job switchers often see 15–30% salary jumps. But it's not always the right move.</p>
       <h2>Time your ask right</h2>
@@ -104,6 +124,10 @@ export const BLOG_POSTS: BlogPost[] = [
     description: "Remote work changes the rules of salary negotiation. Here's how to navigate location-based pay and global pay scales.",
     date: "2026-03-20",
     readTime: "5 min read",
+    primaryKeyword: "remote work salary negotiation",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/salary-negotiation-tips"],
+    priority: 7,
     content: `
       <p>Remote work opened up global job markets. But it also introduced a new dilemma: should your salary be based on where the company is, or where you are?</p>
       <h2>The location-adjusted pay debate</h2>
@@ -117,6 +141,130 @@ export const BLOG_POSTS: BlogPost[] = [
       <h2>Factor in tax and take-home</h2>
       <p>Gross salary is only part of the picture. Tax rates, social security contributions, and deductions vary significantly across Europe.</p>
       <p><a href="/">Check your market rate</a> and come to your next negotiation with data.</p>
+    `,
+  },
+  {
+    slug: "signs-you-are-underpaid",
+    title: "5 Signs You're Underpaid (And What To Do About It)",
+    description: "From stalled salary reviews to below-market offers from recruiters — here are the clearest signals that you're being paid less than you're worth.",
+    date: "2026-03-25",
+    readTime: "5 min read",
+    primaryKeyword: "signs you are underpaid",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/how-to-know-if-you-are-underpaid", "/blog/salary-negotiation-tips"],
+    priority: 9,
+    content: `
+      <p>Most people who are underpaid don't know it — not because the evidence isn't there, but because they've never looked for it. Here are five concrete signals worth paying attention to.</p>
+
+      <h2>1. You haven't had a real raise in over two years</h2>
+      <p>A cost-of-living adjustment that barely keeps pace with inflation is not a raise. If your salary has stayed roughly flat for two or more years while you've taken on more responsibility, improved at your job, or delivered results — the market has almost certainly moved past you.</p>
+      <p>Companies rarely volunteer pay increases. They wait to be asked, or they rely on inertia. If no one has raised your compensation proactively in two years, that's a signal, not an oversight.</p>
+
+      <h2>2. Recruiters are offering you significantly more</h2>
+      <p>Recruiters spend their days placing people in roles. When they reach out with a role that pays 20–30% more than your current salary, that's not a fluke — it's market intelligence. Recruiters anchor offers to what the market will accept.</p>
+      <p>If three separate inbound approaches are all pitching salaries well above what you earn, you have external validation that your current pay is below market. Keep notes of these conversations. They're useful evidence when you negotiate internally.</p>
+
+      <h2>3. New hires in similar roles are earning more than you</h2>
+      <p>This one is uncomfortable but common. Companies often pay market rate to attract new talent while existing employees sit on salaries set years earlier. The result: a new hire with less experience than you earns the same — or more.</p>
+      <p>If you've heard secondhand (or confirmed directly) that newer colleagues are earning more, this is a clear compression signal. It's not a personal failing — it's a structural problem with how most companies manage compensation. But it's still your problem to solve.</p>
+
+      <h2>4. You're below the 40th percentile for your role</h2>
+      <p>Market data is the most direct signal. Tools like our <a href="/">salary checker</a> let you see where your current salary sits within the range for your role, location, and experience level.</p>
+      <p>If you're at the 25th or 30th percentile, that means roughly 70–75% of people with comparable roles earn more than you. That's not noise — it's a pattern. Anything below the 40th percentile is worth taking seriously as a flag for negotiation.</p>
+
+      <h2>5. You're consistently the most experienced person earning the least</h2>
+      <p>Look at the people around you. If you've been in your field longer, delivered more, and take on greater complexity — but your salary doesn't reflect that relative seniority — something is off.</p>
+      <p>Sometimes this is about title (you're doing senior work at a mid-level rate). Sometimes it's about company type (you're at a company that doesn't pay competitively). Either way, it's worth quantifying rather than just feeling.</p>
+
+      <h2>What to do about it</h2>
+      <p>The first step is to get data. Check your market rate with our <a href="/">free salary tool</a> — it takes 30 seconds and gives you a percentile estimate based on your role, location, and experience. That number is your starting point for any negotiation.</p>
+      <p>Once you have the data, the conversation becomes easier. You're not asking for more because you want it — you're correcting a gap between your pay and the market. That's a different, and much stronger, position.</p>
+    `,
+  },
+  {
+    slug: "how-to-ask-for-a-raise",
+    title: "How to Ask for a Raise: A Practical Script",
+    description: "Most people never ask. Of those who do, most ask wrong. Here's a concrete approach that works.",
+    date: "2026-03-28",
+    readTime: "6 min read",
+    primaryKeyword: "how to ask for a raise",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/salary-negotiation-tips", "/blog/how-to-know-if-you-are-underpaid"],
+    priority: 9,
+    content: `
+      <p>Most people never ask for a raise. Of those who do, the majority ask at the wrong time, in the wrong way, and without the right preparation. Here's what actually works.</p>
+
+      <h2>Before the conversation: build your case</h2>
+      <p>Don't walk in with a feeling. Walk in with evidence. Before you say anything to your manager, you need three things:</p>
+      <ul>
+        <li><strong>Your market rate.</strong> Use our <a href="/">salary checker</a> to see where your current salary sits relative to the market for your role and location. If you're below the median, that's your anchor.</li>
+        <li><strong>Your contributions.</strong> Write down your three to five biggest wins from the past 12 months. Quantify them where possible — revenue influenced, costs reduced, projects delivered, team impact.</li>
+        <li><strong>A specific number.</strong> Pick a number, not a range. "I'm looking for £72,000" is stronger than "something in the £68–75k range." A range signals that you'll take the bottom.</li>
+      </ul>
+
+      <h2>Timing matters</h2>
+      <p>The best time to ask is right after a visible win, at the start of a performance cycle (not mid-cycle), or when you have external validation — a competing offer, a recruiter conversation, or market data showing you're below market.</p>
+      <p>The worst time: when the company has just had a difficult quarter, when your manager is under pressure, or when you've had a recent underperformance. Timing isn't everything, but it's more than most people think.</p>
+
+      <h2>The conversation itself: a practical script</h2>
+      <p>Request a specific meeting — don't ambush your manager in a 1:1. Something like: "I'd like to set up some time to talk about my compensation. Does [day] work?"</p>
+      <p>In the meeting, open directly:</p>
+      <blockquote>
+        <p>"I want to talk about my salary. I've been here [X time], I've taken on [specific responsibilities], and looking at the market data for my role in [city], I'm currently below the median. I'd like to discuss moving my base to [specific number]."</p>
+      </blockquote>
+      <p>Then stop. Don't over-explain, apologise, or immediately offer alternatives. State your case and let the silence sit.</p>
+
+      <h2>What to do if they say no</h2>
+      <p>A "no" is rarely final. Ask what would need to change for the answer to be yes — and get that in writing. "What would it take to get to £72k, and over what timeframe?" turns a rejection into a roadmap.</p>
+      <p>If the answer is vague, set a follow-up date: "Can we revisit this in three months?" If there's still no movement after that, you have your answer — and your job search has a clear rationale.</p>
+
+      <h2>One thing most people get wrong</h2>
+      <p>They ask for a raise before they know what they're worth. If you don't know your market rate, you can't negotiate effectively. Start there.</p>
+      <p><a href="/">Check your salary in 30 seconds</a> — find out your percentile and see if there's a gap worth closing.</p>
+    `,
+  },
+  {
+    slug: "software-engineer-salary-europe-2026",
+    title: "Software Engineer Salary in Europe 2026",
+    description: "A city-by-city breakdown of software engineer pay across London, Berlin, Amsterdam, Paris, and Dublin.",
+    date: "2026-04-01",
+    readTime: "7 min read",
+    primaryKeyword: "software engineer salary europe",
+    cluster: "software-engineer-salary",
+    relatedPages: ["/salary/software-engineer", "/salary/software-engineer-london", "/salary/software-engineer-berlin", "/salary/software-engineer-amsterdam"],
+    priority: 10,
+    content: `
+      <p>Software engineering remains one of the most consistently well-compensated professions in Europe. But the variation between cities is enormous — and understanding it matters whether you're negotiating, relocating, or benchmarking.</p>
+      <p>These are gross annual base salary estimates for mid-level software engineers (4–6 years of experience) in 2026, based on public benchmarks and structured modelling.</p>
+
+      <h2>London</h2>
+      <p>London is consistently the highest-paying market for software engineers in Europe. Mid-level engineers typically earn between £80,000 and £110,000, with a market median around £95,000. Senior engineers regularly exceed £120,000 in base salary alone, and total compensation at growth-stage companies often reaches considerably higher.</p>
+      <p>The concentration of US-headquartered tech companies, financial institutions, and well-funded scale-ups drives salaries well above the European average. The trade-off is cost of living — London is significantly more expensive than most other cities on this list.</p>
+      <p><a href="/salary/software-engineer-london">See the full Software Engineer salary guide for London</a></p>
+
+      <h2>Amsterdam</h2>
+      <p>Amsterdam has emerged as one of the strongest markets in continental Europe for software engineers. Mid-level salaries typically fall in the €75,000–€100,000 range. The city hosts the EMEA offices of major US tech companies and a thriving startup ecosystem, particularly in fintech and B2B software.</p>
+      <p>The Netherlands has a 30% tax ruling that reduces income tax for qualifying international hires — a significant benefit that makes Amsterdam particularly attractive for relocating engineers.</p>
+      <p><a href="/salary/software-engineer-amsterdam">See the full Software Engineer salary guide for Amsterdam</a></p>
+
+      <h2>Dublin</h2>
+      <p>Dublin benefits from its position as the European headquarters of Google, Meta, LinkedIn, and many other major tech companies. Mid-level software engineers earn €72,000–€98,000. Senior roles in the larger tech companies can go considerably higher, and total compensation packages often include equity.</p>
+      <p>Ireland's relatively low corporate tax rate continues to attract international tech investment, which supports salary competition in the engineering market.</p>
+      <p><a href="/salary/software-engineer-dublin">See the full Software Engineer salary guide for Dublin</a></p>
+
+      <h2>Berlin</h2>
+      <p>Berlin is Europe's startup capital — but that comes with a salary caveat. The city's tech scene leans heavily towards early-stage and growth-stage startups, which often pay below the levels seen in London, Amsterdam, or Dublin. Mid-level software engineers typically earn €65,000–€85,000, with a median around €75,000.</p>
+      <p>That said, larger companies and scale-ups in Berlin have pushed salaries higher over the past few years. If you're at a well-funded startup or a corporate tech hub, you can earn significantly above these medians. Berlin also has a materially lower cost of living than London, which changes the effective purchasing power calculation.</p>
+      <p><a href="/salary/software-engineer-berlin">See the full Software Engineer salary guide for Berlin</a></p>
+
+      <h2>Paris</h2>
+      <p>Paris sits between Berlin and Amsterdam in terms of software engineering pay. Mid-level engineers typically earn €70,000–€90,000. France's technology sector has matured significantly, with major players including Criteo, BlaBlaCar, Doctolib, and a growing cohort of funded startups. Salaries have risen meaningfully over the past five years.</p>
+      <p>French labour law provides strong worker protections but also means base salary is particularly significant — variable and equity compensation is less standard at French companies than at their US counterparts operating in Paris.</p>
+      <p><a href="/salary/software-engineer-paris">See the full Software Engineer salary guide for Paris</a></p>
+
+      <h2>How to know if you're underpaid</h2>
+      <p>Market ranges are only useful if you can compare your specific situation against them. Your seniority, specialisation, company type, and years of experience all affect where within a range you should fall.</p>
+      <p>Use our <a href="/">free salary checker</a> to get a personalised estimate — enter your role, location, and years of experience and see your market percentile in seconds. It's the fastest way to know whether there's a gap worth closing.</p>
     `,
   },
 ];

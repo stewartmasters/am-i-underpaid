@@ -1,10 +1,32 @@
-export type RoleSlug = "software-engineer" | "product-manager" | "marketing-manager" | "sales-manager" | "operations-manager" | "designer";
+export type RoleSlug =
+  | "software-engineer"
+  | "product-manager"
+  | "marketing-manager"
+  | "sales-manager"
+  | "operations-manager"
+  | "designer"
+  | "data-analyst"
+  | "data-scientist"
+  | "devops-engineer"
+  | "frontend-developer"
+  | "backend-developer"
+  | "qa-engineer"
+  | "account-manager"
+  | "customer-success-manager"
+  | "hr-manager"
+  | "finance-analyst"
+  | "business-analyst"
+  | "growth-manager"
+  | "content-manager"
+  | "performance-marketing-manager"
+  | "social-media-manager";
+
 export type LocationSlug = "london" | "madrid" | "barcelona" | "berlin" | "paris" | "amsterdam" | "dublin" | "uk" | "spain" | "germany" | "france" | "europe";
 export type Verdict = "underpaid" | "fair" | "overpaid";
 
 export interface Role { slug: RoleSlug; label: string; baseSalary: number; category: string; }
 export interface Location { slug: LocationSlug; label: string; country: string; currency: "£" | "€"; multiplier: number; }
-export interface SalaryResult { low: number; median: number; high: number; percentile: number; verdict: Verdict; delta: number; currency: string; }
+export interface SalaryResult { low: number; median: number; high: number; percentile: number; verdict: Verdict; delta: number; currency: string; roleSlug?: string; locationSlug?: string; }
 export interface SeniorityBands {
   junior: { low: number; median: number; high: number; label: string };
   mid:    { low: number; median: number; high: number; label: string };
@@ -13,12 +35,31 @@ export interface SeniorityBands {
 }
 
 export const ROLES: Role[] = [
-  { slug: "software-engineer",  label: "Software Engineer",  baseSalary: 75000, category: "Engineering" },
-  { slug: "product-manager",    label: "Product Manager",    baseSalary: 80000, category: "Product" },
-  { slug: "marketing-manager",  label: "Marketing Manager",  baseSalary: 62000, category: "Marketing" },
-  { slug: "sales-manager",      label: "Sales Manager",      baseSalary: 68000, category: "Sales" },
-  { slug: "operations-manager", label: "Operations Manager", baseSalary: 65000, category: "Operations" },
-  { slug: "designer",           label: "Designer",           baseSalary: 63000, category: "Design" },
+  // Original 6
+  { slug: "software-engineer",            label: "Software Engineer",            baseSalary: 75000, category: "Engineering" },
+  { slug: "product-manager",              label: "Product Manager",              baseSalary: 80000, category: "Product" },
+  { slug: "marketing-manager",            label: "Marketing Manager",            baseSalary: 62000, category: "Marketing" },
+  { slug: "sales-manager",               label: "Sales Manager",               baseSalary: 68000, category: "Sales" },
+  { slug: "operations-manager",          label: "Operations Manager",          baseSalary: 65000, category: "Operations" },
+  { slug: "designer",                    label: "Designer",                    baseSalary: 63000, category: "Design" },
+  // Tech
+  { slug: "data-analyst",                label: "Data Analyst",                baseSalary: 58000, category: "Data" },
+  { slug: "data-scientist",              label: "Data Scientist",              baseSalary: 74000, category: "Data" },
+  { slug: "devops-engineer",             label: "DevOps Engineer",             baseSalary: 72000, category: "Engineering" },
+  { slug: "frontend-developer",          label: "Frontend Developer",          baseSalary: 68000, category: "Engineering" },
+  { slug: "backend-developer",           label: "Backend Developer",           baseSalary: 72000, category: "Engineering" },
+  { slug: "qa-engineer",                 label: "QA Engineer",                 baseSalary: 55000, category: "Engineering" },
+  // Business
+  { slug: "account-manager",             label: "Account Manager",             baseSalary: 60000, category: "Sales" },
+  { slug: "customer-success-manager",    label: "Customer Success Manager",    baseSalary: 58000, category: "Customer Success" },
+  { slug: "hr-manager",                  label: "HR Manager",                  baseSalary: 60000, category: "People" },
+  { slug: "finance-analyst",             label: "Finance Analyst",             baseSalary: 63000, category: "Finance" },
+  { slug: "business-analyst",            label: "Business Analyst",            baseSalary: 65000, category: "Strategy" },
+  // Growth / Marketing
+  { slug: "growth-manager",              label: "Growth Manager",              baseSalary: 68000, category: "Growth" },
+  { slug: "content-manager",             label: "Content Manager",             baseSalary: 52000, category: "Marketing" },
+  { slug: "performance-marketing-manager", label: "Performance Marketing Manager", baseSalary: 65000, category: "Marketing" },
+  { slug: "social-media-manager",        label: "Social Media Manager",        baseSalary: 48000, category: "Marketing" },
 ];
 
 export const LOCATIONS: Location[] = [
@@ -108,7 +149,7 @@ export function calculateSalary(roleSlug: string, locationSlug: string, years: n
   else verdict = "fair";
 
   const currency = location?.currency ?? "€";
-  return { low, median, high, percentile, verdict, delta, currency };
+  return { low, median, high, percentile, verdict, delta, currency, roleSlug, locationSlug };
 }
 
 export function getMarketRange(roleSlug: string, locationSlug: string, years = 5): { low: number; median: number; high: number; currency: string } {
@@ -144,3 +185,31 @@ export function getSeniorityLabel(years: number): "Junior" | "Mid-level" | "Seni
 export function formatSalary(amount: number, currency: string): string {
   return `${currency}${amount.toLocaleString("en-GB")}`;
 }
+
+// --- Confidence scoring ---
+
+export type ConfidenceLevel = "high" | "medium" | "low";
+
+const HIGH_CONFIDENCE_ROLES = new Set([
+  "software-engineer", "product-manager", "designer", "marketing-manager",
+  "sales-manager", "data-analyst", "frontend-developer", "backend-developer",
+]);
+const HIGH_CONFIDENCE_LOCATIONS = new Set([
+  "london", "berlin", "amsterdam", "paris", "dublin",
+]);
+const LOW_CONFIDENCE_ROLES = new Set([
+  "social-media-manager", "qa-engineer", "content-manager",
+]);
+const LOW_CONFIDENCE_LOCATIONS = new Set(["europe"]);
+
+export function getConfidenceLevel(roleSlug: string, locationSlug: string): ConfidenceLevel {
+  if (LOW_CONFIDENCE_ROLES.has(roleSlug) || LOW_CONFIDENCE_LOCATIONS.has(locationSlug)) return "low";
+  if (HIGH_CONFIDENCE_ROLES.has(roleSlug) && HIGH_CONFIDENCE_LOCATIONS.has(locationSlug)) return "high";
+  return "medium";
+}
+
+export const CONFIDENCE_LABELS: Record<ConfidenceLevel, { label: string; color: string; description: string }> = {
+  high:   { label: "High confidence",   color: "text-emerald-600 bg-emerald-50", description: "Strong benchmark coverage for this role and location." },
+  medium: { label: "Medium confidence", color: "text-amber-600 bg-amber-50",     description: "Reasonable benchmark coverage. Estimates are directional." },
+  low:    { label: "Lower confidence",  color: "text-gray-500 bg-gray-100",      description: "Fewer public benchmarks for this combination. Use as a rough guide only." },
+};

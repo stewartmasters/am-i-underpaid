@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { generateSeoPages, getSeoPage, getRelatedPages, getLocationContext, getRoleContext } from "@/lib/seo-pages";
-import { getMarketRange, getSeniorityBands, formatSalary, ROLES, LOCATIONS } from "@/lib/salary-data";
+import { getMarketRange, getSeniorityBands, formatSalary, getConfidenceLevel, CONFIDENCE_LABELS, ROLES, LOCATIONS } from "@/lib/salary-data";
 import SalaryTool from "@/components/SalaryTool";
 
 interface Props {
@@ -124,6 +124,38 @@ export default async function SalaryPage({ params }: Props) {
                 <Link href="/methodology" className="text-orange-500 hover:underline">How we calculate →</Link>
               </p>
             </div>
+
+            {page.type === "role-location" && (
+              <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 space-y-3">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <h2 className="text-base font-bold text-gray-900">At a glance</h2>
+                  {(() => {
+                    const conf = getConfidenceLevel(roleSlug, locationSlug);
+                    const c = CONFIDENCE_LABELS[conf];
+                    return <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${c.color}`} title={c.description}>{c.label}</span>;
+                  })()}
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="space-y-0.5">
+                    <div className="text-xs text-gray-400">Median salary</div>
+                    <div className="font-bold text-gray-900 text-sm">{formatSalary(range.median, currency)}</div>
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs text-gray-400">Typical range</div>
+                    <div className="font-bold text-gray-900 text-sm">{formatSalary(range.low, currency)} – {formatSalary(range.high, currency)}</div>
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs text-gray-400">Senior median</div>
+                    <div className="font-bold text-gray-900 text-sm">{formatSalary(bands.senior.median, currency)}</div>
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs text-gray-400">Likely underpaid below</div>
+                    <div className="font-bold text-orange-600 text-sm">{formatSalary(Math.round(range.median * 0.88 / 500) * 500, currency)}</div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-400">Gross annual base salary estimates · 2026 · Public benchmarks + structured modelling · <a href="/methodology" className="text-orange-500 hover:underline">Methodology &#8594;</a></p>
+              </div>
+            )}
 
             {page.type === "role-location" && (
               <div className="space-y-4">

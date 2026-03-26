@@ -42,6 +42,38 @@ const SECTIONS = [
     ),
   },
   {
+    id: "data-sources",
+    heading: "Named data sources",
+    content: (
+      <>
+        <p>Our salary model draws on the following publicly available sources, applied to different geographies and role types:</p>
+        <ul>
+          <li><strong>Eurostat Labour Cost Survey</strong> — EU-wide wage structure survey covering industry-level gross annual earnings across member states. Used to calibrate location multipliers for continental European markets.</li>
+          <li><strong>UK ONS Annual Survey of Hours and Earnings (ASHE)</strong> — the UK government&apos;s primary earnings survey, covering median gross annual pay by occupation and region. Our UK and London estimates are anchored to this data.</li>
+          <li><strong>Glassdoor Salary Insights</strong> — aggregated self-reported salary data across roles and cities. Used as a directional market signal, particularly for roles with fewer government survey equivalents.</li>
+          <li><strong>Indeed Salary Insights</strong> — job-posting-derived salary ranges across European markets. Used to cross-check and calibrate role/location medians against live market supply.</li>
+          <li><strong>Levels.fyi Compensation Data</strong> — community-verified compensation data with the strongest signal for tech roles (software engineering, data science, product management, DevOps) in major European cities. Used specifically for tech role benchmarking.</li>
+        </ul>
+        <p>No single source is used in isolation. Where sources diverge, we apply judgement and weight towards government survey data for baseline figures and community/aggregated data for role-specific signals.</p>
+      </>
+    ),
+  },
+  {
+    id: "confidence-scoring",
+    heading: "Confidence scoring",
+    content: (
+      <>
+        <p>We assign a confidence level — <strong>High</strong>, <strong>Medium</strong>, or <strong>Lower</strong> — to each role and location combination. This reflects how well-covered that combination is by public benchmark data.</p>
+        <ul>
+          <li><strong>High confidence</strong> — mainstream role (e.g. software engineer, product manager) in a major, well-documented market (e.g. London, Berlin, Amsterdam). Strong signal from multiple sources.</li>
+          <li><strong>Medium confidence</strong> — reasonable coverage, but either the role or location has fewer available references. Estimates are directional and useful for comparison.</li>
+          <li><strong>Lower confidence</strong> — niche role (e.g. social media manager, content manager) or a broad market category (e.g. &quot;Europe&quot; as a whole) where public benchmarks are sparse. Treat as a rough guide only.</li>
+        </ul>
+        <p>Confidence labels are shown on each salary page and in calculator results. They are not a measure of whether the estimate is wrong — they are a measure of how much external evidence supports it.</p>
+      </>
+    ),
+  },
+  {
     id: "limitations",
     heading: "Limitations",
     content: (

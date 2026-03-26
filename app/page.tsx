@@ -3,7 +3,6 @@ import SalaryTool from "@/components/SalaryTool";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import TrustStrip from "@/components/TrustStrip";
 import Link from "next/link";
-import { ROLES, LOCATIONS } from "@/lib/salary-data";
 
 export const metadata: Metadata = {
   title: "Am I Underpaid? — Free Salary Checker",
@@ -18,6 +17,21 @@ const FEATURED_CHECKS = [
   { role: "marketing-manager", location: "paris",     label: "Marketing Manager · Paris" },
   { role: "sales-manager",     location: "dublin",    label: "Sales Manager · Dublin" },
   { role: "operations-manager",location: "barcelona", label: "Operations Manager · Barcelona" },
+];
+
+const CURATED_GUIDES = [
+  { role: "software-engineer",          location: "london",    roleLabel: "Software Engineer",          locationLabel: "London" },
+  { role: "product-manager",            location: "berlin",    roleLabel: "Product Manager",            locationLabel: "Berlin" },
+  { role: "designer",                   location: "amsterdam", roleLabel: "Designer",                   locationLabel: "Amsterdam" },
+  { role: "marketing-manager",          location: "paris",     roleLabel: "Marketing Manager",          locationLabel: "Paris" },
+  { role: "sales-manager",              location: "dublin",    roleLabel: "Sales Manager",              locationLabel: "Dublin" },
+  { role: "operations-manager",         location: "barcelona", roleLabel: "Operations Manager",         locationLabel: "Barcelona" },
+  { role: "data-analyst",               location: "london",    roleLabel: "Data Analyst",               locationLabel: "London" },
+  { role: "frontend-developer",         location: "london",    roleLabel: "Frontend Developer",         locationLabel: "London" },
+  { role: "customer-success-manager",   location: "berlin",    roleLabel: "Customer Success Manager",   locationLabel: "Berlin" },
+  { role: "data-scientist",             location: "amsterdam", roleLabel: "Data Scientist",             locationLabel: "Amsterdam" },
+  { role: "devops-engineer",            location: "london",    roleLabel: "DevOps Engineer",            locationLabel: "London" },
+  { role: "business-analyst",           location: "paris",     roleLabel: "Business Analyst",           locationLabel: "Paris" },
 ];
 
 export default function Home() {
@@ -43,9 +57,9 @@ export default function Home() {
 
             <div className="grid grid-cols-3 gap-4 pt-2">
               {[
-                { value: "6",   label: "Role categories" },
+                { value: "21",   label: "Role categories" },
                 { value: "12",  label: "Locations" },
-                { value: "90+", label: "Salary guides" },
+                { value: "300+", label: "Salary guides" },
               ].map(({ value, label }) => (
                 <div key={label} className="text-center">
                   <div className="text-2xl font-extrabold text-gray-900">{value}</div>
@@ -105,20 +119,18 @@ export default function Home() {
           </Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {ROLES.map((role) =>
-            LOCATIONS.slice(0, 2).map((loc) => (
-              <Link
-                key={`${role.slug}-${loc.slug}`}
-                href={`/salary/${role.slug}-${loc.slug}`}
-                className="group block p-4 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50 transition-all"
-              >
-                <div className="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">
-                  {role.label}
-                </div>
-                <div className="text-xs text-gray-400 mt-0.5">{loc.label} · {loc.country}</div>
-              </Link>
-            ))
-          )}
+          {CURATED_GUIDES.map(({ role, location, roleLabel, locationLabel }) => (
+            <Link
+              key={`${role}-${location}`}
+              href={`/salary/${role}-${location}`}
+              className="group block p-4 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50 transition-all"
+            >
+              <div className="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">
+                {roleLabel}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">{locationLabel}</div>
+            </Link>
+          ))}
         </div>
       </section>
 
