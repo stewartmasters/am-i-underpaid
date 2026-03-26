@@ -58,6 +58,17 @@ function faqsLocation(locationLabel: string) {
   ];
 }
 
+function faqsSalaryQuestion(amount: number, locationLabel: string, currency: string, roles: { label: string; median: number }[]) {
+  const amountStr = `${currency}${amount.toLocaleString("en-GB")}`;
+  const topRole = roles.find(r => Math.abs(r.median - amount) === Math.min(...roles.map(r => Math.abs(r.median - amount))));
+  return [
+    { q: `Is ${amountStr} a good salary in ${locationLabel}?`, a: `${amountStr} is ${amount >= (roles.reduce((s, r) => s + r.median, 0) / roles.length) ? "above" : "below"} the average salary across professional roles in ${locationLabel}. Whether it's "good" depends heavily on your specific role and years of experience. For most mid-level professional roles in ${locationLabel}, ${amountStr} is ${amount >= (roles.find(r => r.label === "Software Engineer")?.median ?? 0) * 0.85 ? "competitive" : "below market rate"}.` },
+    { q: `What jobs pay ${amountStr} in ${locationLabel}?`, a: `In ${locationLabel}, ${amountStr} is broadly in the range for ${topRole?.label ?? "mid-level professional"} roles. Roles that commonly pay around this level include project managers, marketing managers, analysts, and mid-level engineers depending on experience. See the salary guides above for specific role benchmarks.` },
+    { q: `Is ${amountStr} enough to live on in ${locationLabel}?`, a: `${amountStr} gross in ${locationLabel} translates to a net take-home that depends on your tax situation. In most European cities, ${amountStr} provides a comfortable standard of living, though London and Amsterdam are more expensive markets where cost of living will consume a larger share.` },
+    { q: `How does ${amountStr} compare to average salaries in ${locationLabel}?`, a: `Use the tool above to check how ${amountStr} compares to specific roles. For a software engineer in ${locationLabel}, the median salary is different than for a marketing manager. The percentile you'd be in depends entirely on your specific role and years of experience.` },
+  ];
+}
+
 function buildFaqSchema(faqs: { q: string; a: string }[]) {
   return {
     "@context": "https://schema.org",
@@ -88,6 +99,13 @@ export default async function SalaryPage({ params }: Props) {
       ? faqsRoleLocation(page.roleLabel!, page.locationLabel!, formatSalary(range.median, currency), formatSalary(range.low, currency), formatSalary(range.high, currency))
       : page.type === "role-only"
       ? faqsRole(page.roleLabel!)
+      : page.type === "salary-question"
+      ? faqsSalaryQuestion(
+          page.salaryAmount!,
+          page.locationLabel!,
+          currency,
+          ROLES.map(r => ({ label: r.label, median: getMarketRange(r.slug, locationSlug).median }))
+        )
       : faqsLocation(page.locationLabel!);
 
   const faqSchema = buildFaqSchema(faqs);
@@ -118,6 +136,7 @@ export default async function SalaryPage({ params }: Props) {
                 {page.type === "role-location" && locationCtx}
                 {page.type === "role-only"     && roleCtx}
                 {page.type === "location-only" && locationCtx}
+                {page.type === "salary-question" && locationCtx}
               </p>
               {page.type === "role-location" && (
                 <p className="text-gray-500 text-base leading-relaxed">
@@ -184,6 +203,45 @@ export default async function SalaryPage({ params }: Props) {
                   ))}
                 </div>
                 <p className="text-xs text-gray-400">Gross annual base salary estimates for 2026. Bonuses and equity not included.</p>
+              </div>
+            )}
+
+            {page.type === "salary-question" && page.salaryAmount && (
+              <div className="space-y-6">
+                <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 space-y-4">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    How does {formatSalary(page.salaryAmount, currency)} compare?
+                  </h2>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Whether {formatSalary(page.salaryAmount, currency)}/year is a good salary in {page.locationLabel} depends on your role and experience. Here&apos;s how it compares to typical market rates for common roles:
+                  </p>
+                  <div className="space-y-2">
+                    {ROLES.slice(0, 10).map((role) => {
+                      const r = getMarketRange(role.slug, locationSlug);
+                      const diff = page.salaryAmount! - r.median;
+                      const pct = Math.round((diff / r.median) * 100);
+                      const isAbove = diff >= 0;
+                      return (
+                        <Link key={role.slug} href={`/salary/${role.slug}-${locationSlug}`} className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-orange-200 bg-white hover:bg-orange-50 transition-all group">
+                          <span className="text-sm font-medium text-gray-700 group-hover:text-orange-600">{role.label}</span>
+                          <div className="text-right">
+                            <span className={`text-xs font-bold ${isAbove ? "text-emerald-600" : "text-red-500"}`}>
+                              {isAbove ? "+" : ""}{pct}% vs median
+                            </span>
+                            <div className="text-xs text-gray-400">Median: {formatSalary(r.median, r.currency)}</div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-2xl p-5 space-y-3 border border-gray-100">
+                  <h2 className="text-lg font-bold text-gray-900">Get your personalised verdict</h2>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    The table above shows general market rates. Your actual percentile depends on your specific role and years of experience. Use the calculator to get your exact position.
+                  </p>
+                </div>
               </div>
             )}
 

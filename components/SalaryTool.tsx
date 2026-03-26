@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ROLES, LOCATIONS, calculateSalary, getConfidenceLevel, type SalaryResult, type ConfidenceLevel } from "@/lib/salary-data";
 import SalaryResultComponent from "./SalaryResult";
+import { track } from "@/lib/analytics";
 
 interface Props {
   defaultRole?: string;
@@ -30,6 +31,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
     const ll = LOCATIONS.find(l => l.slug === location)?.label;
     setMeta({ roleLabel: rl, locationLabel: ll, confidence: getConfidenceLevel(role, location) });
     setResult(res);
+    track("salary_calculated", { verdict: res.verdict, percentile: res.percentile, role, location, years });
   };
 
   const handleReset = () => {
@@ -37,6 +39,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
     setCurrentSalary("");
     setError("");
     setMeta({});
+    track("check_another");
   };
 
   if (result) {
@@ -90,7 +93,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
       {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
 
       <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors text-base shadow-sm shadow-orange-200">
-        Am I underpaid? &#8594;
+        Get my verdict →
       </button>
 
       <p className="text-xs text-gray-400 text-center">No signup required. Results are instant and private.</p>

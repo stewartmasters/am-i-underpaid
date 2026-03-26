@@ -2,7 +2,7 @@ import { ROLES, LOCATIONS, type RoleSlug, type LocationSlug } from "./salary-dat
 
 export interface SeoPage {
   slug: string;
-  type: "role-location" | "role-only" | "location-only";
+  type: "role-location" | "role-only" | "location-only" | "salary-question";
   roleSlug?: RoleSlug;
   locationSlug?: LocationSlug;
   roleLabel?: string;
@@ -11,6 +11,7 @@ export interface SeoPage {
   h1: string;
   title: string;
   description: string;
+  salaryAmount?: number;
 }
 
 const YEAR = 2026;
@@ -137,6 +138,31 @@ export function generateSeoPages(): SeoPage[] {
         h1: `${levelLabel} ${r.label} Salary in ${l.label} (${YEAR})`,
         title: `${levelLabel} ${r.label} Salary in ${l.label} ${YEAR} — Am I Underpaid?`,
         description: `What does a ${levelLabel.toLowerCase()} ${r.label} earn in ${l.label}? See the ${levelLabel.toLowerCase()} salary range for ${YEAR}. Check your percentile and find out if you're underpaid.`,
+      });
+    }
+  }
+
+  // "Is X a good salary in Location" pages
+  const SALARY_AMOUNTS = [25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 90000, 100000, 120000];
+  const SALARY_Q_LOCATIONS: LocationSlug[] = ["london", "berlin", "amsterdam", "paris", "dublin", "barcelona"];
+
+  for (const amount of SALARY_AMOUNTS) {
+    for (const locSlug of SALARY_Q_LOCATIONS) {
+      const loc = LOCATIONS.find(l => l.slug === locSlug);
+      if (!loc) continue;
+      const symbol = loc.currency;
+      const amountStr = amount >= 1000 ? `${symbol}${(amount/1000).toFixed(0)}k` : `${symbol}${amount}`;
+      const amountFull = `${symbol}${amount.toLocaleString("en-GB")}`;
+      pages.push({
+        slug: `is-${amount}-good-salary-${locSlug}`,
+        type: "salary-question" as SeoPage["type"],
+        locationSlug: locSlug,
+        locationLabel: loc.label,
+        country: loc.country,
+        h1: `Is ${amountFull} a Good Salary in ${loc.label}?`,
+        title: `Is ${amountFull} a Good Salary in ${loc.label}? (${YEAR})`,
+        description: `Is ${amountFull}/year a good salary in ${loc.label}? Find out how it compares to the market, which percentile you'd be in, and whether you're underpaid.`,
+        salaryAmount: amount,
       });
     }
   }

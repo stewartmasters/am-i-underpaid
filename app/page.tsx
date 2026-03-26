@@ -47,12 +47,11 @@ export default function Home() {
               Free · No signup · Instant result
             </div>
             <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">
-              Are you being paid{" "}
-              <span className="text-orange-500">what you&apos;re worth?</span>
+              Find out if you&apos;re underpaid{" "}
+              <span className="text-orange-500">in 30 seconds</span>
             </h1>
             <p className="text-lg text-gray-500 leading-relaxed">
-              Most people suspect they&apos;re underpaid. Few ever check the data.
-              Enter your role and salary — find out where you actually stand.
+              Compare your salary against real market data across 12 European cities. Get your verdict instantly — no signup, no email.
             </p>
 
             <div className="grid grid-cols-3 gap-4 pt-2">
@@ -66,6 +65,15 @@ export default function Home() {
                   <div className="text-xs text-gray-400 mt-0.5">{label}</div>
                 </div>
               ))}
+            </div>
+
+            <div className="flex items-center gap-2 pt-1">
+              <div className="flex -space-x-1">
+                {["E", "O", "G", "I", "L"].map((l, i) => (
+                  <div key={i} className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-bold text-gray-600">{l}</div>
+                ))}
+              </div>
+              <p className="text-xs text-gray-400">Data from Eurostat · ONS · Glassdoor · Indeed · Levels.fyi</p>
             </div>
 
             <div className="space-y-2 pt-2">

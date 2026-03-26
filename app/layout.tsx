@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     "underpaid",
   ],
   alternates: {
-    canonical: "/",
+    canonical: BASE_URL,
   },
   openGraph: {
     type: "website",
@@ -75,20 +76,13 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+        <link rel="icon" href="/icon.png" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
       </head>
       <body className="bg-white text-gray-900 min-h-screen font-sans">
         <Navigation />
         <main>{children}</main>
-        <footer className="border-t border-gray-100 mt-20">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
-            <span>© {new Date().getFullYear()} Am I Underpaid? — Salary data is estimated and for reference only.</span>
-            <div className="flex gap-6">
-              <a href="/blog" className="hover:text-gray-700 transition-colors">Blog</a>
-              <a href="/salary/software-engineer" className="hover:text-gray-700 transition-colors">Salaries</a>
-              <a href="/methodology" className="hover:text-gray-700 transition-colors">Methodology</a>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   );

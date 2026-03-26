@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { type SalaryResult, formatSalary, getSeniorityLabel, type ConfidenceLevel, CONFIDENCE_LABELS } from "@/lib/salary-data";
+import { track } from "@/lib/analytics";
 
 interface Props {
   result: SalaryResult;
@@ -69,6 +70,7 @@ export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, l
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
+      track("share_link_copied");
       setTimeout(() => setCopied(false), 2000);
     } catch {}
   };
@@ -77,12 +79,13 @@ export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, l
     try {
       await navigator.clipboard.writeText(shareText + " → " + window.location.href);
       setCopiedText(true);
+      track("share_text_copied");
       setTimeout(() => setCopiedText(false), 2000);
     } catch {}
   };
 
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "https://amiunderpaid.com")}`;
-  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "https://amiunderpaid.com")}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "https://salaryverdict.com")}`;
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "https://salaryverdict.com")}`;
 
   return (
     <div className={`rounded-2xl border ${config.border} ${config.bg} p-6 sm:p-8 space-y-6`}>
@@ -174,6 +177,7 @@ export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, l
             href={twitterUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track("share_twitter")}
             className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-black text-white py-2.5 px-3 rounded-lg hover:bg-gray-900 transition-colors"
           >
             Share on X
@@ -182,12 +186,13 @@ export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, l
             href={linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track("share_linkedin")}
             className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-blue-600 text-white py-2.5 px-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Share on LinkedIn
           </a>
         </div>
-        <p className="text-xs text-gray-400 text-center">Compare with a colleague &#8594; send them this link</p>
+        <p className="text-xs text-gray-400 text-center">Compare with a colleague → send them this link</p>
       </div>
 
       {/* Actions */}
