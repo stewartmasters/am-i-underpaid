@@ -9,7 +9,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://amiunderpaid.com";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
