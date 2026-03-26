@@ -5,6 +5,11 @@ import { generateSeoPages, getSeoPage, getRelatedPages, getLocationContext, getR
 import { getMarketRange, getSeniorityBands, formatSalary, getConfidenceLevel, CONFIDENCE_LABELS, ROLES, LOCATIONS } from "@/lib/salary-data";
 import SalaryTool from "@/components/SalaryTool";
 
+// Force truly static generation — no ISR, no blob caching needed
+export const revalidate = false;
+export const dynamic = "force-static";
+export const dynamicParams = false;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }

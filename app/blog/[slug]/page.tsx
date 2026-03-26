@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BLOG_POSTS, getBlogPost } from "@/data/blog-posts";
 
+export const revalidate = false;
+export const dynamic = "force-static";
+export const dynamicParams = false;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
