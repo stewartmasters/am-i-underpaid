@@ -1,4 +1,6 @@
 import type { MetadataRoute } from "next";
+
+export const dynamic = "force-static";
 import { generateSeoPages } from "@/lib/seo-pages";
 import { BLOG_POSTS } from "@/data/blog-posts";
 

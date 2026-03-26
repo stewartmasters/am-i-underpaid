@@ -1,8 +1,12 @@
 import { ImageResponse } from "next/og";
-import { getSeoPage } from "@/lib/seo-pages";
+import { getSeoPage, generateSeoPages } from "@/lib/seo-pages";
 import { getMarketRange, formatSalary } from "@/lib/salary-data";
 
-export const runtime = "edge";
+export function generateStaticParams() {
+  return generateSeoPages().map((p) => ({ slug: p.slug }));
+}
+
+export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -68,7 +72,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               borderRadius: "100px",
               padding: "6px 18px",
               marginBottom: "24px",
-              width: "fit-content",
+              alignSelf: "flex-start",
             }}
           >
             <span style={{ color: "#f97316", fontSize: "16px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
@@ -109,7 +113,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 borderRadius: "16px",
                 padding: "24px 32px",
                 marginTop: "8px",
-                width: "fit-content",
+                alignSelf: "flex-start",
               }}
             >
               <span style={{ color: "#6b7280", fontSize: "16px", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.08em" }}>
@@ -138,7 +142,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             Free salary checker · No signup required
           </span>
           <span style={{ color: "#4b5563", fontSize: "18px" }}>
-            amiunderpaid.com
+            salaryverdict.com
           </span>
         </div>
       </div>
