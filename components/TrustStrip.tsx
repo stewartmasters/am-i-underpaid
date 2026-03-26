@@ -23,7 +23,7 @@ export default function TrustStrip() {
             width={width}
             height={height}
             className="opacity-30 grayscale hover:opacity-50 transition-opacity"
-            style={{ objectFit: "contain", height: "20px", width: "auto" }}
+            style={{ objectFit: "contain", height: "30px", width: "auto" }}
           />
         ))}
       </div>

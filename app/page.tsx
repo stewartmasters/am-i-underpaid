@@ -80,7 +80,7 @@ export default function Home() {
                 ].map(({ src, alt, width, height }) => (
                   <Image key={alt} src={src} alt={alt} width={width} height={height}
                     className="opacity-40 grayscale"
-                    style={{ objectFit: "contain", height: "18px", width: "auto" }}
+                    style={{ objectFit: "contain", height: "27px", width: "auto" }}
                   />
                 ))}
               </div>
