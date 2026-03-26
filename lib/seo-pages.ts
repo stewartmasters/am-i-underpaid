@@ -47,7 +47,10 @@ export function getRoleContext(roleSlug?: string): string {
   return ROLE_CONTEXT[roleSlug ?? "software-engineer"] ?? ROLE_CONTEXT["software-engineer"];
 }
 
+let _seoPageCache: SeoPage[] | null = null;
+
 export function generateSeoPages(): SeoPage[] {
+  if (_seoPageCache) return _seoPageCache;
   const pages: SeoPage[] = [];
 
   for (const role of ROLES) {
@@ -92,6 +95,7 @@ export function generateSeoPages(): SeoPage[] {
     });
   }
 
+  _seoPageCache = pages;
   return pages;
 }
 

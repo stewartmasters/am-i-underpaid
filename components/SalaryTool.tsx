@@ -23,10 +23,9 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
     if (!role) return setError("Please select a job title.");
     if (!location) return setError("Please select a location.");
     const salary = parseInt(currentSalary.replace(/[^0-9]/g, ""), 10);
-    if (!salary || salary < 10000) return setError("Please enter a valid salary.");
+    if (!salary || salary < 10000 || salary > 2000000) return setError("Please enter a valid annual salary.");
     const res = calculateSalary(role, location, years, salary);
     setResult(res);
-    console.log("[analytics] salary_check", { role, location, years, salary, verdict: res.verdict });
   };
 
   const handleReset = () => {

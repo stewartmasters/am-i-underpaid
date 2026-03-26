@@ -1,8 +1,7 @@
 import Link from "next/link";
 
-const MONTH_YEAR = "March 2026";
-
 export default function TrustStrip() {
+  const MONTH_YEAR = new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" });
   return (
     <div className="mt-4 pt-4 border-t border-gray-100">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">

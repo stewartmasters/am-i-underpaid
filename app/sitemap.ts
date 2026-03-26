@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { generateSeoPages } from "@/lib/seo-pages";
 import { BLOG_POSTS } from "@/data/blog-posts";
 
-const BASE_URL = "https://amiunderpaid.com";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://amiunderpaid.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const seoPages = generateSeoPages();

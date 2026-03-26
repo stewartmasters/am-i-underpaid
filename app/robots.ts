@@ -1,8 +1,12 @@
 import type { MetadataRoute } from "next";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://amiunderpaid.com";
+
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://amiunderpaid.com/sitemap.xml",
+    rules: [
+      { userAgent: "*", allow: "/", disallow: ["/.netlify/", "/_next/"] },
+    ],
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }
