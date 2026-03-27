@@ -4,10 +4,12 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 input[type="range"] {

@@ -13,7 +13,7 @@ export default function Navigation() {
         <Link href="/" className="font-bold text-gray-900 text-lg tracking-tight flex-shrink-0">
           Salary<span className="text-orange-500">Verdict</span>
         </Link>
-        <div className="flex items-center gap-6 text-sm">
+        <div className="flex items-center gap-2 sm:gap-6 text-sm">
           <Link
             href="/salary/software-engineer"
             className={`transition-colors hidden sm:block ${pathname?.startsWith("/salary") ? "text-gray-900 font-medium" : "text-gray-500 hover:text-gray-900"}`}
@@ -35,7 +35,7 @@ export default function Navigation() {
           <LanguageSelect current="en" />
           <Link
             href="/#salary-tool"
-            className="bg-orange-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-orange-600 transition-colors flex-shrink-0"
+            className="bg-orange-500 text-white px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold hover:bg-orange-600 transition-colors flex-shrink-0 whitespace-nowrap"
           >
             Check my salary
           </Link>

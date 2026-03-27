@@ -92,7 +92,7 @@ export default function Home() {
           </div>
 
           {/* Tool — second on mobile (below copy), right on desktop */}
-          <div id="salary-tool" className="bg-white rounded-2xl shadow-xl shadow-gray-100 border border-gray-100 p-6 sm:p-8">
+          <div id="salary-tool" className="bg-white rounded-2xl shadow-xl shadow-gray-100 border border-gray-100 p-6 sm:p-8 min-w-0">
             <SalaryTool />
             <TrustSection />
           </div>
