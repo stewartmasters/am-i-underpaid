@@ -72,15 +72,16 @@ export default function Home() {
               <p className="text-xs text-gray-500 font-medium">Built using official public salary datasets:</p>
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
                 {[
-                  { src: "/logos/eurostat.png", alt: "Eurostat", width: 120, height: 40, displayH: 36 },
-                  { src: "/logos/ons.png",       alt: "ONS",      width: 80,  height: 36, displayH: 32 },
-                ].map(({ src, alt, width, height, displayH }) => (
+                  { src: "/logos/eurostat.png", alt: "Eurostat", width: 120, height: 32 },
+                  { src: "/logos/ons.png",       alt: "ONS",      width: 80,  height: 32 },
+                  { src: "/logos/destatis.png",  alt: "Destatis", width: 100, height: 32 },
+                  { src: "/logos/ine.png",        alt: "INE",      width: 60,  height: 32 },
+                ].map(({ src, alt, width, height }) => (
                   <Image key={alt} src={src} alt={alt} width={width} height={height}
                     className="opacity-40 grayscale hover:opacity-60 transition-opacity"
-                    style={{ objectFit: "contain", height: `${displayH}px`, width: "auto" }}
+                    style={{ objectFit: "contain", height: "32px", width: "auto" }}
                   />
                 ))}
-                <span className="text-xs text-gray-400 font-medium">+ Destatis · INE · national offices</span>
               </div>
               <p className="text-xs text-gray-400">Coverage varies by role and location.</p>
             </div>

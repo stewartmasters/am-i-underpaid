@@ -7,13 +7,13 @@ import Image from "next/image";
 // branding display and/or are not primary data sources.
 const SOURCES = [
   // Eurostat: free reuse with attribution (EC copyright notice)
-  { src: "/logos/eurostat.png",  alt: "Eurostat", width: 120, height: 40, displayHeight: 36 },
+  { src: "/logos/eurostat.png",  alt: "Eurostat", width: 120, height: 32 },
   // ONS: Open Government Licence v3.0
-  { src: "/logos/ons.png",       alt: "ONS",      width: 80,  height: 36, displayHeight: 32 },
+  { src: "/logos/ons.png",       alt: "ONS",      width: 80,  height: 32 },
   // Destatis: public domain / open data
-  { src: "/logos/destatis.png",  alt: "Destatis", width: 100, height: 36, displayHeight: 32 },
+  { src: "/logos/destatis.png",  alt: "Destatis", width: 100, height: 32 },
   // INE: public domain / open data
-  { src: "/logos/ine.png",       alt: "INE",      width: 60,  height: 36, displayHeight: 32 },
+  { src: "/logos/ine.png",       alt: "INE",      width: 60,  height: 32 },
 ];
 
 export default function TrustStrip() {
@@ -24,7 +24,7 @@ export default function TrustStrip() {
         Built using official public salary datasets and verified market benchmarks
       </p>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-2">
-        {SOURCES.map(({ src, alt, width, height, displayHeight }) => (
+        {SOURCES.map(({ src, alt, width, height }) => (
           <Image
             key={alt}
             src={src}
@@ -32,7 +32,7 @@ export default function TrustStrip() {
             width={width}
             height={height}
             className="opacity-40 grayscale hover:opacity-60 transition-opacity"
-            style={{ objectFit: "contain", height: `${displayHeight}px`, width: "auto" }}
+            style={{ objectFit: "contain", height: "32px", width: "auto" }}
           />
         ))}
         <span className="text-xs text-gray-400 font-medium">+ national statistical offices</span>
