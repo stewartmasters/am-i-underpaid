@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { generateSeoPages, getSeoPage, getRelatedPages, getLocationContext, getRoleContext } from "@/lib/seo-pages";
+import { generateSeoPages, getSeoPage, getRelatedPages, getLocationContext, getRoleContext, getIntroVariant } from "@/lib/seo-pages";
 import { getMarketRange, getSeniorityBands, formatSalary, getConfidenceLevel, CONFIDENCE_LABELS, ROLES, LOCATIONS } from "@/lib/salary-data";
 import SalaryTool from "@/components/SalaryTool";
 
@@ -81,6 +81,26 @@ function buildFaqSchema(faqs: { q: string; a: string }[]) {
   };
 }
 
+function buildRoleLocationIntro(
+  slug: string,
+  roleLabel: string,
+  locationLabel: string,
+  low: string,
+  median: string,
+  high: string,
+  locationCtx: string,
+  roleCtx: string,
+): string {
+  const v = getIntroVariant(slug);
+  if (v === 0) {
+    return `${roleLabel}s in ${locationLabel} typically earn between ${low} and ${high} per year, with a market midpoint of ${median}. ${locationCtx}`;
+  } else if (v === 1) {
+    return `The median ${roleLabel} salary in ${locationLabel} is ${median} — ranging from ${low} for junior roles to ${high} at the senior level. ${roleCtx}`;
+  } else {
+    return `In ${locationLabel}, a mid-level ${roleLabel} earns around ${median} per year. The full market range runs from ${low} to ${high} depending on seniority and employer. ${locationCtx}`;
+  }
+}
+
 export default async function SalaryPage({ params }: Props) {
   const { slug } = await params;
   const page = getSeoPage(slug);
@@ -141,14 +161,24 @@ export default async function SalaryPage({ params }: Props) {
             <div className="space-y-4">
               <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">{page.h1}</h1>
               <p className="text-lg text-gray-500 leading-relaxed">
-                {page.type === "role-location" && locationCtx}
-                {page.type === "role-only"     && roleCtx}
-                {page.type === "location-only" && locationCtx}
-                {page.type === "salary-question" && locationCtx}
+                {page.type === "role-location"
+                  ? buildRoleLocationIntro(
+                      slug,
+                      page.roleLabel!,
+                      page.locationLabel!,
+                      formatSalary(range.low, currency),
+                      formatSalary(range.median, currency),
+                      formatSalary(range.high, currency),
+                      locationCtx,
+                      roleCtx,
+                    )
+                  : page.type === "role-only"
+                  ? roleCtx
+                  : locationCtx}
               </p>
               {page.type === "role-location" && (
                 <p className="text-gray-500 text-base leading-relaxed">
-                  {roleCtx} Below you&apos;ll find junior, mid-level, and senior salary bands, plus a personalised calculator to check your own position.
+                  Below you&apos;ll find junior, mid-level, and senior salary bands, plus a personalised calculator to check where you stand.
                 </p>
               )}
               <p className="text-xs text-gray-400">

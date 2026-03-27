@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import SalaryTool from "@/components/SalaryTool";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import TrustStrip from "@/components/TrustStrip";
+import TrustSection from "@/components/TrustSection";
 import Link from "next/link";
-import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Am I Underpaid? — Free Salary Checker",
@@ -70,23 +70,7 @@ export default function Home() {
 
             <div className="space-y-2 pt-1">
               <p className="text-xs text-gray-500 font-medium">Built using official public salary datasets:</p>
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-                {[
-                  { src: "/logos/eurostat.png", alt: "Eurostat", width: 120, height: 32 },
-                  { src: "/logos/ons.png",      alt: "ONS",      width: 80,  height: 32 },
-                  { src: "/logos/destatis.png", alt: "Destatis", width: 100, height: 32 },
-                  { src: "/logos/ine.png",      alt: "INE",      width: 60,  height: 32 },
-                  { src: "/logos/bfs.jpg",      alt: "BFS",      width: 80,  height: 32 },
-                  { src: "/logos/scb.png",      alt: "SCB",      width: 80,  height: 32 },
-                  { src: "/logos/istat.png",    alt: "Istat",    width: 80,  height: 32 },
-                  { src: "/logos/gus.png",      alt: "GUS",      width: 80,  height: 32 },
-                ].map(({ src, alt, width, height }) => (
-                  <Image key={alt} src={src} alt={alt} width={width} height={height}
-                    className="opacity-40 grayscale hover:opacity-60 transition-opacity"
-                    style={{ objectFit: "contain", height: "32px", width: "auto" }}
-                  />
-                ))}
-              </div>
+              <TrustSection variant="minimal" />
               <p className="text-xs text-gray-400">Coverage varies by role and location.</p>
             </div>
 

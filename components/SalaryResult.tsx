@@ -24,6 +24,7 @@ interface Props {
 
 interface VerdictConfig {
   emoji: string;
+  shortAnswer: string;
   headline: string;
   heroSub: string;
   nextStep: string;
@@ -37,8 +38,9 @@ interface VerdictConfig {
 const VERDICT_CONFIG: Record<SalaryResult["verdict"], VerdictConfig> = {
   "well-below": {
     emoji: "😬",
-    headline: "You're likely underpaid.",
-    heroSub: "Most people in your role earn more than you do.",
+    shortAnswer: "You're likely underpaid.",
+    headline: "You're earning less than most people doing your job.",
+    heroSub: "Your salary sits well below the market midpoint for your role and location.",
     nextStep: "This is worth raising in your next compensation conversation.",
     heroBg: "bg-red-50 border-b border-red-100",
     badge: "bg-red-100 text-red-700",
@@ -48,8 +50,9 @@ const VERDICT_CONFIG: Record<SalaryResult["verdict"], VerdictConfig> = {
   },
   "slightly-below": {
     emoji: "😐",
-    headline: "Your salary may be slightly below market.",
-    heroSub: "You're a bit below what similar roles typically pay in your location.",
+    shortAnswer: "You may be slightly underpaid.",
+    headline: "Your salary is a little below what the market pays.",
+    heroSub: "You're below the midpoint, though the gap is modest.",
     nextStep: "Worth keeping in mind for your next salary review or offer negotiation.",
     heroBg: "bg-orange-50 border-b border-orange-100",
     badge: "bg-orange-100 text-orange-700",
@@ -59,7 +62,8 @@ const VERDICT_CONFIG: Record<SalaryResult["verdict"], VerdictConfig> = {
   },
   "fair": {
     emoji: "🙂",
-    headline: "You're roughly at market rate.",
+    shortAnswer: "You're paid around market rate.",
+    headline: "You're roughly where the market expects you to be.",
     heroSub: "Your salary looks broadly in line with similar roles in your location.",
     nextStep: "You're roughly where the market expects you to be.",
     heroBg: "bg-amber-50 border-b border-amber-100",
@@ -70,8 +74,9 @@ const VERDICT_CONFIG: Record<SalaryResult["verdict"], VerdictConfig> = {
   },
   "above": {
     emoji: "😎",
-    headline: "You're above market.",
-    heroSub: "You earn more than most people in similar roles. Well negotiated.",
+    shortAnswer: "You're paid above market.",
+    headline: "You earn more than most people in your role.",
+    heroSub: "You're ahead of the market midpoint. Well negotiated.",
     nextStep: "You're ahead of market — a strong position to negotiate from.",
     heroBg: "bg-emerald-50 border-b border-emerald-100",
     badge: "bg-emerald-100 text-emerald-700",
@@ -291,6 +296,12 @@ export default function SalaryResult({
 
       {/* ─── HERO VERDICT ─── */}
       <div className={`px-5 pt-5 pb-5 ${config.heroBg}`}>
+        <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+          Short answer:{" "}
+          <span className="text-gray-700 normal-case tracking-normal font-semibold">
+            {config.shortAnswer}
+          </span>
+        </p>
         <div className="flex items-start gap-3">
           <span className="text-2xl mt-0.5 flex-shrink-0" role="img" aria-hidden="true">
             {config.emoji}
