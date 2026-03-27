@@ -77,7 +77,7 @@ export default function Footer() {
             </ul>
             <div className="pt-2 space-y-1.5">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Data</p>
-              <p className="text-xs text-gray-400">Updated Q1 {year} · Eurostat · ONS · Glassdoor · Indeed · Levels.fyi</p>
+              <p className="text-xs text-gray-400">Eurostat · ONS · Destatis · INE</p>
             </div>
           </div>
         </div>

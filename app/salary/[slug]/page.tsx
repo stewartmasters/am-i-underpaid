@@ -111,8 +111,16 @@ export default async function SalaryPage({ params }: Props) {
   const faqSchema = buildFaqSchema(faqs);
   const locationCtx = getLocationContext(page.locationSlug);
   const roleCtx     = getRoleContext(page.roleSlug);
-  const otherRoles     = ROLES.filter((r) => r.slug !== page.roleSlug).slice(0, 5);
-  const otherLocations = LOCATIONS.filter((l) => l.slug !== page.locationSlug).slice(0, 5);
+  const otherRoles     = ROLES.filter((r) => r.slug !== page.roleSlug).slice(0, 10);
+  const otherLocations = LOCATIONS.filter((l) => l.slug !== page.locationSlug).slice(0, 8);
+
+  // Blog posts shown inline on salary pages (improves internal linking + content depth)
+  const BLOG_LINKS = [
+    { href: "/blog/how-to-know-if-you-are-underpaid", label: "How to know if you're underpaid" },
+    { href: "/blog/salary-negotiation-tips", label: "7 salary negotiation tips that work" },
+    { href: "/blog/average-salaries-europe-2026", label: "Average salaries in Europe 2026" },
+    { href: "/blog/how-to-ask-for-a-raise", label: "How to ask for a raise" },
+  ] as const;
 
   return (
     <>
@@ -351,6 +359,17 @@ export default async function SalaryPage({ params }: Props) {
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="space-y-3 border-t border-gray-100 pt-8">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">From the blog</p>
+              <div className="grid sm:grid-cols-2 gap-2">
+                {BLOG_LINKS.map(({ href, label }) => (
+                  <Link key={href} href={href} className="text-sm text-gray-600 hover:text-orange-600 hover:underline transition-colors">
+                    {label} →
+                  </Link>
+                ))}
+              </div>
             </div>
 
             <div className="text-xs text-gray-400 pt-2 border-t border-gray-100">

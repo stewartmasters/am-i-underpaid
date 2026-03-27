@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { type SalaryResult, formatSalary, getSeniorityLabel, type ConfidenceLevel, CONFIDENCE_LABELS } from "@/lib/salary-data";
+import Link from "next/link";
+import {
+  type SalaryResult,
+  formatSalary,
+  getSeniorityLabel,
+  type ConfidenceLevel,
+  CONFIDENCE_LABELS,
+} from "@/lib/salary-data";
 import { track } from "@/lib/analytics";
 
 const SAVE_KEY = "salary_verdict_saved";
@@ -15,40 +22,62 @@ interface Props {
   confidenceLevel?: ConfidenceLevel;
 }
 
-// Headline is a function of percentile to enable dynamic copy like
-// "You earn less than 68% of people in your role"
-const VERDICT_CONFIG = {
+interface VerdictConfig {
+  emoji: string;
+  headline: string;
+  heroSub: string;
+  nextStep: string;
+  heroBg: string;
+  badge: string;
+  badgeLabel: string;
+  barColor: string;
+  gapColor: string;
+}
+
+const VERDICT_CONFIG: Record<SalaryResult["verdict"], VerdictConfig> = {
   "well-below": {
-    headline: (pct: number) => `You earn less than ${100 - pct}% of people in your role.`,
-    sub: "Your salary is significantly below what the market pays for your role, location, and experience.",
+    emoji: "😬",
+    headline: "You're likely underpaid.",
+    heroSub: "Most people in your role earn more than you do.",
     nextStep: "This is worth raising in your next compensation conversation.",
-    bg: "bg-red-50", border: "border-red-200",
-    badge: "bg-red-100 text-red-700", badgeLabel: "Well below market",
-    barColor: "bg-red-400", deltaColor: "text-red-600",
+    heroBg: "bg-red-50 border-b border-red-100",
+    badge: "bg-red-100 text-red-700",
+    badgeLabel: "Well below market",
+    barColor: "bg-red-400",
+    gapColor: "text-red-600",
   },
   "slightly-below": {
-    headline: (pct: number) => `You earn less than ${100 - pct}% of people in your role.`,
-    sub: "Your salary is slightly below the market rate for your role and location.",
+    emoji: "😐",
+    headline: "Your salary may be slightly below market.",
+    heroSub: "You're a bit below what similar roles typically pay in your location.",
     nextStep: "Worth keeping in mind for your next salary review or offer negotiation.",
-    bg: "bg-orange-50", border: "border-orange-200",
-    badge: "bg-orange-100 text-orange-700", badgeLabel: "Slightly below market",
-    barColor: "bg-orange-400", deltaColor: "text-orange-600",
+    heroBg: "bg-orange-50 border-b border-orange-100",
+    badge: "bg-orange-100 text-orange-700",
+    badgeLabel: "Slightly below market",
+    barColor: "bg-orange-400",
+    gapColor: "text-orange-600",
   },
   "fair": {
-    headline: (_pct: number) => "You're earning around market rate.",
-    sub: "Your salary is broadly in line with what the market pays for this role.",
+    emoji: "🙂",
+    headline: "You're roughly at market rate.",
+    heroSub: "Your salary looks broadly in line with similar roles in your location.",
     nextStep: "You're roughly where the market expects you to be.",
-    bg: "bg-amber-50", border: "border-amber-200",
-    badge: "bg-amber-100 text-amber-700", badgeLabel: "Around market",
-    barColor: "bg-amber-400", deltaColor: "text-amber-600",
+    heroBg: "bg-amber-50 border-b border-amber-100",
+    badge: "bg-amber-100 text-amber-700",
+    badgeLabel: "Around market",
+    barColor: "bg-amber-400",
+    gapColor: "text-gray-600",
   },
   "above": {
-    headline: (pct: number) => `You're earning more than ${pct}% of people in your role.`,
-    sub: "You're earning above what most people in a comparable role make. Well negotiated.",
+    emoji: "😎",
+    headline: "You're above market.",
+    heroSub: "You earn more than most people in similar roles. Well negotiated.",
     nextStep: "You're ahead of market — a strong position to negotiate from.",
-    bg: "bg-emerald-50", border: "border-emerald-200",
-    badge: "bg-emerald-100 text-emerald-700", badgeLabel: "Above market",
-    barColor: "bg-emerald-400", deltaColor: "text-emerald-600",
+    heroBg: "bg-emerald-50 border-b border-emerald-100",
+    badge: "bg-emerald-100 text-emerald-700",
+    badgeLabel: "Above market",
+    barColor: "bg-emerald-500",
+    gapColor: "text-emerald-600",
   },
 };
 
@@ -58,26 +87,60 @@ function ordinal(n: number): string {
   return n + (s[(v - 20) % 10] ?? s[v] ?? s[0]);
 }
 
-function buildShareText(verdict: SalaryResult["verdict"], percentile: number, deltaStr: string, roleLabel?: string, locationLabel?: string): string {
-  const context = roleLabel && locationLabel ? ` (${roleLabel} · ${locationLabel})` : "";
-  if (verdict === "well-below") return `I just found out I earn less than ${100 - percentile}% of people in my role${context}. Not what I expected. Used this free salary checker.`;
-  if (verdict === "slightly-below") return `Turns out I might be underpaid 😅${context}. Used this free salary checker to find out where I stand.`;
-  if (verdict === "above") return `Apparently I'm earning more than ${percentile}% of people in my role${context}. Checked with this free salary benchmarking tool.`;
-  return `I'm at the ${ordinal(percentile)} percentile for my role${context}. Checked using this free salary tool — takes 30 seconds.`;
+function buildShareCard(
+  verdict: SalaryResult["verdict"],
+  percentile: number,
+  deltaStr: string,
+  roleLabel?: string,
+  locationLabel?: string
+): string {
+  const roleLocation =
+    roleLabel && locationLabel
+      ? `${roleLabel} · ${locationLabel}`
+      : roleLabel ?? locationLabel ?? "";
+  const pctLine =
+    percentile <= 50
+      ? `Bottom ${100 - percentile}% for my role`
+      : `Top ${100 - percentile}% for my role`;
+
+  const lines: string[] = [];
+  if (verdict === "well-below") {
+    lines.push(`😬 Might be underpaid by ~${deltaStr}/year`);
+  } else if (verdict === "slightly-below") {
+    lines.push("😐 Salary might be slightly below market");
+  } else if (verdict === "above") {
+    lines.push("😎 Above market for my role");
+  } else {
+    lines.push("🙂 Roughly at market rate");
+  }
+  lines.push(pctLine);
+  if (roleLocation) lines.push(roleLocation);
+  lines.push("salaryverdict.com");
+  return lines.join("\n");
 }
 
-export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, locationLabel, confidenceLevel }: Props) {
-  const [copied, setCopied] = useState(false);
-  const [copiedText, setCopiedText] = useState(false);
+export default function SalaryResult({
+  result,
+  yearsOfExp,
+  onReset,
+  roleLabel,
+  locationLabel,
+  confidenceLevel,
+}: Props) {
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedCard, setCopiedCard] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Check if already saved on mount
   useEffect(() => {
     try {
       const item = localStorage.getItem(SAVE_KEY);
       if (item) {
         const parsed = JSON.parse(item);
-        if (parsed.verdict === result.verdict && parsed.roleSlug === result.roleSlug && parsed.locationSlug === result.locationSlug) {
+        if (
+          parsed.verdict === result.verdict &&
+          parsed.roleSlug === result.roleSlug &&
+          parsed.locationSlug === result.locationSlug
+        ) {
           setSaved(true);
         }
       }
@@ -86,200 +149,370 @@ export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, l
 
   const handleSave = () => {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({
-        verdict: result.verdict,
-        percentile: result.percentile,
-        median: result.median,
-        delta: result.delta,
-        currency: result.currency,
-        roleSlug: result.roleSlug,
-        locationSlug: result.locationSlug,
-        roleLabel,
-        locationLabel,
-        savedAt: new Date().toISOString(),
-      }));
+      localStorage.setItem(
+        SAVE_KEY,
+        JSON.stringify({
+          verdict: result.verdict,
+          percentile: result.percentile,
+          median: result.median,
+          delta: result.delta,
+          currency: result.currency,
+          roleSlug: result.roleSlug,
+          locationSlug: result.locationSlug,
+          roleLabel,
+          locationLabel,
+          savedAt: new Date().toISOString(),
+        })
+      );
       setSaved(true);
       track("result_saved" as Parameters<typeof track>[0]);
     } catch {}
   };
 
   const config = VERDICT_CONFIG[result.verdict];
-  const { currency, low, median, high, percentile, delta } = result;
+  const { currency, low, median, high, percentile, delta, recordCount, sourceCount } = result;
+
+  // Derive current salary from median + delta (delta = currentSalary - median)
+  const currentSalary = median + delta;
   const deltaAbs = Math.abs(delta);
   const deltaStr = formatSalary(Math.round(deltaAbs / 500) * 500, currency);
-  const barPos = Math.max(5, Math.min(93, percentile));
+  // Gap display: +€X,000 or -€X,000
+  const gapDisplay =
+    Math.round(deltaAbs / 500) * 500 === 0
+      ? "—"
+      : `${delta > 0 ? "+" : "-"}${deltaStr}`;
+
+  const barPos = Math.max(4, Math.min(94, percentile));
   const seniorityLabel = yearsOfExp !== undefined ? getSeniorityLabel(yearsOfExp) : null;
-  const shareText = buildShareText(result.verdict, percentile, deltaStr, roleLabel, locationLabel);
   const confidence = confidenceLevel ? CONFIDENCE_LABELS[confidenceLevel] : null;
-  const headline = config.headline(percentile);
-  const pageUrl = typeof window !== "undefined" ? window.location.href : "https://salaryverdict.com";
-  const isBelow = result.verdict === "well-below" || result.verdict === "slightly-below";
+  const isBelow =
+    result.verdict === "well-below" || result.verdict === "slightly-below";
+
+  // "Why this matters" block: only show when there's a real gap (>=€3k) and verdict is below
+  const showWhyItMatters = isBelow && deltaAbs >= 3000;
+  const fiveYearStr = showWhyItMatters
+    ? formatSalary(Math.round((deltaAbs * 5) / 1000) * 1000, currency)
+    : null;
+
+  const pageUrl =
+    typeof window !== "undefined" ? window.location.href : "https://salaryverdict.com";
+
+  const shareCard = buildShareCard(
+    result.verdict,
+    percentile,
+    deltaStr,
+    roleLabel,
+    locationLabel
+  );
+
+  // Percentile section headline (role + location context)
+  const pctBelow = 100 - percentile;
+  const percentileHeadline = (() => {
+    const roleCtx = roleLabel ? `${roleLabel}s` : "this role";
+    const locCtx = locationLabel ? ` in ${locationLabel}` : "";
+    if (percentile <= 50) return `Bottom ${pctBelow}% for ${roleCtx}${locCtx}`;
+    return `Top ${100 - percentile}% for ${roleCtx}${locCtx}`;
+  })();
+
+  const percentileMicrocopy = (() => {
+    if (isBelow)
+      return `You earn less than roughly ${pctBelow}% of people in similar roles.`;
+    if (result.verdict === "above")
+      return `You earn more than roughly ${percentile}% of people in similar roles.`;
+    return "You earn roughly what most people in your role make.";
+  })();
+
+  const MONTH_YEAR = new Date().toLocaleDateString("en-GB", {
+    month: "long",
+    year: "numeric",
+  });
 
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(pageUrl);
-      setCopied(true);
+      setCopiedLink(true);
       track("share_link_copied");
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopiedLink(false), 2500);
     } catch {}
   };
 
-  const handleCopyText = async () => {
+  const handleCopyCard = async () => {
     try {
-      await navigator.clipboard.writeText(shareText + " → " + pageUrl);
-      setCopiedText(true);
+      await navigator.clipboard.writeText(shareCard);
+      setCopiedCard(true);
       track("share_text_copied");
-      setTimeout(() => setCopiedText(false), 2000);
+      setTimeout(() => setCopiedCard(false), 2500);
     } catch {}
   };
 
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+    shareCard + "\n\n"
+  )}&url=${encodeURIComponent(pageUrl)}`;
   const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`;
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText + " → " + pageUrl)}`;
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareCard + "\n\n" + pageUrl)}`;
 
   return (
-    <div className={`rounded-2xl border ${config.border} ${config.bg} p-6 sm:p-8 space-y-6`}>
-      {/* Header */}
-      <div className="space-y-2">
+    <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+
+      {/* ─── TRUST / STATUS ROW ─── */}
+      <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className={`inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full ${config.badge}`}>{config.badgeLabel}</span>
-          {seniorityLabel && <span className="text-xs text-gray-400 font-medium">{seniorityLabel} level</span>}
+          <span
+            className={`text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${config.badge}`}
+          >
+            {config.badgeLabel}
+          </span>
+          {seniorityLabel && (
+            <span className="text-xs text-gray-400">{seniorityLabel} level</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
           {confidence && (
-            <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${confidence.color}`} title={confidence.description}>
+            <span
+              className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${confidence.color}`}
+              title={confidence.description}
+            >
               {confidence.label}
             </span>
           )}
+          <span className="text-xs text-gray-400">{MONTH_YEAR}</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">{headline}</h2>
-        <p className="text-gray-600 text-sm leading-relaxed">{config.sub}</p>
       </div>
-
-      {/* Delta callout */}
-      {isBelow && (
-        <div className="bg-white/60 rounded-xl p-4 space-y-1">
-          <p className="text-sm text-gray-500">You may be missing out on</p>
-          <p className={`text-3xl font-extrabold ${config.deltaColor}`}>{deltaStr}<span className="text-base font-semibold text-gray-500">/year</span></p>
-          <p className="text-xs text-gray-400">compared to the mid-market rate for your role</p>
-        </div>
-      )}
-      {result.verdict === "above" && (
-        <div className="bg-white/60 rounded-xl p-4 space-y-1">
-          <p className="text-sm text-gray-500">You&apos;re earning</p>
-          <p className={`text-3xl font-extrabold ${config.deltaColor}`}>{deltaStr}<span className="text-base font-semibold text-gray-500">/year</span></p>
-          <p className="text-xs text-gray-400">above the mid-market rate for your role</p>
+      {recordCount != null && recordCount > 0 && (
+        <div className="px-5 py-2 bg-gray-50 border-b border-gray-100">
+          <p className="text-xs text-gray-400">
+            {sourceCount != null && sourceCount > 0
+              ? `Based on ${sourceCount} data source${sourceCount !== 1 ? "s" : ""} · `
+              : ""}
+            {recordCount} matching salary records
+          </p>
         </div>
       )}
 
-      {/* Percentile bar */}
-      <div className="space-y-2">
-        <div className="flex justify-between text-xs text-gray-500 font-medium">
-          <span>Bottom earners</span>
-          <span className="font-black text-lg text-gray-900">{ordinal(percentile)} percentile</span>
-          <span>Top earners</span>
+      {/* ─── HERO VERDICT ─── */}
+      <div className={`px-5 pt-5 pb-5 ${config.heroBg}`}>
+        <div className="flex items-start gap-3">
+          <span className="text-2xl mt-0.5 flex-shrink-0" role="img" aria-hidden="true">
+            {config.emoji}
+          </span>
+          <div className="space-y-1 min-w-0">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 leading-tight">
+              {config.headline}
+            </h2>
+            <p className="text-sm text-gray-600 leading-relaxed">{config.heroSub}</p>
+          </div>
         </div>
-        <div className="relative h-3 bg-gray-200 rounded-full overflow-visible">
-          <div className={`absolute left-0 top-0 h-full ${config.barColor} rounded-full transition-all duration-700`} style={{ width: `${barPos}%` }} />
-          <div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-gray-800 rounded-full shadow-md" style={{ left: `calc(${barPos}% - 8px)` }} />
-        </div>
-        <p className="text-xs text-gray-400 text-center">
-          {percentile <= 30 ? "Most people in your role earn more than you do." : percentile >= 70 ? "You're earning more than most people in your role." : "You're earning roughly what most people in your role earn."}
-        </p>
-      </div>
 
-      {/* Market range */}
-      <div className="space-y-2">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Market range for your role</p>
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { label: "Low",    value: formatSalary(low, currency),    sub: "25th pct" },
-            { label: "Median", value: formatSalary(median, currency), sub: "50th pct", hl: true },
-            { label: "High",   value: formatSalary(high, currency),   sub: "75th pct" },
-          ].map(({ label, value, sub, hl }) => (
-            <div key={label} className={`rounded-xl p-3 text-center ${hl ? "bg-white shadow-sm ring-1 ring-gray-200" : "bg-white/60"}`}>
-              <div className="text-xs text-gray-400 font-medium mb-1">{label}</div>
-              <div className={`font-bold text-sm sm:text-base ${hl ? "text-gray-900" : "text-gray-700"}`}>{value}</div>
-              <div className="text-xs text-gray-400">{sub}</div>
+        {/* 3-stat row: your salary / market midpoint / gap */}
+        <div className="grid grid-cols-3 gap-2 mt-4">
+          <div className="bg-white/70 rounded-xl p-3 text-center">
+            <div className="text-xs text-gray-400 font-medium mb-1">Your salary</div>
+            <div className="font-bold text-gray-900 text-sm sm:text-base leading-tight">
+              {formatSalary(currentSalary, currency)}
             </div>
-          ))}
+          </div>
+          <div className="bg-white rounded-xl p-3 text-center ring-1 ring-gray-200 shadow-sm">
+            <div className="text-xs text-gray-400 font-medium mb-1">Market midpoint</div>
+            <div className="font-bold text-gray-900 text-sm sm:text-base leading-tight">
+              {formatSalary(median, currency)}
+            </div>
+          </div>
+          <div className="bg-white/70 rounded-xl p-3 text-center">
+            <div className="text-xs text-gray-400 font-medium mb-1">Gap</div>
+            <div
+              className={`font-bold text-sm sm:text-base leading-tight ${
+                delta > 0 ? "text-emerald-600" : delta < 0 ? config.gapColor : "text-gray-500"
+              }`}
+            >
+              {gapDisplay}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Next step + social proof */}
-      <div className="space-y-2">
-        <p className="text-sm text-gray-600 italic border-l-2 border-orange-200 pl-3">{config.nextStep}</p>
-        <p className="text-xs text-gray-400">
-          Based on official government earnings surveys (ONS, Eurostat, Destatis, INE) and verified market benchmarks.
-        </p>
-      </div>
+      <div className="divide-y divide-gray-100">
 
-      {/* Share section — primary CTA first */}
-      <div className="bg-white/70 rounded-xl p-4 space-y-3 border border-gray-100">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Share your result</p>
-        {/* Primary: copy share text */}
-        <button
-          onClick={handleCopyText}
-          className="w-full flex items-center justify-center gap-2 text-sm font-bold bg-gray-900 text-white py-3 px-4 rounded-xl hover:bg-gray-800 transition-colors"
-        >
-          {copiedText ? "✓ Copied to clipboard!" : "Copy share text"}
-        </button>
-        {/* Secondary: social share */}
-        <div className="grid grid-cols-3 gap-2">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("share_whatsapp")}
-            className="flex items-center justify-center gap-1 text-xs font-semibold bg-green-500 text-white py-2.5 px-2 rounded-lg hover:bg-green-600 transition-colors"
-          >
-            WhatsApp
-          </a>
-          <a
-            href={twitterUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("share_twitter")}
-            className="flex items-center justify-center gap-1 text-xs font-semibold bg-black text-white py-2.5 px-2 rounded-lg hover:bg-gray-900 transition-colors"
-          >
-            Share on X
-          </a>
-          <a
-            href={linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("share_linkedin")}
-            className="flex items-center justify-center gap-1 text-xs font-semibold bg-blue-600 text-white py-2.5 px-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            LinkedIn
-          </a>
+        {/* ─── PERCENTILE BLOCK ─── */}
+        <div className="px-5 py-5 space-y-3">
+          <h3 className="font-bold text-gray-900 text-base">{percentileHeadline}</h3>
+          <div className="space-y-2">
+            <div className="relative h-2.5 bg-gray-200 rounded-full overflow-visible">
+              <div
+                className={`absolute left-0 top-0 h-full ${config.barColor} rounded-full transition-all duration-700`}
+                style={{ width: `${barPos}%` }}
+              />
+              <div
+                className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-gray-800 rounded-full shadow-md"
+                style={{ left: `calc(${barPos}% - 8px)` }}
+              />
+            </div>
+            <div className="flex justify-between text-xs text-gray-400 font-medium">
+              <span>Bottom</span>
+              <span className="text-gray-700 font-bold">{ordinal(percentile)} percentile</span>
+              <span>Top</span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 leading-relaxed">{percentileMicrocopy}</p>
         </div>
-        {/* Tertiary: copy link */}
-        <button
-          onClick={handleCopyLink}
-          className="w-full text-xs font-medium border border-gray-200 bg-white text-gray-500 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          {copied ? "✓ Link copied!" : "Copy result link"}
-        </button>
-        <p className="text-xs text-gray-400 text-center">Send to a colleague — see how you compare</p>
-      </div>
 
-      {/* Actions */}
-      <div className="space-y-2">
-        <button onClick={onReset} className="w-full bg-gray-900 text-white py-3 px-6 rounded-xl font-semibold hover:bg-gray-800 transition-colors">
-          Check another role
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={saved}
-          className="w-full border border-gray-200 text-gray-500 py-2.5 px-6 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-default"
-        >
-          {saved ? "✓ Result saved to this browser" : "Save result to re-check later"}
-        </button>
-      </div>
+        {/* ─── MARKET RANGE ─── */}
+        <div className="px-5 py-5 space-y-3">
+          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            Typical market range
+          </h3>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "Low", value: formatSalary(low, currency), sub: "25th percentile" },
+              { label: "Median", value: formatSalary(median, currency), sub: "50th percentile", hl: true },
+              { label: "High", value: formatSalary(high, currency), sub: "75th percentile" },
+            ].map(({ label, value, sub, hl }) => (
+              <div
+                key={label}
+                className={`rounded-xl p-3 text-center ${
+                  hl ? "bg-gray-900 text-white" : "bg-gray-50"
+                }`}
+              >
+                <div className={`text-xs font-medium mb-1 ${hl ? "text-gray-400" : "text-gray-400"}`}>
+                  {label}
+                </div>
+                <div
+                  className={`font-bold text-sm sm:text-base ${hl ? "text-white" : "text-gray-700"}`}
+                >
+                  {value}
+                </div>
+                <div className={`text-xs mt-0.5 ${hl ? "text-gray-500" : "text-gray-400"}`}>
+                  {sub}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-gray-400">
+            Base salary only. Bonus, equity, and benefits not included.
+          </p>
+        </div>
 
-      <p className="text-xs text-gray-400 text-center">
-        Based on public salary benchmarks and structured modelling.{" "}
-        <a href="/methodology" className="text-orange-500 hover:underline">How we calculate</a>
-      </p>
+        {/* ─── WHY THIS MATTERS (below verdicts with real gap only) ─── */}
+        {showWhyItMatters ? (
+          <div className="px-5 py-5 space-y-2">
+            <h3 className="font-bold text-gray-900 text-base">Why this matters</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              A {deltaStr} gap today typically compounds over time. Over 5 years,
+              that&apos;s roughly{" "}
+              <strong className="text-gray-800">{fiveYearStr}</strong> in missed
+              gross pay — before any additional raises or promotions.
+            </p>
+            <p className="text-sm text-gray-600 leading-relaxed border-l-2 border-orange-200 pl-3">
+              {config.nextStep}
+            </p>
+          </div>
+        ) : (
+          <div className="px-5 py-4">
+            <p className="text-sm text-gray-500 italic border-l-2 border-gray-200 pl-3">
+              {config.nextStep}
+            </p>
+          </div>
+        )}
+
+        {/* ─── SHARE BLOCK ─── */}
+        <div className="px-5 py-5 space-y-3">
+          <h3 className="font-bold text-gray-900 text-base">Share your result</h3>
+
+          {/* Share card preview */}
+          <div className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all">
+            {shareCard}
+          </div>
+
+          {/* Share buttons */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={handleCopyCard}
+              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-gray-900 text-white py-2.5 px-3 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              {copiedCard ? "✓ Copied!" : "Copy share text"}
+            </button>
+            <button
+              onClick={handleCopyLink}
+              className="flex items-center justify-center gap-1.5 text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              {copiedLink ? "✓ Copied!" : "Copy link"}
+            </button>
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("share_linkedin")}
+              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-blue-600 text-white py-2.5 px-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Share on LinkedIn
+            </a>
+            <a
+              href={twitterUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("share_twitter")}
+              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-black text-white py-2.5 px-3 rounded-lg hover:bg-gray-900 transition-colors"
+            >
+              Share on X
+            </a>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("share_whatsapp")}
+              className="col-span-2 flex items-center justify-center gap-1.5 text-xs font-semibold bg-green-500 text-white py-2.5 px-3 rounded-lg hover:bg-green-600 transition-colors"
+            >
+              Share on WhatsApp
+            </a>
+          </div>
+          <p className="text-xs text-gray-400 text-center">
+            Compare with a friend — send them this link
+          </p>
+        </div>
+
+        {/* ─── NEXT ACTIONS ─── */}
+        <div className="px-5 py-5 space-y-2">
+          <button
+            onClick={onReset}
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-xl font-semibold transition-colors text-sm"
+          >
+            Check another salary →
+          </button>
+          <div className="grid grid-cols-2 gap-2">
+            {result.roleSlug && (
+              <Link
+                href={`/salary/${result.roleSlug}`}
+                className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center leading-tight"
+              >
+                {roleLabel ? `${roleLabel} in other cities` : "Same role, other cities"}
+              </Link>
+            )}
+            <Link
+              href="/methodology"
+              className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center"
+            >
+              How we calculate →
+            </Link>
+          </div>
+          <button
+            onClick={handleSave}
+            disabled={saved}
+            className="w-full text-xs font-medium text-gray-400 hover:text-gray-600 py-2 transition-colors disabled:cursor-default text-center"
+          >
+            {saved ? "✓ Saved to this browser" : "Save result to re-check later"}
+          </button>
+        </div>
+
+        {/* ─── FOOTER DISCLAIMER ─── */}
+        <div className="px-5 py-3 bg-gray-50">
+          <p className="text-xs text-gray-400">
+            Based on official government earnings surveys (ONS, Eurostat, Destatis, INE) and
+            verified market benchmarks.{" "}
+            <Link href="/methodology" className="text-orange-500 hover:underline">
+              Methodology →
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

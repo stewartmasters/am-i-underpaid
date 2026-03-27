@@ -26,7 +26,14 @@ export type Verdict = "well-below" | "slightly-below" | "fair" | "above";
 
 export interface Role { slug: RoleSlug; label: string; baseSalary: number; category: string; }
 export interface Location { slug: LocationSlug; label: string; country: string; currency: "£" | "€"; multiplier: number; }
-export interface SalaryResult { low: number; median: number; high: number; percentile: number; verdict: Verdict; delta: number; currency: string; roleSlug?: string; locationSlug?: string; }
+export interface SalaryResult {
+  low: number; median: number; high: number; percentile: number; verdict: Verdict;
+  delta: number; currency: string; roleSlug?: string; locationSlug?: string;
+  /** Number of normalized salary records that contributed to this estimate (undefined = fallback model used) */
+  recordCount?: number;
+  /** Number of distinct data sources that contributed (undefined = fallback model used) */
+  sourceCount?: number;
+}
 export interface SeniorityBands {
   junior: { low: number; median: number; high: number; label: string };
   mid:    { low: number; median: number; high: number; label: string };
@@ -156,7 +163,7 @@ function tryPipelineBenchmark(
   roleSlug: string,
   locationSlug: string,
   years: number
-): { low: number; median: number; high: number } | null {
+): { low: number; median: number; high: number; recordCount: number; sourceCount: number } | null {
   try {
     // Dynamic require to avoid breaking static build if records.json missing
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -166,7 +173,13 @@ function tryPipelineBenchmark(
     const records = getAllRecords();
     const result = computeBenchmark(records, { roleNormalized: roleSlug, locationSlug, experienceYears: years });
     if (result.median > 0) {
-      return { low: result.low, median: result.median, high: result.high };
+      return {
+        low: result.low,
+        median: result.median,
+        high: result.high,
+        recordCount: result.record_count,
+        sourceCount: result.source_count,
+      };
     }
     return null;
   } catch {
@@ -210,14 +223,18 @@ export function calculateSalary(roleSlug: string, locationSlug: string, years: n
   else verdict = "fair";
 
   const currency = location?.currency ?? "€";
-  return { low, median, high, percentile, verdict, delta, currency, roleSlug, locationSlug };
+  return {
+    low, median, high, percentile, verdict, delta, currency, roleSlug, locationSlug,
+    recordCount: pipeline?.recordCount,
+    sourceCount: pipeline?.sourceCount,
+  };
 }
 
 export function getMarketRange(roleSlug: string, locationSlug: string, years = 5): { low: number; median: number; high: number; currency: string } {
   const location = LOCATIONS.find((l) => l.slug === locationSlug);
   const currency = location?.currency ?? "€";
   const pipeline = tryPipelineBenchmark(roleSlug, locationSlug, years);
-  if (pipeline) return { ...pipeline, currency };
+  if (pipeline) return { low: pipeline.low, median: pipeline.median, high: pipeline.high, currency };
   const median = computeMedian(roleSlug, locationSlug, years);
   const low  = roundToNearest(median * 0.78, 500);
   const high = roundToNearest(median * 1.28, 500);

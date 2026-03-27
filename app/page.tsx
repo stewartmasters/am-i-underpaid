@@ -52,14 +52,14 @@ export default function Home() {
               <span className="text-orange-500">in 30 seconds</span>
             </h1>
             <p className="text-lg text-gray-500 leading-relaxed">
-              Compare your salary against real market data across 12 locations in Europe. Get your verdict instantly — no signup, no email.
+              Compare your salary against official government wage data across 12 European locations. Get your verdict in 30 seconds — no signup, no email.
             </p>
 
             <div className="grid grid-cols-3 gap-4 pt-2">
               {[
-                { value: "21",   label: "Role categories" },
-                { value: "12",  label: "Locations" },
-                { value: "300+", label: "Salary guides" },
+                { value: "21",   label: "Role types" },
+                { value: "12",   label: "Locations" },
+                { value: "600+", label: "Salary guides" },
               ].map(({ value, label }) => (
                 <div key={label} className="text-center">
                   <div className="text-2xl font-extrabold text-gray-900">{value}</div>
@@ -68,20 +68,21 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="space-y-1.5 pt-1">
-              <p className="text-xs text-gray-400 font-medium">Built using official public salary datasets:</p>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <div className="space-y-2 pt-1">
+              <p className="text-xs text-gray-500 font-medium">Built using official public salary datasets:</p>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
                 {[
-                  { src: "/logos/eurostat.png", alt: "Eurostat", width: 72, height: 20, displayH: 24 },
-                  { src: "/logos/ons.png",       alt: "ONS",      width: 48, height: 20, displayH: 22 },
+                  { src: "/logos/eurostat.png", alt: "Eurostat", width: 120, height: 40, displayH: 36 },
+                  { src: "/logos/ons.png",       alt: "ONS",      width: 80,  height: 36, displayH: 32 },
                 ].map(({ src, alt, width, height, displayH }) => (
                   <Image key={alt} src={src} alt={alt} width={width} height={height}
-                    className="opacity-40 grayscale"
+                    className="opacity-40 grayscale hover:opacity-60 transition-opacity"
                     style={{ objectFit: "contain", height: `${displayH}px`, width: "auto" }}
                   />
                 ))}
                 <span className="text-xs text-gray-400 font-medium">+ Destatis · INE · national offices</span>
               </div>
+              <p className="text-xs text-gray-400">Coverage varies by role and location.</p>
             </div>
 
             <div className="space-y-2 pt-2">
