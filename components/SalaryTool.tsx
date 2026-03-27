@@ -61,7 +61,13 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
         <label className="block text-sm font-semibold text-gray-700">Job title</label>
         <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer">
           <option value="">Select your role...</option>
-          {ROLES.map((r) => <option key={r.slug} value={r.slug}>{r.label}</option>)}
+          {Array.from(new Set(ROLES.map((r) => r.category))).map((cat) => (
+            <optgroup key={cat} label={cat}>
+              {ROLES.filter((r) => r.category === cat).map((r) => (
+                <option key={r.slug} value={r.slug}>{r.label}</option>
+              ))}
+            </optgroup>
+          ))}
         </select>
       </div>
 
@@ -69,7 +75,13 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
         <label className="block text-sm font-semibold text-gray-700">Location</label>
         <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer">
           <option value="">Select your location...</option>
-          {LOCATIONS.map((l) => <option key={l.slug} value={l.slug}>{l.label}</option>)}
+          {Array.from(new Set(LOCATIONS.map((l) => l.country))).map((country) => (
+            <optgroup key={country || "Other"} label={country || "Europe"}>
+              {LOCATIONS.filter((l) => l.country === country).map((l) => (
+                <option key={l.slug} value={l.slug}>{l.label}</option>
+              ))}
+            </optgroup>
+          ))}
         </select>
       </div>
 
