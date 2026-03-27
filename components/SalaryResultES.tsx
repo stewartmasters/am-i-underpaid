@@ -195,6 +195,22 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, onEdit, ro
             </div>
           </div>
         </div>
+
+        {/* Above-fold actions */}
+        <div className="flex items-center gap-3 mt-4 pt-3 border-t border-black/5">
+          <button
+            onClick={handleCopyCard}
+            className="flex-1 text-xs font-semibold text-center py-2 px-3 rounded-lg bg-white/80 hover:bg-white text-gray-700 transition-colors"
+          >
+            {copiedCard ? "✓ ¡Copiado!" : "Compartir resultado →"}
+          </button>
+          <Link
+            href="/methodology"
+            className="text-xs text-gray-400 hover:text-orange-500 transition-colors whitespace-nowrap"
+          >
+            Metodología →
+          </Link>
+        </div>
       </div>
 
       <div className="divide-y divide-gray-100">

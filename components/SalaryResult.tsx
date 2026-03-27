@@ -371,6 +371,22 @@ export default function SalaryResult({
             </div>
           </div>
         </div>
+
+        {/* Above-fold actions */}
+        <div className="flex items-center gap-3 mt-4 pt-3 border-t border-black/5">
+          <button
+            onClick={handleCopyCard}
+            className="flex-1 text-xs font-semibold text-center py-2 px-3 rounded-lg bg-white/80 hover:bg-white text-gray-700 transition-colors"
+          >
+            {copiedCard ? "✓ Copied!" : "Share result →"}
+          </button>
+          <Link
+            href="/methodology"
+            className="text-xs text-gray-400 hover:text-orange-500 transition-colors whitespace-nowrap"
+          >
+            How we calculate →
+          </Link>
+        </div>
       </div>
 
       <div className="divide-y divide-gray-100">
