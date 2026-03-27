@@ -542,7 +542,7 @@ export default function SalaryResult({
           </div>
 
           <div
-            className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all cursor-pointer"
+            className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre-wrap break-words leading-relaxed select-all cursor-pointer overflow-hidden"
             onClick={handleCopyCard}
           >
             {shareCard}
