@@ -1,6 +1,8 @@
 export type RoleSlug =
   | "software-engineer"
   | "product-manager"
+  | "project-manager"
+  | "full-stack-developer"
   | "marketing-manager"
   | "sales-manager"
   | "operations-manager"
@@ -21,11 +23,23 @@ export type RoleSlug =
   | "performance-marketing-manager"
   | "social-media-manager";
 
-export type LocationSlug = "london" | "madrid" | "barcelona" | "berlin" | "paris" | "amsterdam" | "dublin" | "uk" | "spain" | "germany" | "france" | "europe";
+export type LocationSlug =
+  | "london" | "uk"
+  | "dublin"
+  | "amsterdam"
+  | "paris" | "france"
+  | "berlin" | "germany"
+  | "barcelona" | "madrid" | "spain"
+  | "zurich" | "switzerland"
+  | "lisbon" | "portugal"
+  | "stockholm" | "sweden"
+  | "milan" | "italy"
+  | "warsaw" | "poland"
+  | "europe";
 export type Verdict = "well-below" | "slightly-below" | "fair" | "above";
 
 export interface Role { slug: RoleSlug; label: string; baseSalary: number; category: string; }
-export interface Location { slug: LocationSlug; label: string; country: string; currency: "£" | "€"; multiplier: number; }
+export interface Location { slug: LocationSlug; label: string; country: string; currency: "£" | "€" | "CHF "; multiplier: number; }
 export interface SalaryResult {
   low: number; median: number; high: number; percentile: number; verdict: Verdict;
   delta: number; currency: string; roleSlug?: string; locationSlug?: string;
@@ -67,6 +81,9 @@ export const ROLES: Role[] = [
   { slug: "content-manager",             label: "Content Manager",             baseSalary: 52000, category: "Marketing" },
   { slug: "performance-marketing-manager", label: "Performance Marketing Manager", baseSalary: 65000, category: "Marketing" },
   { slug: "social-media-manager",        label: "Social Media Manager",        baseSalary: 48000, category: "Marketing" },
+  // New high-search-volume roles
+  { slug: "project-manager",             label: "Project Manager",             baseSalary: 68000, category: "Operations" },
+  { slug: "full-stack-developer",        label: "Full Stack Developer",        baseSalary: 73000, category: "Engineering" },
 ];
 
 /**
@@ -102,8 +119,23 @@ export const LOCATIONS: Location[] = [
   { slug: "barcelona", label: "Barcelona", country: "Spain",          currency: "€", multiplier: 0.88 },
   { slug: "madrid",    label: "Madrid",    country: "Spain",          currency: "€", multiplier: 0.82 },
   { slug: "spain",     label: "Spain",     country: "Spain",          currency: "€", multiplier: 0.80 },
+  // Switzerland — calibrated from Swiss Federal Statistical Office data; CHF
+  { slug: "zurich",       label: "Zurich",       country: "Switzerland", currency: "CHF ", multiplier: 1.72 },
+  { slug: "switzerland",  label: "Switzerland",  country: "Switzerland", currency: "CHF ", multiplier: 1.60 },
+  // Sweden — calibrated from Statistics Sweden (SCB) data; EUR equivalent shown
+  { slug: "stockholm",    label: "Stockholm",    country: "Sweden",      currency: "€",    multiplier: 1.20 },
+  { slug: "sweden",       label: "Sweden",       country: "Sweden",      currency: "€",    multiplier: 1.10 },
+  // Italy — calibrated from Istat data
+  { slug: "milan",        label: "Milan",        country: "Italy",       currency: "€",    multiplier: 0.87 },
+  { slug: "italy",        label: "Italy",        country: "Italy",       currency: "€",    multiplier: 0.80 },
+  // Portugal — calibrated from INE Portugal data
+  { slug: "lisbon",       label: "Lisbon",       country: "Portugal",    currency: "€",    multiplier: 0.78 },
+  { slug: "portugal",     label: "Portugal",     country: "Portugal",    currency: "€",    multiplier: 0.72 },
+  // Poland — calibrated from GUS (Statistics Poland) data; EUR equivalent shown
+  { slug: "warsaw",       label: "Warsaw",       country: "Poland",      currency: "€",    multiplier: 0.65 },
+  { slug: "poland",       label: "Poland",       country: "Poland",      currency: "€",    multiplier: 0.58 },
   // Europe (broad average) — calibrated from Eurostat EU-wide aggregate; lower confidence
-  { slug: "europe",    label: "Europe",    country: "",               currency: "€", multiplier: 1.00 },
+  { slug: "europe",       label: "Europe",       country: "",            currency: "€",    multiplier: 1.00 },
 ];
 
 const EXP_CURVE: [number, number][] = [
@@ -276,10 +308,10 @@ export type ConfidenceLevel = "high" | "medium" | "low";
 
 const HIGH_CONFIDENCE_ROLES = new Set([
   // Tech roles with strong cross-source coverage (ONS/Eurostat + Glassdoor/Indeed + Levels.fyi)
-  "software-engineer", "frontend-developer", "backend-developer", "data-scientist",
-  "devops-engineer",
+  "software-engineer", "frontend-developer", "backend-developer", "full-stack-developer",
+  "data-scientist", "devops-engineer",
   // Non-tech roles with good government survey + aggregated coverage
-  "product-manager", "designer", "marketing-manager", "sales-manager", "data-analyst",
+  "product-manager", "project-manager", "designer", "marketing-manager", "sales-manager", "data-analyst",
 ]);
 const HIGH_CONFIDENCE_LOCATIONS = new Set([
   "london", "berlin", "amsterdam", "paris", "dublin",

@@ -17,18 +17,28 @@ export interface SeoPage {
 const YEAR = 2026;
 
 const LOCATION_CONTEXT: Record<string, string> = {
-  london:    "London is one of Europe's highest-paying markets, driven by a high density of US-headquartered companies, financial institutions, and a competitive talent pool.",
-  amsterdam: "Amsterdam has become a top destination for international tech and product talent, with salaries that are among the highest in continental Europe.",
-  dublin:    "Dublin's role as the EMEA headquarters for many US tech companies has pushed salaries well above the European average for most professional roles.",
-  paris:     "Paris offers strong salaries — particularly in finance, luxury, and tech — backed by France's regulated labour market and a growing startup ecosystem.",
-  berlin:    "Berlin is Europe's startup capital, with a maturing salary market that has risen significantly over the past decade as international companies expand there.",
-  barcelona: "Barcelona has a vibrant tech and design scene, though salaries remain lower than northern Europe — meaning there's often a gap between market value and what local companies pay.",
-  madrid:    "Madrid is Spain's primary business hub with the country's highest salaries, though they still trail northern European markets by a significant margin.",
-  uk:        "The UK market varies considerably — London leads, but regional cities like Manchester, Edinburgh, and Bristol have also seen salary growth in professional roles.",
-  spain:     "Spain's professional salary market is evolving rapidly, particularly in tech and product, but pay still lags significantly behind northern European averages.",
-  germany:   "Germany offers a stable, well-paying labour market with strong protections. Salaries are competitive across the country, with Munich and Frankfurt leading regionally.",
-  france:    "France's labour market is characterised by strong regulation and solid base salaries. Benefits and social contributions are generous, though gross pay may appear lower.",
-  europe:    "Across Europe, salaries vary dramatically by country, city, company type, and sector. The numbers below represent a broad European market baseline.",
+  london:       "London is one of Europe's highest-paying markets, driven by a high density of US-headquartered companies, financial institutions, and a competitive talent pool.",
+  amsterdam:    "Amsterdam has become a top destination for international tech and product talent, with salaries that are among the highest in continental Europe.",
+  dublin:       "Dublin's role as the EMEA headquarters for many US tech companies has pushed salaries well above the European average for most professional roles.",
+  paris:        "Paris offers strong salaries — particularly in finance, luxury, and tech — backed by France's regulated labour market and a growing startup ecosystem.",
+  berlin:       "Berlin is Europe's startup capital, with a maturing salary market that has risen significantly over the past decade as international companies expand there.",
+  barcelona:    "Barcelona has a vibrant tech and design scene, though salaries remain lower than northern Europe — meaning there's often a gap between market value and what local companies pay.",
+  madrid:       "Madrid is Spain's primary business hub with the country's highest salaries, though they still trail northern European markets by a significant margin.",
+  uk:           "The UK market varies considerably — London leads, but regional cities like Manchester, Edinburgh, and Bristol have also seen salary growth in professional roles.",
+  spain:        "Spain's professional salary market is evolving rapidly, particularly in tech and product, but pay still lags significantly behind northern European averages.",
+  germany:      "Germany offers a stable, well-paying labour market with strong protections. Salaries are competitive across the country, with Munich and Frankfurt leading regionally.",
+  france:       "France's labour market is characterised by strong regulation and solid base salaries. Benefits and social contributions are generous, though gross pay may appear lower.",
+  zurich:       "Zurich is the highest-paying city in Europe for most professional roles, driven by Switzerland's strong economy, low unemployment, and a high concentration of finance and tech firms. Salaries are quoted in Swiss francs (CHF).",
+  switzerland:  "Switzerland consistently ranks as Europe's highest-paying country for professional roles. Strong demand in banking, pharmaceuticals, and tech, combined with a high cost of living, drives salaries significantly above the EU average. Salaries are quoted in CHF.",
+  stockholm:    "Stockholm is one of Europe's leading tech hubs, home to Spotify, Klarna, and a dense ecosystem of scale-ups. Salaries are competitive by European standards, though the market is smaller than London or Berlin.",
+  sweden:       "Sweden offers a strong labour market with an emphasis on work-life balance and flat hierarchies. Tech and product roles in Stockholm pay at or above the continental European average.",
+  milan:        "Milan is Italy's financial and fashion capital, with the country's highest professional salaries. Tech and finance roles have grown significantly, though salaries still lag behind northern European markets.",
+  italy:        "Italy's professional salary market is lower than northern Europe but evolving. Milan and Rome lead, with growing tech ecosystems. Remote-first roles for international companies have become an important segment.",
+  lisbon:       "Lisbon has emerged as one of Europe's fastest-growing tech hubs, attracting international companies and remote workers. Salaries are rising but remain below the EU average, creating significant opportunity for skilled professionals.",
+  portugal:     "Portugal's professional salary market is one of Europe's lowest, but the country's low cost of living and growing tech ecosystem — especially in Lisbon and Porto — make it attractive for international talent.",
+  warsaw:       "Warsaw is Central Europe's largest business hub, with a rapidly maturing tech and services market. Salaries are well below Western European levels but rising sharply, particularly for engineering and product roles.",
+  poland:       "Poland has become a major European tech hub, with Warsaw and Kraków hosting large engineering teams for international companies. Salaries are significantly below Western Europe, though purchasing power is competitive locally.",
+  europe:       "Across Europe, salaries vary dramatically by country, city, company type, and sector. The numbers below represent a broad European market baseline.",
 };
 
 const ROLE_CONTEXT: Record<string, string> = {
@@ -53,6 +63,8 @@ const ROLE_CONTEXT: Record<string, string> = {
   "content-manager":    "Content manager salaries are lower than many digital roles, but senior content strategists in tech companies earn significantly more than traditional editorial roles.",
   "performance-marketing-manager": "Performance marketing managers with strong paid media expertise are increasingly well-paid, particularly at companies with significant ad budgets.",
   "social-media-manager": "Social media manager salaries are generally lower than other digital marketing roles, though senior strategists at consumer brands can earn considerably more.",
+  "project-manager":      "Project managers are in demand across every industry — from construction to software. Salaries vary widely based on the sector, company size, and whether PMP or Agile certification is held. Tech and consulting pay the most.",
+  "full-stack-developer": "Full stack developers are among the most versatile and in-demand engineers in Europe. The ability to work across frontend and backend commands a salary premium over specialists, particularly at smaller product companies.",
 };
 
 export function getLocationContext(locationSlug?: string): string {
@@ -115,11 +127,11 @@ export function generateSeoPages(): SeoPage[] {
   // Seniority variation pages — expanded to top roles × major cities
   // Generates "junior/mid/senior X salary in Y" pages for high-search-volume combos
   const SENIORITY_ROLES = [
-    "software-engineer", "product-manager", "data-analyst", "frontend-developer",
-    "backend-developer", "data-scientist", "devops-engineer", "designer",
-    "marketing-manager", "sales-manager",
+    "software-engineer", "product-manager", "project-manager", "full-stack-developer",
+    "data-analyst", "frontend-developer", "backend-developer", "data-scientist",
+    "devops-engineer", "designer", "marketing-manager", "sales-manager",
   ];
-  const SENIORITY_LOCATIONS = ["london", "berlin", "amsterdam", "paris", "dublin", "barcelona"];
+  const SENIORITY_LOCATIONS = ["london", "berlin", "amsterdam", "paris", "dublin", "barcelona", "zurich", "stockholm", "milan", "lisbon"];
   const SENIORITY_COMBOS = SENIORITY_ROLES.flatMap((role) =>
     SENIORITY_LOCATIONS.map((location) => ({ role, location }))
   );
@@ -147,7 +159,11 @@ export function generateSeoPages(): SeoPage[] {
 
   // "Is X a good salary in Location" pages — expanded to all major locations
   const SALARY_AMOUNTS = [25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 90000, 100000, 120000];
-  const SALARY_Q_LOCATIONS: LocationSlug[] = ["london", "berlin", "amsterdam", "paris", "dublin", "barcelona", "madrid", "uk", "germany", "france", "spain"];
+  const SALARY_Q_LOCATIONS: LocationSlug[] = [
+    "london", "berlin", "amsterdam", "paris", "dublin", "barcelona", "madrid",
+    "uk", "germany", "france", "spain",
+    "zurich", "switzerland", "stockholm", "sweden", "milan", "italy", "lisbon", "portugal", "warsaw", "poland",
+  ];
 
   for (const amount of SALARY_AMOUNTS) {
     for (const locSlug of SALARY_Q_LOCATIONS) {
