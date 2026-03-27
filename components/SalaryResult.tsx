@@ -99,7 +99,7 @@ function buildShareCard(
   roleLabel?: string,
   locationLabel?: string
 ): string {
-  const roleLocation =
+  const ctx =
     roleLabel && locationLabel
       ? `${roleLabel} · ${locationLabel}`
       : roleLabel ?? locationLabel ?? "";
@@ -110,17 +110,17 @@ function buildShareCard(
 
   const lines: string[] = [];
   if (verdict === "well-below") {
-    lines.push(`😬 Might be underpaid by ~${deltaStr}/year`);
+    lines.push(`😬 I checked my salary — I'm underpaid by ~${deltaStr}`);
   } else if (verdict === "slightly-below") {
-    lines.push("😐 Salary might be slightly below market");
+    lines.push(`😐 I checked my salary — I'm slightly below market`);
   } else if (verdict === "above") {
-    lines.push("😎 Above market for my role");
+    lines.push(`😎 I checked my salary — I'm above market`);
   } else {
-    lines.push("🙂 Roughly at market rate");
+    lines.push(`🙂 I checked my salary — I'm roughly at market rate`);
   }
   lines.push(pctLine);
-  if (roleLocation) lines.push(roleLocation);
-  lines.push("salaryverdict.com");
+  if (ctx) lines.push(ctx);
+  lines.push("Check yours → salaryverdict.com");
   return lines.join("\n");
 }
 
@@ -426,88 +426,93 @@ export default function SalaryResult({
 
         {/* ─── SHARE BLOCK ─── */}
         <div className="px-5 py-5 space-y-3">
-          <h3 className="font-bold text-gray-900 text-base">Share your result</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-gray-900 text-base">Share your result</h3>
+            <span className="text-xs text-gray-400">Compare with a friend →</span>
+          </div>
 
-          {/* Share card preview */}
-          <div className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all">
+          {/* Share card preview — tap to select all */}
+          <div className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all cursor-pointer" onClick={handleCopyCard}>
             {shareCard}
           </div>
 
-          {/* Share buttons */}
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={handleCopyCard}
-              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-gray-900 text-white py-2.5 px-3 rounded-lg hover:bg-gray-800 transition-colors"
+          {/* Primary share CTA */}
+          <button
+            onClick={handleCopyCard}
+            className="w-full flex items-center justify-center gap-2 text-sm font-bold bg-gray-900 text-white py-3 px-4 rounded-xl hover:bg-gray-800 transition-colors"
+          >
+            {copiedCard ? "✓ Copied to clipboard!" : "Copy and share"}
+          </button>
+
+          {/* Secondary share row */}
+          <div className="grid grid-cols-3 gap-2">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("share_whatsapp")}
+              className="flex items-center justify-center text-xs font-semibold bg-green-500 text-white py-2.5 px-2 rounded-lg hover:bg-green-600 transition-colors"
             >
-              {copiedCard ? "✓ Copied!" : "Copy share text"}
-            </button>
-            <button
-              onClick={handleCopyLink}
-              className="flex items-center justify-center gap-1.5 text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              {copiedLink ? "✓ Copied!" : "Copy link"}
-            </button>
+              WhatsApp
+            </a>
             <a
               href={linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track("share_linkedin")}
-              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-blue-600 text-white py-2.5 px-3 rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center text-xs font-semibold bg-blue-600 text-white py-2.5 px-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Share on LinkedIn
+              LinkedIn
             </a>
             <a
               href={twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track("share_twitter")}
-              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-black text-white py-2.5 px-3 rounded-lg hover:bg-gray-900 transition-colors"
+              className="flex items-center justify-center text-xs font-semibold bg-black text-white py-2.5 px-2 rounded-lg hover:bg-gray-900 transition-colors"
             >
-              Share on X
-            </a>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track("share_whatsapp")}
-              className="col-span-2 flex items-center justify-center gap-1.5 text-xs font-semibold bg-green-500 text-white py-2.5 px-3 rounded-lg hover:bg-green-600 transition-colors"
-            >
-              Share on WhatsApp
+              X
             </a>
           </div>
-          <p className="text-xs text-gray-400 text-center">
-            Compare with a friend — send them this link
-          </p>
+          <button
+            onClick={handleCopyLink}
+            className="w-full text-xs text-gray-400 hover:text-gray-600 py-1 transition-colors text-center"
+          >
+            {copiedLink ? "✓ Link copied" : "or copy link"}
+          </button>
         </div>
 
-        {/* ─── NEXT ACTIONS ─── */}
-        <div className="px-5 py-5 space-y-2">
-          <button
-            onClick={onReset}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-xl font-semibold transition-colors text-sm"
-          >
-            Check another salary →
-          </button>
-          <div className="grid grid-cols-2 gap-2">
+        {/* ─── EXPLORE MORE ─── */}
+        <div className="px-5 py-4 bg-gray-50 space-y-3">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Explore more</p>
+          <div className="grid grid-cols-1 gap-2">
+            <button
+              onClick={onReset}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-xl font-semibold transition-colors text-sm"
+            >
+              Check another salary →
+            </button>
             {result.roleSlug && (
               <Link
                 href={`/salary/${result.roleSlug}`}
-                className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center leading-tight"
+                className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-700 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center"
               >
-                {roleLabel ? `${roleLabel} in other cities` : "Same role, other cities"}
+                {roleLabel ? `See ${roleLabel} salaries across all cities` : "Same role in other cities"}
               </Link>
             )}
-            <Link
-              href="/methodology"
-              className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center"
-            >
-              How we calculate →
-            </Link>
+            {result.locationSlug && (
+              <Link
+                href={`/salary/${result.locationSlug}`}
+                className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-700 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center"
+              >
+                {locationLabel ? `All salaries in ${locationLabel}` : "All roles in this city"}
+              </Link>
+            )}
           </div>
           <button
             onClick={handleSave}
             disabled={saved}
-            className="w-full text-xs font-medium text-gray-400 hover:text-gray-600 py-2 transition-colors disabled:cursor-default text-center"
+            className="w-full text-xs font-medium text-gray-400 hover:text-gray-600 py-1 transition-colors disabled:cursor-default text-center"
           >
             {saved ? "✓ Saved to this browser" : "Save result to re-check later"}
           </button>

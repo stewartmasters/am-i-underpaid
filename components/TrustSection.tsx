@@ -14,21 +14,28 @@ export default function TrustSection({ variant = "full" }: Props) {
     year: "numeric",
   });
 
+  // Shared logo element — fixed 28px height, max 76px wide, grayscale
+  const LogoList = () => (
+    <>
+      {TRUST_SOURCES.map(({ src, alt }) => (
+        <div key={alt} className="h-[28px] w-[76px] flex items-center justify-center flex-shrink-0">
+          <Image
+            src={src}
+            alt={alt}
+            width={76}
+            height={28}
+            className="opacity-40 grayscale hover:opacity-60 transition-opacity"
+            style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", objectFit: "contain" }}
+          />
+        </div>
+      ))}
+    </>
+  );
+
   if (variant === "minimal") {
     return (
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-        {TRUST_SOURCES.map(({ src, alt }) => (
-          <div key={alt} className="h-[32px] flex items-center">
-            <Image
-              src={src}
-              alt={alt}
-              width={120}
-              height={32}
-              className="opacity-40 grayscale hover:opacity-60 transition-opacity"
-              style={{ maxHeight: "100%", width: "auto", objectFit: "contain" }}
-            />
-          </div>
-        ))}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <LogoList />
       </div>
     );
   }
@@ -38,19 +45,8 @@ export default function TrustSection({ variant = "full" }: Props) {
       <p className="text-xs font-medium text-gray-500 mb-3">
         Built using official public salary datasets and verified market benchmarks
       </p>
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-2">
-        {TRUST_SOURCES.map(({ src, alt }) => (
-          <div key={alt} className="h-[32px] flex items-center">
-            <Image
-              src={src}
-              alt={alt}
-              width={120}
-              height={32}
-              className="opacity-40 grayscale hover:opacity-60 transition-opacity"
-              style={{ maxHeight: "100%", width: "auto", objectFit: "contain" }}
-            />
-          </div>
-        ))}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-2">
+        <LogoList />
         <span className="text-xs text-gray-400 font-medium">+ national statistical offices</span>
       </div>
       <p className="text-xs text-gray-400 mb-2.5">Coverage varies by role and location.</p>

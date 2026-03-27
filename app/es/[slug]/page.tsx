@@ -19,7 +19,6 @@ import {
   formatSalary,
   getConfidenceLevel,
   CONFIDENCE_LABELS,
-  ROLES,
 } from "@/lib/salary-data";
 import SalaryToolES from "@/components/SalaryToolES";
 

@@ -229,42 +229,44 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, roleLabel,
 
         {/* SHARE */}
         <div className="px-5 py-5 space-y-3">
-          <h3 className="font-bold text-gray-900 text-base">Comparte tu resultado</h3>
-          <div className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all">{shareCard}</div>
-          <div className="grid grid-cols-2 gap-2">
-            <button onClick={handleCopyCard} className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-gray-900 text-white py-2.5 px-3 rounded-lg hover:bg-gray-800 transition-colors">
-              {copiedCard ? "✓ Copiado" : "Copiar texto"}
-            </button>
-            <button onClick={handleCopyLink} className="flex items-center justify-center gap-1.5 text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors">
-              {copiedLink ? "✓ Copiado" : "Copiar enlace"}
-            </button>
-            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={() => track("share_linkedin")} className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-blue-600 text-white py-2.5 px-3 rounded-lg hover:bg-blue-700 transition-colors">
-              Compartir en LinkedIn
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-gray-900 text-base">Comparte tu resultado</h3>
+            <span className="text-xs text-gray-400">Compara con un amigo →</span>
+          </div>
+          <div className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all cursor-pointer" onClick={handleCopyCard}>
+            {shareCard}
+          </div>
+          <button onClick={handleCopyCard} className="w-full flex items-center justify-center gap-2 text-sm font-bold bg-gray-900 text-white py-3 px-4 rounded-xl hover:bg-gray-800 transition-colors">
+            {copiedCard ? "✓ ¡Copiado!" : "Copiar y compartir"}
+          </button>
+          <div className="grid grid-cols-3 gap-2">
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => track("share_whatsapp")} className="flex items-center justify-center text-xs font-semibold bg-green-500 text-white py-2.5 px-2 rounded-lg hover:bg-green-600 transition-colors">
+              WhatsApp
             </a>
-            <a href={twitterUrl} target="_blank" rel="noopener noreferrer" onClick={() => track("share_twitter")} className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-black text-white py-2.5 px-3 rounded-lg hover:bg-gray-900 transition-colors">
-              Compartir en X
+            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={() => track("share_linkedin")} className="flex items-center justify-center text-xs font-semibold bg-blue-600 text-white py-2.5 px-2 rounded-lg hover:bg-blue-700 transition-colors">
+              LinkedIn
             </a>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => track("share_whatsapp")} className="col-span-2 flex items-center justify-center gap-1.5 text-xs font-semibold bg-green-500 text-white py-2.5 px-3 rounded-lg hover:bg-green-600 transition-colors">
-              Compartir en WhatsApp
+            <a href={twitterUrl} target="_blank" rel="noopener noreferrer" onClick={() => track("share_twitter")} className="flex items-center justify-center text-xs font-semibold bg-black text-white py-2.5 px-2 rounded-lg hover:bg-gray-900 transition-colors">
+              X
             </a>
           </div>
-          <p className="text-xs text-gray-400 text-center">Compara con un amigo — envíale el enlace</p>
+          <button onClick={handleCopyLink} className="w-full text-xs text-gray-400 hover:text-gray-600 py-1 transition-colors text-center">
+            {copiedLink ? "✓ Enlace copiado" : "o copiar enlace"}
+          </button>
         </div>
 
-        {/* ACTIONS */}
-        <div className="px-5 py-5 space-y-2">
-          <button onClick={onReset} className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-xl font-semibold transition-colors text-sm">
-            Comprobar otro salario →
-          </button>
-          <div className="grid grid-cols-2 gap-2">
-            <Link href="/es/" className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center">
-              Volver a la calculadora
-            </Link>
-            <Link href="/methodology" className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center">
-              Cómo calculamos →
+        {/* EXPLORAR MÁS */}
+        <div className="px-5 py-4 bg-gray-50 space-y-3">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Explorar más</p>
+          <div className="grid grid-cols-1 gap-2">
+            <button onClick={onReset} className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-xl font-semibold transition-colors text-sm">
+              Comprobar otro salario →
+            </button>
+            <Link href="/es/" className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-700 py-2.5 px-3 rounded-lg hover:border-orange-200 hover:text-orange-600 transition-colors text-center">
+              Ver guías de salario en España
             </Link>
           </div>
-          <button onClick={handleSave} disabled={saved} className="w-full text-xs font-medium text-gray-400 hover:text-gray-600 py-2 transition-colors disabled:cursor-default text-center">
+          <button onClick={handleSave} disabled={saved} className="w-full text-xs font-medium text-gray-400 hover:text-gray-600 py-1 transition-colors disabled:cursor-default text-center">
             {saved ? "✓ Guardado en este navegador" : "Guardar resultado para revisarlo más tarde"}
           </button>
         </div>

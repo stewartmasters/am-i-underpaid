@@ -44,10 +44,6 @@ const CURATED_GUIDES = generateEsPages()
 export default function EsHome() {
   return (
     <>
-      {/* Hreflang — already set via metadata.alternates, but add explicit tags for clarity */}
-      <link rel="alternate" hrefLang="es" href={`${BASE_URL}/es`} />
-      <link rel="alternate" hrefLang="en" href={BASE_URL} />
-      <link rel="alternate" hrefLang="x-default" href={BASE_URL} />
 
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-8">

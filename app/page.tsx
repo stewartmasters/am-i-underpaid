@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SalaryTool from "@/components/SalaryTool";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
-import TrustStrip from "@/components/TrustStrip";
 import TrustSection from "@/components/TrustSection";
 import Link from "next/link";
 
@@ -93,7 +92,7 @@ export default function Home() {
           {/* Right: tool + trust strip */}
           <div id="salary-tool" className="bg-white rounded-2xl shadow-xl shadow-gray-100 border border-gray-100 p-6 sm:p-8">
             <SalaryTool />
-            <TrustStrip />
+            <TrustSection />
           </div>
         </div>
       </section>
