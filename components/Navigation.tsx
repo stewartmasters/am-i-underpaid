@@ -7,6 +7,9 @@ import LanguageSelect from "./LanguageSelect";
 export default function Navigation() {
   const pathname = usePathname();
 
+  // ES layout has its own nav — don't double-render
+  if (pathname?.startsWith("/es")) return null;
+
   return (
     <nav className="border-b border-gray-100 bg-white/90 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
