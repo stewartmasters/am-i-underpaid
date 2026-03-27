@@ -17,6 +17,7 @@ interface Props {
   result: SalaryResult;
   yearsOfExp?: number;
   onReset: () => void;
+  onEdit?: () => void;
   roleLabel?: string;
   locationLabel?: string;
   confidenceLevel?: ConfidenceLevel;
@@ -77,7 +78,7 @@ const VERDICT_CONFIG: Record<SalaryResult["verdict"], VerdictConfig> = {
     shortAnswer: "You're paid above market.",
     headline: "You earn more than most people in your role.",
     heroSub: "You're ahead of the market midpoint. Well negotiated.",
-    nextStep: "You're ahead of market — a strong position to negotiate from.",
+    nextStep: "Use this as leverage — you're in a strong position in any future negotiation.",
     heroBg: "bg-emerald-50 border-b border-emerald-100",
     badge: "bg-emerald-100 text-emerald-700",
     badgeLabel: "Above market",
@@ -128,6 +129,7 @@ export default function SalaryResult({
   result,
   yearsOfExp,
   onReset,
+  onEdit,
   roleLabel,
   locationLabel,
   confidenceLevel,
@@ -135,6 +137,9 @@ export default function SalaryResult({
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCard, setCopiedCard] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     try {
@@ -160,6 +165,8 @@ export default function SalaryResult({
           verdict: result.verdict,
           percentile: result.percentile,
           median: result.median,
+          low: result.low,
+          high: result.high,
           delta: result.delta,
           currency: result.currency,
           roleSlug: result.roleSlug,
@@ -174,14 +181,38 @@ export default function SalaryResult({
     } catch {}
   };
 
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailError("");
+    if (!email || !email.includes("@")) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          "form-name": "salary-leads",
+          email,
+          verdict: result.verdict,
+          role: result.roleSlug ?? "",
+          location: result.locationSlug ?? "",
+        }).toString(),
+      });
+      setEmailSubmitted(true);
+      track("email_captured", { verdict: result.verdict });
+    } catch {
+      setEmailError("Something went wrong. Please try again.");
+    }
+  };
+
   const config = VERDICT_CONFIG[result.verdict];
   const { currency, low, median, high, percentile, delta, recordCount, sourceCount } = result;
 
-  // Derive current salary from median + delta (delta = currentSalary - median)
   const currentSalary = median + delta;
   const deltaAbs = Math.abs(delta);
   const deltaStr = formatSalary(Math.round(deltaAbs / 500) * 500, currency);
-  // Gap display: +€X,000 or -€X,000
   const gapDisplay =
     Math.round(deltaAbs / 500) * 500 === 0
       ? "—"
@@ -193,8 +224,8 @@ export default function SalaryResult({
   const isBelow =
     result.verdict === "well-below" || result.verdict === "slightly-below";
 
-  // "Why this matters" block: only show when there's a real gap (>=€3k) and verdict is below
-  const showWhyItMatters = isBelow && deltaAbs >= 3000;
+  // Show "why this matters" for any below verdict with a meaningful gap (≥€1k)
+  const showWhyItMatters = isBelow && deltaAbs >= 1000;
   const fiveYearStr = showWhyItMatters
     ? formatSalary(Math.round((deltaAbs * 5) / 1000) * 1000, currency)
     : null;
@@ -210,7 +241,6 @@ export default function SalaryResult({
     locationLabel
   );
 
-  // Percentile section headline (role + location context)
   const pctBelow = 100 - percentile;
   const percentileHeadline = (() => {
     const roleCtx = roleLabel ? `${roleLabel}s` : "this role";
@@ -262,16 +292,14 @@ export default function SalaryResult({
       {/* ─── TRUST / STATUS ROW ─── */}
       <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className={`text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${config.badge}`}
-          >
+          <span className={`text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${config.badge}`}>
             {config.badgeLabel}
           </span>
           {seniorityLabel && (
             <span className="text-xs text-gray-400">{seniorityLabel} level</span>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {confidence && (
             <span
               className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${confidence.color}`}
@@ -281,6 +309,14 @@ export default function SalaryResult({
             </span>
           )}
           <span className="text-xs text-gray-400">{MONTH_YEAR}</span>
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              className="text-xs font-medium text-gray-400 hover:text-orange-500 transition-colors underline underline-offset-2"
+            >
+              Edit
+            </button>
+          )}
         </div>
       </div>
       {recordCount != null && recordCount > 0 && (
@@ -314,7 +350,7 @@ export default function SalaryResult({
           </div>
         </div>
 
-        {/* 3-stat row: your salary / market midpoint / gap */}
+        {/* 3-stat row */}
         <div className="grid grid-cols-3 gap-2 mt-4">
           <div className="bg-white/70 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-400 font-medium mb-1">Your salary</div>
@@ -330,11 +366,7 @@ export default function SalaryResult({
           </div>
           <div className="bg-white/70 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-400 font-medium mb-1">Gap</div>
-            <div
-              className={`font-bold text-sm sm:text-base leading-tight ${
-                delta > 0 ? "text-emerald-600" : delta < 0 ? config.gapColor : "text-gray-500"
-              }`}
-            >
+            <div className={`font-bold text-sm sm:text-base leading-tight ${delta > 0 ? "text-emerald-600" : delta < 0 ? config.gapColor : "text-gray-500"}`}>
               {gapDisplay}
             </div>
           </div>
@@ -379,16 +411,12 @@ export default function SalaryResult({
             ].map(({ label, value, sub, hl }) => (
               <div
                 key={label}
-                className={`rounded-xl p-3 text-center ${
-                  hl ? "bg-gray-900 text-white" : "bg-gray-50"
-                }`}
+                className={`rounded-xl p-3 text-center ${hl ? "bg-gray-900 text-white" : "bg-gray-50"}`}
               >
                 <div className={`text-xs font-medium mb-1 ${hl ? "text-gray-400" : "text-gray-400"}`}>
                   {label}
                 </div>
-                <div
-                  className={`font-bold text-sm sm:text-base ${hl ? "text-white" : "text-gray-700"}`}
-                >
+                <div className={`font-bold text-sm sm:text-base ${hl ? "text-white" : "text-gray-700"}`}>
                   {value}
                 </div>
                 <div className={`text-xs mt-0.5 ${hl ? "text-gray-500" : "text-gray-400"}`}>
@@ -402,12 +430,12 @@ export default function SalaryResult({
           </p>
         </div>
 
-        {/* ─── WHY THIS MATTERS (below verdicts with real gap only) ─── */}
+        {/* ─── WHY THIS MATTERS (all below verdicts with gap ≥ €1k) ─── */}
         {showWhyItMatters ? (
           <div className="px-5 py-5 space-y-2">
             <h3 className="font-bold text-gray-900 text-base">Why this matters</h3>
             <p className="text-sm text-gray-600 leading-relaxed">
-              A {deltaStr} gap today typically compounds over time. Over 5 years,
+              A {deltaStr} gap today compounds over time. Over 5 years,
               that&apos;s roughly{" "}
               <strong className="text-gray-800">{fiveYearStr}</strong> in missed
               gross pay — before any additional raises or promotions.
@@ -424,6 +452,53 @@ export default function SalaryResult({
           </div>
         )}
 
+        {/* ─── ABOVE MARKET: SHARE CTA ─── */}
+        {result.verdict === "above" && (
+          <div className="px-5 py-4 bg-emerald-50 border-b border-emerald-100">
+            <p className="text-sm font-semibold text-emerald-800 mb-1">Show your friends how you compare</p>
+            <p className="text-xs text-emerald-700 mb-3">
+              You&apos;re in the top {100 - percentile}% for your role. Share your result and see where they stand.
+            </p>
+            <button
+              onClick={handleCopyCard}
+              className="w-full flex items-center justify-center gap-2 text-sm font-bold bg-emerald-700 text-white py-2.5 px-4 rounded-xl hover:bg-emerald-800 transition-colors"
+            >
+              {copiedCard ? "✓ Copied!" : "Copy result and share →"}
+            </button>
+          </div>
+        )}
+
+        {/* ─── EMAIL CAPTURE ─── */}
+        {!emailSubmitted ? (
+          <div className="px-5 py-5 bg-orange-50">
+            <p className="text-sm font-semibold text-gray-900 mb-0.5">Get salary tips by email</p>
+            <p className="text-xs text-gray-500 mb-3">
+              Monthly salary insights and negotiation tactics. One email a month. Unsubscribe any time.
+            </p>
+            <form onSubmit={handleEmailSubmit} className="flex gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                className="flex-1 min-w-0 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
+              />
+              <button
+                type="submit"
+                className="bg-orange-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors whitespace-nowrap flex-shrink-0"
+              >
+                Subscribe
+              </button>
+            </form>
+            {emailError && <p className="text-xs text-red-500 mt-1.5">{emailError}</p>}
+          </div>
+        ) : (
+          <div className="px-5 py-4 bg-orange-50">
+            <p className="text-sm font-semibold text-emerald-700">✓ You&apos;re on the list</p>
+            <p className="text-xs text-gray-500 mt-0.5">We&apos;ll send you salary insights once a month.</p>
+          </div>
+        )}
+
         {/* ─── SHARE BLOCK ─── */}
         <div className="px-5 py-5 space-y-3">
           <div className="flex items-center justify-between">
@@ -431,12 +506,13 @@ export default function SalaryResult({
             <span className="text-xs text-gray-400">Compare with a friend →</span>
           </div>
 
-          {/* Share card preview — tap to select all */}
-          <div className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all cursor-pointer" onClick={handleCopyCard}>
+          <div
+            className="bg-gray-900 rounded-xl px-4 py-3.5 font-mono text-xs text-gray-200 whitespace-pre leading-relaxed select-all cursor-pointer"
+            onClick={handleCopyCard}
+          >
             {shareCard}
           </div>
 
-          {/* Primary share CTA */}
           <button
             onClick={handleCopyCard}
             className="w-full flex items-center justify-center gap-2 text-sm font-bold bg-gray-900 text-white py-3 px-4 rounded-xl hover:bg-gray-800 transition-colors"
@@ -444,7 +520,6 @@ export default function SalaryResult({
             {copiedCard ? "✓ Copied to clipboard!" : "Copy and share"}
           </button>
 
-          {/* Secondary share row */}
           <div className="grid grid-cols-3 gap-2">
             <a
               href={whatsappUrl}

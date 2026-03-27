@@ -22,7 +22,11 @@ export type AnalyticsEvent =
   | "share_whatsapp"
   | "check_another"
   | "cta_hero_click"
-  | "scroll_to_tool";
+  | "scroll_to_tool"
+  | "email_captured"
+  | "edit_inputs"
+  | "return_visit_banner_shown"
+  | "return_visit_recheck";
 
 export function track(event: AnalyticsEvent, props?: Record<string, string | number>) {
   if (typeof window === "undefined") return;

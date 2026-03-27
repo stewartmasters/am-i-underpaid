@@ -12,6 +12,7 @@ interface Props {
   result: SalaryResult;
   yearsOfExp?: number;
   onReset: () => void;
+  onEdit?: () => void;
   roleLabel?: string;
   cityLabel?: string;
   confidenceLevel?: ConfidenceLevel;
@@ -43,10 +44,13 @@ function buildShareCardEs(
   return lines.join("\n");
 }
 
-export default function SalaryResultES({ result, yearsOfExp, onReset, roleLabel, cityLabel, confidenceLevel }: Props) {
+export default function SalaryResultES({ result, yearsOfExp, onReset, onEdit, roleLabel, cityLabel, confidenceLevel }: Props) {
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCard, setCopiedCard] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     try {
@@ -78,7 +82,22 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, roleLabel,
   const gapDisplay = Math.round(deltaAbs / 500) * 500 === 0 ? "—" : `${delta > 0 ? "+" : "-"}${deltaStr}`;
   const barPos = Math.max(4, Math.min(94, percentile));
   const isBelow = result.verdict === "well-below" || result.verdict === "slightly-below";
-  const showWhyItMatters = isBelow && deltaAbs >= 3000;
+  const showWhyItMatters = isBelow && deltaAbs >= 1000;
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailError("");
+    if (!email || !email.includes("@")) { setEmailError("Por favor, introduce un email válido."); return; }
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ "form-name": "salary-leads", email, verdict: result.verdict, role: result.roleSlug ?? "", location: result.locationSlug ?? "" }).toString(),
+      });
+      setEmailSubmitted(true);
+      track("email_captured", { verdict: result.verdict });
+    } catch { setEmailError("Algo ha fallado. Por favor, inténtalo de nuevo."); }
+  };
   const fiveYearStr = showWhyItMatters ? formatSalary(Math.round((deltaAbs * 5) / 1000) * 1000, currency) : null;
   const pageUrl = typeof window !== "undefined" ? window.location.href : "https://salaryverdict.com/es";
   const shareCard = buildShareCardEs(result.verdict, percentile, deltaStr, roleLabel, cityLabel);
@@ -122,13 +141,18 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, roleLabel,
           </span>
           {seniorityLabel && <span className="text-xs text-gray-400">Nivel {seniorityLabel}</span>}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {confidence && (
             <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${confidence.color}`}>
               {confidence.label}
             </span>
           )}
           <span className="text-xs text-gray-400 capitalize">{MONTH_YEAR}</span>
+          {onEdit && (
+            <button onClick={onEdit} className="text-xs font-medium text-gray-400 hover:text-orange-500 transition-colors underline underline-offset-2">
+              Editar
+            </button>
+          )}
         </div>
       </div>
       {recordCount != null && recordCount > 0 && (
@@ -224,6 +248,27 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, roleLabel,
         ) : (
           <div className="px-5 py-4">
             <p className="text-sm text-gray-500 italic border-l-2 border-gray-200 pl-3">{config.nextStep}</p>
+          </div>
+        )}
+
+        {/* EMAIL CAPTURE */}
+        {!emailSubmitted ? (
+          <div className="px-5 py-5 bg-orange-50">
+            <p className="text-sm font-semibold text-gray-900 mb-0.5">Recibe consejos de salario por email</p>
+            <p className="text-xs text-gray-500 mb-3">Información mensual sobre salarios y negociación. Sin spam. Baja cuando quieras.</p>
+            <form onSubmit={handleEmailSubmit} className="flex gap-2">
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tu@email.com"
+                className="flex-1 min-w-0 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white" />
+              <button type="submit" className="bg-orange-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors whitespace-nowrap flex-shrink-0">
+                Suscribirse
+              </button>
+            </form>
+            {emailError && <p className="text-xs text-red-500 mt-1.5">{emailError}</p>}
+          </div>
+        ) : (
+          <div className="px-5 py-4 bg-orange-50">
+            <p className="text-sm font-semibold text-emerald-700">✓ ¡Apuntado!</p>
+            <p className="text-xs text-gray-500 mt-0.5">Te enviaremos información salarial una vez al mes.</p>
           </div>
         )}
 

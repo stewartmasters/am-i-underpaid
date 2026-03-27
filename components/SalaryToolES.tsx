@@ -54,12 +54,19 @@ export default function SalaryToolES({ defaultRoleDataSlug = "", defaultCityData
     track("check_another");
   };
 
+  const handleEdit = () => {
+    setResult(null);
+    setError("");
+    track("edit_inputs");
+  };
+
   if (result) {
     return (
       <SalaryResultES
         result={result}
         yearsOfExp={years}
         onReset={handleReset}
+        onEdit={handleEdit}
         roleLabel={meta.roleLabel}
         cityLabel={meta.cityLabel}
         confidenceLevel={meta.confidence}

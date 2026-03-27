@@ -224,6 +224,224 @@ export const BLOG_POSTS: BlogPost[] = [
     `,
   },
   {
+    slug: "product-manager-salary-europe-2026",
+    title: "Product Manager Salary in Europe 2026",
+    description: "City-by-city breakdown of product manager salaries across London, Berlin, Amsterdam, Paris, and Dublin — with junior to senior ranges.",
+    date: "2026-04-02",
+    readTime: "7 min read",
+    primaryKeyword: "product manager salary europe",
+    cluster: "product-manager-salary",
+    relatedPages: ["/salary/product-manager", "/salary/product-manager-london", "/salary/product-manager-berlin", "/salary/product-manager-amsterdam"],
+    priority: 10,
+    content: `
+      <p>Product management remains one of the highest-compensated non-engineering roles in the European tech sector. But what you can earn varies enormously depending on which city you're based in — and which type of company you work for.</p>
+      <p>These are gross annual base salary estimates for mid-level product managers (4–6 years of experience) in 2026.</p>
+
+      <h2>London</h2>
+      <p>London is the most competitive market for product managers in Europe. Mid-level PMs at established tech companies and scale-ups typically earn between £75,000 and £100,000, with a median around £88,000. Senior PMs and Group PMs regularly exceed £120,000 in base, and total compensation at growth-stage companies often includes meaningful equity on top.</p>
+      <p>The concentration of US-headquartered tech firms and fintech companies creates strong upward pressure on PM salaries. The trade-off is that the role is also more demanding and the bar for hiring is higher than in most other European cities.</p>
+      <p><a href="/salary/product-manager-london">See the full Product Manager salary guide for London</a></p>
+
+      <h2>Amsterdam</h2>
+      <p>Amsterdam has become one of the top destinations for product managers in continental Europe, particularly in B2B SaaS, fintech, and e-commerce. Mid-level PM salaries typically fall between €70,000 and €92,000. The Dutch tech ecosystem is mature, with significant EMEA hubs for Booking.com, Adyen, Stripe, and other well-funded companies driving salary competition upward.</p>
+      <p><a href="/salary/product-manager-amsterdam">See the full Product Manager salary guide for Amsterdam</a></p>
+
+      <h2>Dublin</h2>
+      <p>Dublin benefits from its position as the European base for Google, Meta, Salesforce, and many other US tech companies with strong product functions. Mid-level PMs typically earn €67,000–€90,000. Senior product roles at the larger tech companies can go considerably higher, particularly at companies with US-aligned compensation bands.</p>
+      <p><a href="/salary/product-manager-dublin">See the full Product Manager salary guide for Dublin</a></p>
+
+      <h2>Berlin</h2>
+      <p>Berlin's startup-heavy ecosystem means PM salaries are more varied than in London or Dublin. Mid-level PMs earn €58,000–€80,000, with a median around €68,000. Well-funded scale-ups and corporate tech hubs push salaries higher, but early-stage startups often pay in the €50,000–€65,000 range. Equity is more common in Berlin than in most other European markets, which changes the total compensation picture significantly.</p>
+      <p><a href="/salary/product-manager-berlin">See the full Product Manager salary guide for Berlin</a></p>
+
+      <h2>Paris</h2>
+      <p>Paris has developed a strong product culture, with companies like Doctolib, Criteo, and Contentsquare creating a competitive market. Mid-level PMs typically earn €62,000–€84,000. French labour law provides strong protections, making base salary a particularly important factor since variable pay is less standard than at US-style tech companies.</p>
+      <p><a href="/salary/product-manager-paris">See the full Product Manager salary guide for Paris</a></p>
+
+      <h2>Know where you stand</h2>
+      <p>These ranges are useful for benchmarking, but your exact market rate depends on your specific experience, the type of company you work for, and your specialisation (consumer vs. B2B, platform vs. growth, etc.).</p>
+      <p><a href="/">Use our free salary checker</a> to get a personalised estimate in 30 seconds — enter your role, location, and years of experience to see your percentile.</p>
+    `,
+  },
+  {
+    slug: "what-is-a-good-salary-in-london",
+    title: "What Is a Good Salary in London in 2026?",
+    description: "What counts as a good salary in London depends on your role, experience, and lifestyle. Here's how to benchmark yours.",
+    date: "2026-04-05",
+    readTime: "6 min read",
+    primaryKeyword: "what is a good salary in london",
+    cluster: "london-salaries",
+    relatedPages: ["/salary/london", "/salary/software-engineer-london", "/salary/product-manager-london"],
+    priority: 9,
+    content: `
+      <p>There's no single answer to what counts as a "good" salary in London — it depends entirely on what you're comparing against. Good relative to the cost of living? Good relative to your role's market rate? Good relative to your peers? Each question gives a different number.</p>
+
+      <h2>The basics: what is the average salary in London?</h2>
+      <p>The median gross annual salary for full-time workers in London is around £44,000–£48,000, according to ONS data. But this figure is heavily skewed by the distribution of roles across all sectors — it includes retail, hospitality, and public sector workers alongside tech and finance. For professional and knowledge-work roles, the relevant benchmark is considerably higher.</p>
+
+      <h2>By sector: what counts as a good salary</h2>
+      <p>For tech roles, a "good" starting salary for a mid-level professional in London is typically in the £65,000–£85,000 range. Senior and specialist roles regularly reach £100,000–£130,000+. Financial services roles track similarly. For marketing, operations, and business roles, the ranges are lower: mid-level typically £50,000–£75,000, senior £75,000–£100,000.</p>
+
+      <h2>The cost-of-living reality check</h2>
+      <p>London has one of the highest costs of living of any European city. A £60,000 gross salary in London has roughly the same purchasing power as €52,000–€55,000 in Berlin or Amsterdam, once you factor in higher rent, transport, and general living costs. So a salary that looks strong on paper may feel tighter in practice.</p>
+      <p>As a rough guide: to live comfortably as a single professional in London (renting, no children), most people find they need at least £45,000–£55,000 gross per year. To live well — central location, occasional travel, saving — most aim for £65,000+.</p>
+
+      <h2>The percentile benchmark</h2>
+      <p>A more useful question than "is my salary good?" is "where does my salary sit in the market for my role?" If you're earning at or above the 50th percentile for your role and experience level, you're at or above market. Below the 40th percentile is a clear signal to consider negotiating.</p>
+
+      <h2>How to benchmark your specific salary</h2>
+      <p>Use our <a href="/">free salary checker</a> to see where you sit for your specific role, location, and years of experience. It takes 30 seconds and gives you a percentile estimate based on public salary data.</p>
+    `,
+  },
+  {
+    slug: "data-scientist-salary-europe-2026",
+    title: "Data Scientist Salary in Europe 2026",
+    description: "What data scientists earn in London, Amsterdam, Berlin, Paris, and Dublin — from junior analyst to senior ML engineer.",
+    date: "2026-04-08",
+    readTime: "6 min read",
+    primaryKeyword: "data scientist salary europe",
+    cluster: "data-salary",
+    relatedPages: ["/salary/data-scientist", "/salary/data-scientist-london", "/salary/data-scientist-amsterdam", "/salary/data-analyst-london"],
+    priority: 9,
+    content: `
+      <p>Data science has become one of the most sought-after disciplines in European tech. Demand continues to outpace supply in most major markets, which has pushed salaries higher — particularly for those with ML engineering or applied AI experience.</p>
+      <p>These figures are gross annual base salary estimates for mid-level data scientists (4–6 years of experience) in 2026.</p>
+
+      <h2>London</h2>
+      <p>London offers the highest data science salaries in Europe. Mid-level data scientists typically earn £75,000–£100,000, with ML engineers and those working with large-scale production systems earning towards the higher end. Senior data scientists at finance, tech, and growth-stage startups regularly exceed £110,000 in base salary.</p>
+      <p>The concentration of fintech companies, data-intensive retailers, and the London offices of major US tech firms creates strong demand. The role has also bifurcated: classical data scientists working on analytics and modelling earn towards £75k–£90k, while ML engineers working on production systems command £90k–£120k+.</p>
+      <p><a href="/salary/data-scientist-london">See the full Data Scientist salary guide for London</a></p>
+
+      <h2>Amsterdam</h2>
+      <p>Amsterdam is a strong market for data scientists, driven by Booking.com, Adyen, and a growing number of data-intensive scale-ups. Mid-level data scientists typically earn €68,000–€90,000. The 30% tax ruling remains attractive for international hires and effectively increases take-home pay significantly for the first five years.</p>
+      <p><a href="/salary/data-scientist-amsterdam">See the full Data Scientist salary guide for Amsterdam</a></p>
+
+      <h2>Berlin</h2>
+      <p>Berlin has a growing data science market, particularly in e-commerce, health tech, and fintech. Mid-level salaries are typically €60,000–€80,000. The startup-heavy landscape means salary variation is higher than in London or Amsterdam — well-funded series B+ companies often match or exceed the ranges above, while earlier-stage companies typically pay less.</p>
+      <p><a href="/salary/data-scientist-berlin">See the full Data Scientist salary guide for Berlin</a></p>
+
+      <h2>Dublin</h2>
+      <p>Dublin's tech cluster drives healthy demand for data scientists. Mid-level salaries typically fall between €65,000 and €85,000. US tech companies with Irish headquarters tend to align compensation more closely with their global bands than local Irish companies do, which creates meaningful variation within the market.</p>
+
+      <h2>What's driving salary growth in data science?</h2>
+      <p>Three factors: (1) the AI/ML investment cycle has increased demand for applied machine learning skills specifically; (2) many companies have underinvested in data infrastructure and are now scrambling to catch up; (3) the skill set genuinely takes years to develop, which keeps supply constrained.</p>
+      <p>Specialisations that command premiums: MLOps / ML engineering, NLP and LLM fine-tuning, causal inference, and experimentation design (A/B testing at scale).</p>
+
+      <h2>Check your specific situation</h2>
+      <p><a href="/">Use our free salary checker</a> to benchmark your salary against the market for your specific role, location, and experience level. Takes 30 seconds, no signup required.</p>
+    `,
+  },
+  {
+    slug: "how-to-use-a-competing-offer-in-salary-negotiation",
+    title: "How to Use a Competing Offer to Negotiate Your Salary",
+    description: "A competing offer is the most powerful tool in a salary negotiation. Here's how to use it without burning bridges.",
+    date: "2026-04-10",
+    readTime: "5 min read",
+    primaryKeyword: "competing offer salary negotiation",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/salary-negotiation-tips", "/blog/how-to-ask-for-a-raise"],
+    priority: 8,
+    content: `
+      <p>A competing offer is the single most reliable lever in a salary negotiation. It removes opinion from the conversation and replaces it with market evidence. When a competitor is willing to pay you £X, your current employer has to decide whether they're willing to match it or let you walk.</p>
+      <p>But using a competing offer badly — or dishonestly — can destroy trust and leave you worse off. Here's how to do it right.</p>
+
+      <h2>First: only do this if you'd genuinely consider taking the offer</h2>
+      <p>This sounds obvious, but it matters. If you use a competing offer as a bluff and your employer calls it — by either refusing to negotiate or coming back with a number you can't refuse — you need to be prepared to follow through. Never claim you have an offer you don't have. It's dishonest, and it will come out.</p>
+
+      <h2>How to bring it up</h2>
+      <p>Don't lead with it. Start by requesting a conversation about your compensation: "I'd like to set up some time to talk about my salary." Then, in the conversation:</p>
+      <blockquote>
+        <p>"I've been happy here and I want to be straightforward with you. I've received an offer from another company at [X]. Before I make a decision, I wanted to have this conversation. I'd genuinely prefer to stay, but I need to understand if there's a path to [target number] here."</p>
+      </blockquote>
+      <p>This is honest, professional, and creates a clear decision point for both sides.</p>
+
+      <h2>What to do if they match it</h2>
+      <p>If they match or beat the offer, great. But consider: if they can find the money now, why couldn't they find it before? Is this a pattern — where you only get what you're worth when you threaten to leave? If so, the competing offer may have told you something important about whether to stay long-term.</p>
+
+      <h2>What to do if they don't match it</h2>
+      <p>This is useful information. Either the company genuinely can't afford to match, or they've decided you're not worth it at that price. Either way, you now have clarity. If you valued the role beyond the salary (growth, mission, team), this is the moment to quantify how much that's worth to you.</p>
+
+      <h2>The leverage window is short</h2>
+      <p>Once you've disclosed a competing offer, the clock starts. Don't let the conversation drag — push for a decision within a week. Prolonged negotiations signal weakness.</p>
+
+      <h2>Before you go to market</h2>
+      <p>Before interviewing elsewhere, make sure you know your market rate. <a href="/">Use our free salary checker</a> to benchmark your current salary — if you're significantly below the median for your role and location, you're almost certainly going to receive offers materially above where you are.</p>
+    `,
+  },
+  {
+    slug: "salary-vs-cost-of-living-europe",
+    title: "Salary vs Cost of Living: Comparing European Cities",
+    description: "A €70k salary in Berlin and a €70k salary in Amsterdam don't go the same distance. Here's how to compare real purchasing power across European cities.",
+    date: "2026-04-13",
+    readTime: "6 min read",
+    primaryKeyword: "salary cost of living europe comparison",
+    cluster: "european-salaries",
+    relatedPages: ["/salary/europe", "/salary/london", "/salary/berlin", "/salary/amsterdam", "/salary/barcelona"],
+    priority: 8,
+    content: `
+      <p>Two professionals earning the same gross salary in different European cities are not earning the same thing. Tax rates, housing costs, transport, and general living expenses vary so dramatically that a €70,000 salary can mean a comfortable life in one city and a stretched one in another.</p>
+      <p>Here's how some of the major European cities compare for cost-adjusted take-home value.</p>
+
+      <h2>London</h2>
+      <p>London consistently ranks as the most expensive major city in Europe for professionals. High income tax and National Insurance contributions bite hard at higher salaries, and housing is among the most expensive on the continent. A gross salary of £80,000 in London translates to roughly £53,000 in take-home after tax and NI — enough to live well, but requiring careful budgeting if you're also trying to save.</p>
+      <p>The upside: London also pays the highest salaries in Europe for most roles. The premium exists partly to compensate for the higher cost of living.</p>
+
+      <h2>Amsterdam</h2>
+      <p>Amsterdam is expensive relative to the rest of the Netherlands, but moderate relative to London. The 30% tax ruling for qualifying international employees significantly reduces effective tax rates, making Amsterdam particularly attractive for relocation. Housing has become very tight, but the broader cost of living is more manageable than London's.</p>
+      <p>Net adjustment vs. London: Amsterdam salaries are lower in gross terms, but the effective take-home difference is smaller than the gross gap suggests — especially with the 30% ruling in play.</p>
+
+      <h2>Berlin</h2>
+      <p>Berlin has historically been one of Europe's most affordable major cities for professionals, with relatively low rents compared to salary levels. That's changed significantly over the past decade as the city has grown, but it remains materially cheaper than London, Amsterdam, or Paris. German income tax is progressive and can be significant at higher salary bands.</p>
+      <p>A €70,000 gross salary in Berlin typically yields around €44,000–€47,000 net after tax and social contributions — but your rent and lifestyle costs are lower, which means effective purchasing power is strong.</p>
+
+      <h2>Paris</h2>
+      <p>Paris is expensive, with housing costs second only to London among major European cities covered here. French social contributions are high, reducing net salary more than in Germany or the Netherlands. However, public services (healthcare, childcare, transport infrastructure) are high quality and heavily subsidised — reducing the out-of-pocket costs of living that are harder to quantify.</p>
+
+      <h2>Barcelona and Madrid</h2>
+      <p>Spanish cities offer significantly lower salaries but also dramatically lower costs of living. A €40,000 gross salary in Barcelona goes further in terms of rent, food, and lifestyle than a £60,000 salary in London. The work-life balance, climate, and social environment attract many professionals — particularly remote workers who can earn in higher-salary currencies while living at Spanish costs.</p>
+
+      <h2>How to think about it for your situation</h2>
+      <p>The right comparison is: gross salary after tax, minus non-discretionary costs (rent, transport, food), leaves how much for savings and discretionary spending. A higher gross salary in a more expensive city isn't automatically better.</p>
+      <p>Start by knowing your market rate in your current city. <a href="/">Use our salary checker</a> to see where you stand, then use that as a baseline for any city comparison you're considering.</p>
+    `,
+  },
+  {
+    slug: "when-to-job-hop-vs-stay",
+    title: "When to Job Hop vs Stay: The Salary Trade-off",
+    description: "Job hopping is the fastest way to increase your salary — but it comes with real costs. Here's how to decide if the jump is worth it.",
+    date: "2026-04-15",
+    readTime: "6 min read",
+    primaryKeyword: "job hopping salary increase",
+    cluster: "underpaid-negotiation",
+    relatedPages: ["/", "/blog/how-to-increase-your-salary", "/blog/salary-negotiation-tips", "/blog/how-to-ask-for-a-raise"],
+    priority: 7,
+    content: `
+      <p>The data on this is fairly consistent: job switchers earn 15–25% more on average than people who stay in the same role, according to multiple studies over the past decade. The "loyalty premium" — the extra pay you get for staying — has largely disappeared in most industries. In fact, the opposite is often true: long-tenured employees frequently fall behind market rate as companies optimise spend on new hires rather than retention.</p>
+      <p>But job hopping isn't cost-free. Here's how to think about when it's worth it.</p>
+
+      <h2>The case for moving</h2>
+      <p>Moving companies is the most reliable way to get a step-change in salary. Internally, most companies have rigid compensation bands and annual increase cycles that cap how much they'll move your pay in a single year. Externally, you can skip bands entirely — a company hiring you doesn't know (or care) about your current band; they're anchoring to what the role is worth to them.</p>
+      <p>If you're more than 15% below market (check your percentile with our <a href="/">free salary tool</a>), an external move is almost certainly your fastest path to correction.</p>
+
+      <h2>The case for staying</h2>
+      <p>Continuity has value that doesn't show up in a salary comparison. Domain knowledge, relationships, accumulated trust, faster promotion tracks, and reduced risk all favour staying. If you're on an upward trajectory internally — taking on more responsibility, clearly on track for a promotion — the total return of staying may exceed what you'd get from jumping.</p>
+      <p>The maths changes if you're stuck. If you've been at the same level for 2+ years with no clear path forward, the promotion isn't coming — and you're paying an opportunity cost while you wait.</p>
+
+      <h2>The hidden costs of switching</h2>
+      <ul>
+        <li><strong>Onboarding tax.</strong> The first 3–6 months in a new role are lower-productivity. You're learning systems, relationships, and context. This has a real cost, even if it's not visible in your salary.</li>
+        <li><strong>Vesting cliffs.</strong> If you have unvested equity or bonuses, leaving before they vest is a real financial cost. Always calculate your true walk-away number.</li>
+        <li><strong>Pension and benefits.</strong> UK and European pension contributions, health insurance, and other benefits vary significantly. A higher salary at a company with worse benefits may not actually be a better deal.</li>
+        <li><strong>Risk.</strong> New jobs carry more risk. Probation periods, cultural mismatches, and "the role wasn't as described" scenarios are real.</li>
+      </ul>
+
+      <h2>A simple framework</h2>
+      <p>Ask three questions: (1) Am I below market rate at my current company, and has internal negotiation not resolved it? (2) Is there a clear external opportunity that pays materially better? (3) Do the hidden costs (vesting, benefits, risk) not outweigh the salary gain?</p>
+      <p>If yes to all three, moving is probably the right call. If you're not sure about question 1, start there.</p>
+      <p><a href="/">Check your market rate in 30 seconds</a> — it's the only objective input you have before deciding.</p>
+    `,
+  },
+  {
     slug: "software-engineer-salary-europe-2026",
     title: "Software Engineer Salary in Europe 2026",
     description: "A city-by-city breakdown of software engineer pay across London, Berlin, Amsterdam, Paris, and Dublin.",

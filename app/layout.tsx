@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -83,6 +84,24 @@ export default function RootLayout({
         <Navigation />
         <main>{children}</main>
         <Footer />
+        {/* Netlify Forms registration — scanned at deploy time; submission handled via fetch in client components */}
+        <form name="salary-leads" data-netlify="true" hidden aria-hidden="true">
+          <input type="email" name="email" />
+          <input type="hidden" name="verdict" />
+          <input type="hidden" name="role" />
+          <input type="hidden" name="location" />
+        </form>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-H8XR1C8DXG"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-H8XR1C8DXG');
+        `}</Script>
       </body>
     </html>
   );
