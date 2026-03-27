@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import LanguageSelect from "@/components/LanguageSelect";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
 
@@ -43,13 +44,7 @@ function NavigationES() {
             Metodología
           </Link>
           {/* Language toggle */}
-          <Link
-            href="/"
-            className="text-xs border border-gray-200 text-gray-500 hover:border-orange-300 hover:text-orange-600 px-2.5 py-1 rounded-full transition-colors"
-            title="Switch to English"
-          >
-            EN
-          </Link>
+          <LanguageSelect current="es" />
           <Link
             href="/es/#calculadora"
             className="bg-orange-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-orange-600 transition-colors flex-shrink-0"

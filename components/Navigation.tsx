@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LanguageSelect from "./LanguageSelect";
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -31,13 +32,7 @@ export default function Navigation() {
           >
             Methodology
           </Link>
-          <Link
-            href="/es/"
-            className="text-xs border border-gray-200 text-gray-500 hover:border-orange-300 hover:text-orange-600 px-2.5 py-1 rounded-full transition-colors"
-            title="Versión en español"
-          >
-            ES
-          </Link>
+          <LanguageSelect current="en" />
           <Link
             href="/#salary-tool"
             className="bg-orange-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-orange-600 transition-colors flex-shrink-0"

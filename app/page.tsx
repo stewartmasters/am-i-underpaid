@@ -42,14 +42,8 @@ export default function Home() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 sm:pt-20 pb-8">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
-          {/* Tool — first on mobile, second (right) on desktop */}
-          <div id="salary-tool" className="bg-white rounded-2xl shadow-xl shadow-gray-100 border border-gray-100 p-6 sm:p-8 order-first lg:order-last">
-            <SalaryTool />
-            <TrustSection />
-          </div>
-
-          {/* Copy — second on mobile, first (left) on desktop */}
-          <div className="space-y-6 order-last lg:order-first">
+          {/* Copy — first on mobile (top), left on desktop */}
+          <div className="space-y-6">
             <div className="inline-block bg-orange-50 text-orange-600 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
               Free · No signup · Instant result
             </div>
@@ -96,6 +90,13 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Tool — second on mobile (below copy), right on desktop */}
+          <div id="salary-tool" className="bg-white rounded-2xl shadow-xl shadow-gray-100 border border-gray-100 p-6 sm:p-8">
+            <SalaryTool />
+            <TrustSection />
+          </div>
+
         </div>
       </section>
 
