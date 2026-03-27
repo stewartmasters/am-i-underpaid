@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "normalize": "tsx scripts/normalize.ts",
+    "benchmark:inspect": "tsx scripts/benchmark-inspect.ts"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

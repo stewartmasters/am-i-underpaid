@@ -146,11 +146,47 @@ function computeMedian(roleSlug: string, locationSlug: string, years: number): n
   return roundToNearest(base * locMult * expMult * adj, 500);
 }
 
+/**
+ * Pipeline-aware salary calculation.
+ * Tries the real data pipeline first; if it returns meaningful data (median > 0),
+ * uses those figures. Otherwise falls back to the multiplier model.
+ * All pipeline figures are in the correct local currency already.
+ */
+function tryPipelineBenchmark(
+  roleSlug: string,
+  locationSlug: string,
+  years: number
+): { low: number; median: number; high: number } | null {
+  try {
+    // Dynamic require to avoid breaking static build if records.json missing
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { getAllRecords } = require("@/lib/benchmarking/loadRecords") as typeof import("@/lib/benchmarking/loadRecords");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { computeBenchmark } = require("@/lib/benchmarking/computeBenchmark") as typeof import("@/lib/benchmarking/computeBenchmark");
+    const records = getAllRecords();
+    const result = computeBenchmark(records, { roleNormalized: roleSlug, locationSlug, experienceYears: years });
+    if (result.median > 0) {
+      return { low: result.low, median: result.median, high: result.high };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export function calculateSalary(roleSlug: string, locationSlug: string, years: number, currentSalary: number): SalaryResult {
   const location = LOCATIONS.find((l) => l.slug === locationSlug);
-  const median = computeMedian(roleSlug, locationSlug, years);
-  const low  = roundToNearest(median * 0.78, 500);
-  const high = roundToNearest(median * 1.28, 500);
+
+  // Try real data pipeline first
+  const pipeline = tryPipelineBenchmark(roleSlug, locationSlug, years);
+  const { low, median, high } = pipeline ?? (() => {
+    const med = computeMedian(roleSlug, locationSlug, years);
+    return {
+      low:  roundToNearest(med * 0.78, 500),
+      median: med,
+      high: roundToNearest(med * 1.28, 500),
+    };
+  })();
 
   let percentile: number;
   if (currentSalary <= low) {
@@ -176,10 +212,12 @@ export function calculateSalary(roleSlug: string, locationSlug: string, years: n
 
 export function getMarketRange(roleSlug: string, locationSlug: string, years = 5): { low: number; median: number; high: number; currency: string } {
   const location = LOCATIONS.find((l) => l.slug === locationSlug);
+  const currency = location?.currency ?? "€";
+  const pipeline = tryPipelineBenchmark(roleSlug, locationSlug, years);
+  if (pipeline) return { ...pipeline, currency };
   const median = computeMedian(roleSlug, locationSlug, years);
   const low  = roundToNearest(median * 0.78, 500);
   const high = roundToNearest(median * 1.28, 500);
-  const currency = location?.currency ?? "€";
   return { low, median, high, currency };
 }
 
@@ -232,7 +270,19 @@ const LOW_CONFIDENCE_ROLES = new Set([
 ]);
 const LOW_CONFIDENCE_LOCATIONS = new Set(["europe"]); // Generic aggregate — not a specific market
 
-export function getConfidenceLevel(roleSlug: string, locationSlug: string): ConfidenceLevel {
+export function getConfidenceLevel(roleSlug: string, locationSlug: string, years = 5): ConfidenceLevel {
+  // Try to get confidence from the real data pipeline first
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { getAllRecords } = require("@/lib/benchmarking/loadRecords") as typeof import("@/lib/benchmarking/loadRecords");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { computeBenchmark } = require("@/lib/benchmarking/computeBenchmark") as typeof import("@/lib/benchmarking/computeBenchmark");
+    const records = getAllRecords();
+    const result = computeBenchmark(records, { roleNormalized: roleSlug, locationSlug, experienceYears: years });
+    if (result.record_count > 0) return result.confidence;
+  } catch { /* fall through */ }
+
+  // Fallback to heuristic model
   if (LOW_CONFIDENCE_ROLES.has(roleSlug) || LOW_CONFIDENCE_LOCATIONS.has(locationSlug)) return "low";
   if (HIGH_CONFIDENCE_ROLES.has(roleSlug) && HIGH_CONFIDENCE_LOCATIONS.has(locationSlug)) return "high";
   return "medium";

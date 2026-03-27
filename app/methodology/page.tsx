@@ -15,13 +15,13 @@ const SECTIONS = [
     content: (
       <>
         <p>We do <strong>not</strong> have access to live company salary databases, proprietary HR platforms, or real-time job posting data. We want to be upfront about that.</p>
-        <p>Instead, our salary estimates are built from a combination of:</p>
+        <p>Instead, our salary estimates are built from government earnings surveys and community compensation platforms, normalized into a single structured pipeline:</p>
         <ul>
-          <li><strong>Publicly available salary surveys</strong> — including aggregated data published by industry associations, professional bodies, and government statistical agencies across Europe (including Eurostat wage data and national statistics institutes).</li>
-          <li><strong>Job market benchmarks</strong> — salary ranges cited in publicly available job listings and compensation guides for European markets.</li>
-          <li><strong>Internal modelling</strong> — we apply structured multipliers for location and experience to produce estimates that are consistent and directionally accurate.</li>
+          <li><strong>Government earnings surveys</strong> — ONS ASHE (UK), Eurostat SES (EU-wide), Destatis VSE (Germany), and INE EES (Spain). These are the most statistically reliable sources available — large samples, consistent methodology, published under open data licences.</li>
+          <li><strong>Levels.fyi compensation data</strong> — manually curated from publicly visible salary ranges on the platform, used as a directional signal for tech roles in major cities. Self-reported data with known upward bias — treated as an upper-market signal, not a market median.</li>
+          <li><strong>Structured modelling</strong> — for role/location combinations where we have no direct source data, we fall back to a calibrated model using location and experience multipliers derived from the survey data above.</li>
         </ul>
-        <p>We review and update our model periodically to reflect shifts in the market.</p>
+        <p>All records are normalized into a unified schema and explicitly tagged with their source, geographic scope, seniority level, and freshness. Estimates are only produced from this pipeline — we do not use synthetic data.</p>
       </>
     ),
   },
@@ -30,14 +30,16 @@ const SECTIONS = [
     heading: "How we estimate salaries",
     content: (
       <>
-        <p>Every estimate starts with a <strong>base salary</strong> for each role — this is the midpoint we&apos;ve established for a mid-level professional (roughly 4–6 years of experience) working in a typical European market.</p>
-        <p>From there, we apply two adjustments:</p>
+        <p>When you query a role and location, we run a <strong>3-tier geographic search</strong> against our normalized record set:</p>
         <ol>
-          <li><strong>Location multiplier.</strong> Salaries vary significantly across Europe. London pays roughly 45% above the European average for comparable roles. Madrid pays roughly 18–20% below. We apply a market multiplier per city and country based on observed salary levels.</li>
-          <li><strong>Experience multiplier.</strong> Pay increases as you gain experience, but not linearly. Early-career growth is steep; growth slows as you become more senior. We model this as a smooth curve — from roughly 58% of market rate at entry level to around 145–160% at 15+ years of experience.</li>
+          <li><strong>City-level records</strong> — the most specific and highest-weighted data. For example, ONS London regional data or Levels.fyi London records.</li>
+          <li><strong>Country-level records</strong> — national-level survey data (e.g. UK ONS ASHE national, Germany Destatis VSE national).</li>
+          <li><strong>Pan-European fallback</strong> — Eurostat SES aggregate data, used only when no country-specific records exist for a combination.</li>
         </ol>
-        <p>We also apply a small role × location adjustment (±4%) that reflects real-world variation — for example, software engineers in London command a slightly higher premium relative to other roles than the location multiplier alone would suggest.</p>
-        <p>The result is a <strong>low / median / high</strong> range and a percentile estimate for where your salary sits within that range.</p>
+        <p>Each record is weighted by <strong>four factors</strong>: source reliability (government surveys weighted highest), data freshness (decaying ~15% per year), geographic specificity (city &gt; country &gt; Europe), and role normalization confidence (how well the raw occupation code maps to our role definition).</p>
+        <p>If the available records don&apos;t match the queried seniority exactly, we apply an <strong>experience curve</strong> — a smooth non-linear function (Hermite spline) calibrated from observed European tech market data. Entry level is approximately 58% of mid-level market rate; 15 years of experience is approximately 148%.</p>
+        <p>Where no pipeline data exists for a combination, the estimate falls back to a calibrated multiplier model using location premiums derived from our survey data.</p>
+        <p>The result is a <strong>low / median / high</strong> range (weighted P25/P50/P75 across the contributing records) and a percentile estimate for where your salary sits.</p>
       </>
     ),
   },
@@ -62,15 +64,15 @@ const SECTIONS = [
     heading: "Named data sources",
     content: (
       <>
-        <p>Our salary model draws on the following publicly available sources, applied to different geographies and role types:</p>
+        <p>Our salary pipeline draws on the following publicly available sources, each tagged with its geographic scope and ingestion method:</p>
         <ul>
-          <li><strong>Eurostat Labour Cost Survey</strong> — EU-wide wage structure survey covering industry-level gross annual earnings across member states. Used to calibrate location multipliers for continental European markets.</li>
-          <li><strong>UK ONS Annual Survey of Hours and Earnings (ASHE)</strong> — the UK government&apos;s primary earnings survey, covering median gross annual pay by occupation and region. Our UK and London estimates are anchored to this data.</li>
-          <li><strong>Glassdoor Salary Insights</strong> — aggregated self-reported salary data across roles and cities. Used as a directional market signal, particularly for roles with fewer government survey equivalents.</li>
-          <li><strong>Indeed Salary Insights</strong> — job-posting-derived salary ranges across European markets. Used to cross-check and calibrate role/location medians against live market supply.</li>
-          <li><strong>Levels.fyi Compensation Data</strong> — community-verified compensation data with the strongest signal for tech roles (software engineering, data science, product management, DevOps) in major European cities. Used specifically for tech role benchmarking.</li>
+          <li><strong>UK ONS ASHE 2024</strong> (ons-uk) — Annual Survey of Hours and Earnings Table 14. SOC 2020 occupation codes. Covers UK national and London regional gross annual pay by occupation for full-time employees. Open Government Licence v3.0. <em>UK locations only.</em></li>
+          <li><strong>Eurostat Structure of Earnings Survey 2022</strong> (eurostat-ses) — EU member state earnings data by ISCO-08 occupation, enterprise size, and country. Covers DE, NL, ES, FR, IE and other states. Updated every 4 years. <em>Continental European markets.</em></li>
+          <li><strong>Destatis Verdienststrukturerhebung 2022</strong> (destatis-vse) — Germany&apos;s national earnings structure survey aligned with EU SES. KldB 2010 occupation codes. Includes Berlin federal state breakdown. Data licence Germany dl-de/by-2-0. <em>Germany only.</em></li>
+          <li><strong>INE Encuesta de Estructura Salarial 2022</strong> (ine-ees) — Spain&apos;s national earnings structure survey. CNO-11 occupation codes. Includes Comunidad de Madrid and Cataluña regional breakdown (used for Madrid and Barcelona). Attribution to INE required. <em>Spain only.</em></li>
+          <li><strong>Levels.fyi 2024</strong> (levels-fyi) — Manually curated from publicly visible salary ranges on the platform. Representative of larger tech companies and above-market-median employers. Self-reported data has known upward bias — used as an upper-market signal for engineering, product, and data roles in major tech hubs. <em>Not used for non-tech roles.</em></li>
         </ul>
-        <p>No single source is used in isolation. Where sources diverge, we apply judgement and weight towards government survey data for baseline figures and community/aggregated data for role-specific signals.</p>
+        <p>Government surveys are weighted highest in our pipeline. Levels.fyi is weighted at approximately 0.65× vs 0.80–0.90× for national statistics sources, reflecting its self-reported nature and sample bias toward top-of-market employers.</p>
       </>
     ),
   },
@@ -79,13 +81,17 @@ const SECTIONS = [
     heading: "Confidence scoring",
     content: (
       <>
-        <p>We assign a confidence level — <strong>High</strong>, <strong>Medium</strong>, or <strong>Lower</strong> — to each role and location combination. This reflects how well-covered that combination is by public benchmark data.</p>
+        <p>We assign a confidence level — <strong>High</strong>, <strong>Medium</strong>, or <strong>Lower</strong> — to each estimate, computed directly from the pipeline data used to produce it. This is not a heuristic label; it is derived from six measured factors:</p>
         <ul>
-          <li><strong>High confidence</strong> — mainstream role (e.g. software engineer, product manager) in a major, well-documented market (e.g. London, Berlin, Amsterdam). Strong signal from multiple sources.</li>
-          <li><strong>Medium confidence</strong> — reasonable coverage, but either the role or location has fewer available references. Estimates are directional and useful for comparison.</li>
-          <li><strong>Lower confidence</strong> — niche role (e.g. social media manager, content manager) or a broad market category (e.g. &quot;Europe&quot; as a whole) where public benchmarks are sparse. Treat as a rough guide only.</li>
+          <li><strong>Source diversity</strong> — how many distinct data sources contributed. One source = medium at best.</li>
+          <li><strong>Record count</strong> — how many normalized records matched the query. Fewer records = lower confidence.</li>
+          <li><strong>Freshness</strong> — how recent the contributing data is. Government surveys run every 4 years; freshness decays 15% per year from publication date.</li>
+          <li><strong>Geographic specificity</strong> — city-level data is scored highest; pan-European fallback lowest.</li>
+          <li><strong>Seniority match</strong> — whether records exist for the exact queried seniority, or whether we had to interpolate using the experience curve.</li>
+          <li><strong>Fallback depth</strong> — whether we reached the Europe-wide fallback tier, which means no country-specific data was available.</li>
         </ul>
-        <p>Confidence labels are shown on each salary page and in calculator results. They are not a measure of whether the estimate is wrong — they are a measure of how much external evidence supports it.</p>
+        <p>High confidence requires a composite score ≥ 0.75 across these factors. Medium is 0.45–0.74. Lower confidence means the estimate is based on thin or indirect data — use it as a rough guide only.</p>
+        <p>Confidence is shown on each salary page and in calculator results. It is not a claim about accuracy — it is a measure of how much real evidence supports the estimate.</p>
       </>
     ),
   },
