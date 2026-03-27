@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const TRUST_FACTS = [
   { value: "8", label: "official data sources" },
-  { value: "21", label: "role types covered" },
+  { value: "33", label: "role types covered" },
   { value: "12", label: "European locations" },
 ];
 

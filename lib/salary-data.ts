@@ -21,7 +21,17 @@ export type RoleSlug =
   | "growth-manager"
   | "content-manager"
   | "performance-marketing-manager"
-  | "social-media-manager";
+  | "social-media-manager"
+  | "product-designer"
+  | "ux-designer"
+  | "data-engineer"
+  | "machine-learning-engineer"
+  | "engineering-manager"
+  | "mobile-developer"
+  | "accountant"
+  | "financial-controller"
+  | "recruiter"
+  | "cybersecurity-engineer";
 
 export type LocationSlug =
   | "london" | "uk"
@@ -84,6 +94,21 @@ export const ROLES: Role[] = [
   // New high-search-volume roles
   { slug: "project-manager",             label: "Project Manager",             baseSalary: 68000, category: "Operations" },
   { slug: "full-stack-developer",        label: "Full Stack Developer",        baseSalary: 73000, category: "Engineering" },
+  // Design
+  { slug: "product-designer",            label: "Product Designer",            baseSalary: 72000, category: "Design" },
+  { slug: "ux-designer",                 label: "UX Designer",                 baseSalary: 67000, category: "Design" },
+  // Data & ML
+  { slug: "data-engineer",               label: "Data Engineer",               baseSalary: 78000, category: "Data" },
+  { slug: "machine-learning-engineer",   label: "Machine Learning Engineer",   baseSalary: 86000, category: "Engineering" },
+  // Engineering leadership
+  { slug: "engineering-manager",         label: "Engineering Manager",         baseSalary: 95000, category: "Engineering" },
+  { slug: "mobile-developer",            label: "Mobile Developer",            baseSalary: 70000, category: "Engineering" },
+  // Finance & People
+  { slug: "accountant",                  label: "Accountant",                  baseSalary: 52000, category: "Finance" },
+  { slug: "financial-controller",        label: "Financial Controller",        baseSalary: 75000, category: "Finance" },
+  { slug: "recruiter",                   label: "Recruiter",                   baseSalary: 50000, category: "People" },
+  // Security
+  { slug: "cybersecurity-engineer",      label: "Cybersecurity Engineer",      baseSalary: 80000, category: "Engineering" },
 ];
 
 /**
@@ -314,9 +339,13 @@ export type ConfidenceLevel = "high" | "medium" | "low";
 const HIGH_CONFIDENCE_ROLES = new Set([
   // Tech roles with strong cross-source coverage (ONS/Eurostat + Glassdoor/Indeed + Levels.fyi)
   "software-engineer", "frontend-developer", "backend-developer", "full-stack-developer",
-  "data-scientist", "devops-engineer",
+  "data-scientist", "devops-engineer", "data-engineer", "machine-learning-engineer",
+  "engineering-manager", "mobile-developer", "cybersecurity-engineer",
+  // Design roles with good cross-source coverage
+  "product-designer", "ux-designer", "designer",
   // Non-tech roles with good government survey + aggregated coverage
-  "product-manager", "project-manager", "designer", "marketing-manager", "sales-manager", "data-analyst",
+  "product-manager", "project-manager", "marketing-manager", "sales-manager", "data-analyst",
+  "financial-controller", "accountant",
 ]);
 const HIGH_CONFIDENCE_LOCATIONS = new Set([
   "london", "berlin", "munich", "frankfurt", "amsterdam", "paris", "dublin",

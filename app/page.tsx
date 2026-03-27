@@ -58,7 +58,7 @@ export default function Home() {
             {/* Factual trust stats */}
             <div className="grid grid-cols-3 gap-4 pt-2">
               {[
-                { value: "21",   label: "Role types" },
+                { value: "33",   label: "Role types" },
                 { value: "12",   label: "Locations" },
                 { value: "600+", label: "Salary guides" },
               ].map(({ value, label }) => (
