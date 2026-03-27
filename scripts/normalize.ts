@@ -27,6 +27,11 @@ const SOURCE_CONFIDENCE: Record<string, number> = {
   "eurostat-ses": 0.80,
   "destatis-vse": 0.85,
   "ine-ees":      0.82,
+  "bfs-lse":      0.85, // Swiss Federal Statistical Office — Lohnstrukturerhebung
+  "scb-ses":      0.82, // Statistics Sweden — Structure of Earnings Survey
+  "istat-ses":    0.80, // Istat Italy — Structure of Earnings Survey
+  "ine-pt-ieg":   0.80, // INE Portugal — Inquérito à Estrutura de Ganhos
+  "gus-bsw":      0.78, // GUS Poland — Badanie Struktury Wynagrodzeń
   "levels-fyi":   0.65,
   "glassdoor":    0.55,
 };
@@ -39,6 +44,11 @@ const COUNTRY_NAMES: Record<string, string> = {
   FR: "France",
   NL: "Netherlands",
   IE: "Ireland",
+  CH: "Switzerland",
+  SE: "Sweden",
+  IT: "Italy",
+  PT: "Portugal",
+  PL: "Poland",
   EU: "Europe",
 };
 
@@ -51,6 +61,11 @@ const CITY_NAMES: Record<string, string> = {
   paris:     "Paris",
   amsterdam: "Amsterdam",
   dublin:    "Dublin",
+  zurich:    "Zurich",
+  stockholm: "Stockholm",
+  milan:     "Milan",
+  lisbon:    "Lisbon",
+  warsaw:    "Warsaw",
 };
 
 /**
@@ -128,6 +143,11 @@ function processFile(filePath: string): NormalizedRecord[] {
     "eurostat-ses": "official_stats",
     "destatis-vse": "official_stats",
     "ine-ees":      "official_stats",
+    "bfs-lse":      "official_stats",
+    "scb-ses":      "official_stats",
+    "istat-ses":    "official_stats",
+    "ine-pt-ieg":   "official_stats",
+    "gus-bsw":      "official_stats",
     "levels-fyi":   "compensation_platform",
     "glassdoor":    "compensation_platform",
   };

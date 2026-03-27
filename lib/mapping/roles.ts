@@ -14,7 +14,9 @@ export type RoleSlug =
   | "software-engineer"
   | "frontend-developer"
   | "backend-developer"
+  | "full-stack-developer"
   | "product-manager"
+  | "project-manager"
   | "data-analyst"
   | "data-scientist"
   | "devops-engineer"
@@ -93,6 +95,17 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     isco_codes: ["2512"],
   },
   {
+    slug: "full-stack-developer",
+    label: "Full Stack Developer",
+    family: "engineering",
+    aliases: [
+      "full stack developer", "full-stack developer", "full stack engineer",
+      "full-stack engineer", "fullstack developer", "fullstack engineer",
+    ],
+    soc_codes: ["2136"],
+    isco_codes: ["2512"],
+  },
+  {
     slug: "devops-engineer",
     label: "DevOps Engineer",
     family: "engineering",
@@ -111,11 +124,23 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     aliases: [
       "product manager", "pm", "product owner", "head of product",
       "director of product", "vp product", "digital product manager",
-      "it project manager", "it programme manager", "produktmanager",
-      "chef de produit", "responsable produit", "product lead",
+      "produktmanager", "chef de produit", "responsable produit", "product lead",
     ],
     soc_codes: ["2133", "2543"],
     isco_codes: ["1221", "2519"],
+  },
+  {
+    slug: "project-manager",
+    label: "Project Manager",
+    family: "operations",
+    aliases: [
+      "project manager", "programme manager", "program manager",
+      "project lead", "delivery manager", "pmo", "it project manager",
+      "it programme manager", "projektmanager", "chef de projet",
+      "responsable de projet", "gerente de proyectos",
+    ],
+    soc_codes: ["2134", "2542"],
+    isco_codes: ["2421", "1219"],
   },
   {
     slug: "data-analyst",
