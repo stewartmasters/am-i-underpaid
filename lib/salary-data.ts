@@ -28,7 +28,7 @@ export type LocationSlug =
   | "dublin"
   | "amsterdam"
   | "paris" | "france"
-  | "berlin" | "germany"
+  | "berlin" | "munich" | "frankfurt" | "germany"
   | "barcelona" | "madrid" | "spain" | "valencia" | "sevilla" | "bilbao"
   | "zurich" | "switzerland"
   | "lisbon" | "portugal"
@@ -112,7 +112,9 @@ export const LOCATIONS: Location[] = [
   // France — calibrated from Eurostat EU wage data
   { slug: "paris",     label: "Paris",     country: "France",         currency: "€", multiplier: 1.18 },
   { slug: "france",    label: "France",    country: "France",         currency: "€", multiplier: 1.10 },
-  // Germany — calibrated from Eurostat EU wage data
+  // Germany — calibrated from Destatis / Eurostat EU wage data
+  { slug: "munich",    label: "Munich",    country: "Germany",        currency: "€", multiplier: 1.20 },
+  { slug: "frankfurt", label: "Frankfurt", country: "Germany",        currency: "€", multiplier: 1.13 },
   { slug: "berlin",    label: "Berlin",    country: "Germany",        currency: "€", multiplier: 1.05 },
   { slug: "germany",   label: "Germany",   country: "Germany",        currency: "€", multiplier: 1.00 },
   // Spain — calibrated from Eurostat EU wage data
@@ -317,7 +319,7 @@ const HIGH_CONFIDENCE_ROLES = new Set([
   "product-manager", "project-manager", "designer", "marketing-manager", "sales-manager", "data-analyst",
 ]);
 const HIGH_CONFIDENCE_LOCATIONS = new Set([
-  "london", "berlin", "amsterdam", "paris", "dublin",
+  "london", "berlin", "munich", "frankfurt", "amsterdam", "paris", "dublin",
 ]);
 const LOW_CONFIDENCE_ROLES = new Set([
   // Fewer public benchmarks; job postings vary widely
