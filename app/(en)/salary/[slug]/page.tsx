@@ -27,7 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: page.title,
     description: page.description,
-    alternates: { canonical: `/salary/${slug}` },
+    alternates: {
+      canonical: `/salary/${slug}`,
+      languages: {
+        "en": `${BASE_URL}/salary/${slug}`,
+        "x-default": `${BASE_URL}/salary/${slug}`,
+      },
+    },
     openGraph: { title: page.title, description: page.description },
   };
 }
@@ -354,13 +360,10 @@ export default async function SalaryPage({ params }: Props) {
               <h2 className="text-xl font-bold text-gray-900">Frequently asked questions</h2>
               <div className="space-y-3">
                 {faqs.map(({ q, a }) => (
-                  <details key={q} className="group border border-gray-100 rounded-xl overflow-hidden">
-                    <summary className="flex items-center justify-between p-5 cursor-pointer list-none hover:bg-gray-50 transition-colors">
-                      <h3 className="font-semibold text-gray-900 text-sm pr-4">{q}</h3>
-                      <span className="text-gray-400 text-lg flex-shrink-0 group-open:rotate-45 transition-transform">+</span>
-                    </summary>
-                    <div className="px-5 pb-5"><p className="text-sm text-gray-500 leading-relaxed">{a}</p></div>
-                  </details>
+                  <div key={q} className="border border-gray-100 rounded-xl p-5 space-y-2">
+                    <h3 className="font-semibold text-gray-900 text-sm">{q}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{a}</p>
+                  </div>
                 ))}
               </div>
             </div>

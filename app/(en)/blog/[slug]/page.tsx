@@ -47,6 +47,11 @@ export default async function BlogPostPage({ params }: Props) {
     dateModified: post.date,
     url: `${BASE_URL}/blog/${slug}`,
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE_URL}/blog/${slug}` },
+    author: {
+      "@type": "Organization",
+      "@id": `${BASE_URL}/#organization`,
+      name: "SalaryVerdict",
+    },
     publisher: {
       "@type": "Organization",
       "@id": `${BASE_URL}/#organization`,
