@@ -91,7 +91,7 @@ export default function Home() {
           </div>
 
           {/* Right: tool + trust strip */}
-          <div className="bg-white rounded-2xl shadow-xl shadow-gray-100 border border-gray-100 p-6 sm:p-8">
+          <div id="salary-tool" className="bg-white rounded-2xl shadow-xl shadow-gray-100 border border-gray-100 p-6 sm:p-8">
             <SalaryTool />
             <TrustStrip />
           </div>

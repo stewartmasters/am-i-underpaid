@@ -32,7 +32,7 @@ export default function Navigation() {
             Methodology
           </Link>
           <Link
-            href="/"
+            href="/#salary-tool"
             className="bg-orange-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-orange-600 transition-colors flex-shrink-0"
           >
             Check my salary
