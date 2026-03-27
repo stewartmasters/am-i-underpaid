@@ -7,6 +7,8 @@ export const revalidate = false;
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -36,8 +38,38 @@ export default async function BlogPostPage({ params }: Props) {
   const allPosts = getAllBlogPosts();
   const otherPosts = allPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    url: `${BASE_URL}/blog/${slug}`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE_URL}/blog/${slug}` },
+    publisher: {
+      "@type": "Organization",
+      "@id": `${BASE_URL}/#organization`,
+      name: "SalaryVerdict",
+      url: BASE_URL,
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE_URL}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${BASE_URL}/blog/${slug}` },
+    ],
+  };
+
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       <nav className="text-sm text-gray-400 mb-8 flex items-center gap-2">
         <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link>
         <span>/</span>
@@ -86,5 +118,6 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       )}
     </div>
+    </>
   );
 }

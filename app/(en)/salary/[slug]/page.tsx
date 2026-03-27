@@ -5,6 +5,8 @@ import { generateSeoPages, getSeoPage, getRelatedPages, getLocationContext, getR
 import { getMarketRange, getSeniorityBands, formatSalary, getConfidenceLevel, CONFIDENCE_LABELS, ROLES, LOCATIONS } from "@/lib/salary-data";
 import SalaryTool from "@/components/SalaryTool";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
+
 // Force truly static generation — no ISR, no blob caching needed
 export const revalidate = false;
 export const dynamic = "force-static";
@@ -129,6 +131,17 @@ export default async function SalaryPage({ params }: Props) {
       : faqsLocation(page.locationLabel!);
 
   const faqSchema = buildFaqSchema(faqs);
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "Salaries", item: `${BASE_URL}/salary/software-engineer` },
+      { "@type": "ListItem", position: 3, name: page.h1, item: `${BASE_URL}/salary/${slug}` },
+    ],
+  };
+
   const locationCtx = getLocationContext(page.locationSlug);
   const roleCtx     = getRoleContext(page.roleSlug);
   const otherRoles     = ROLES.filter((r) => r.slug !== page.roleSlug).slice(0, 10);
@@ -144,6 +157,7 @@ export default async function SalaryPage({ params }: Props) {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">

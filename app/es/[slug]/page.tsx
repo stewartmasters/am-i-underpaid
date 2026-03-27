@@ -212,12 +212,23 @@ export default async function EsSalaryPage({ params }: Props) {
         );
     const faqSchema = buildFaqSchema(faqs);
 
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${BASE_URL}/es/` },
+        { "@type": "ListItem", position: 2, name: "Salarios", item: `${BASE_URL}/es/` },
+        { "@type": "ListItem", position: 3, name: page.h1, item: `${BASE_URL}/es/${slug}` },
+      ],
+    };
+
     const introText = page.type === "experience"
       ? `Con ${page.experienceLabel}, un ${page.roleLabel!.toLowerCase()} en ${page.cityLabel} se sitúa en el tramo mid-level del mercado, con un salario medio de ${formatSalary(range.median, currency)} anuales. ${cityContext}`
       : buildRoleCityIntro(slug, page.roleLabel!, page.cityLabel!, formatSalary(range.low, currency), formatSalary(range.median, currency), formatSalary(range.high, currency), cityContext);
 
     return (
       <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
           <nav className="text-sm text-gray-400 mb-8 flex items-center gap-2 flex-wrap">
@@ -405,9 +416,18 @@ export default async function EsSalaryPage({ params }: Props) {
     const cityConfig = ES_CITIES.find((c) => c.dataSlug === cityDataSlug);
     const faqs = faqsSalaryQuestion(amount, page.cityLabel!, currency);
     const faqSchema = buildFaqSchema(faqs);
+    const breadcrumbSQ = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${BASE_URL}/es/` },
+        { "@type": "ListItem", position: 2, name: page.h1, item: `${BASE_URL}/es/${slug}` },
+      ],
+    };
 
     return (
       <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSQ) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
           <nav className="text-sm text-gray-400 mb-8 flex items-center gap-2 flex-wrap">
@@ -519,9 +539,18 @@ export default async function EsSalaryPage({ params }: Props) {
     const city2DataSlug = page.city2DataSlug!;
     const faqs = faqsCityComparison(page.city1Label!, page.city2Label!);
     const faqSchema = buildFaqSchema(faqs);
+    const breadcrumbCC = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${BASE_URL}/es/` },
+        { "@type": "ListItem", position: 2, name: page.h1, item: `${BASE_URL}/es/${slug}` },
+      ],
+    };
 
     return (
       <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbCC) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
           <nav className="text-sm text-gray-400 mb-8 flex items-center gap-2 flex-wrap">

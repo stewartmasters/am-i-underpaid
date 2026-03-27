@@ -58,23 +58,35 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const orgSchema = {
+  const siteSchema = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "SalaryVerdict",
-    url: BASE_URL,
-    description: "Free salary checker. Find out instantly if you're underpaid.",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${BASE_URL}/salary/{search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${BASE_URL}/#website`,
+        name: "SalaryVerdict",
+        url: BASE_URL,
+        description: "Free salary checker. Find out instantly if you're underpaid.",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: { "@type": "EntryPoint", urlTemplate: `${BASE_URL}/salary/{search_term_string}` },
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        name: "SalaryVerdict",
+        url: BASE_URL,
+        description: "SalaryVerdict helps professionals across Europe find out if they are underpaid. Free salary checker — no signup, instant results based on official government wage data.",
+      },
+    ],
   };
 
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }} />
         <link rel="icon" href="/icon.png" />
         <link rel="apple-touch-icon" href="/apple-icon.png" />
       </head>
