@@ -49,9 +49,9 @@ export function generateEsPages(): EsPage[] {
 
   const pages: EsPage[] = [];
 
-  // ─── A. ROLE + CITY (40 pages) ────────────────────────────────────────────
-  // 8 roles × 5 cities = 40
-  for (const role of ES_ROLES.slice(0, 8)) {
+  // ─── A. ROLE + CITY (65 pages) ────────────────────────────────────────────
+  // 13 roles × 5 cities = 65
+  for (const role of ES_ROLES) {
     for (const city of ES_CITIES) {
       const slug = `salario-${role.esSlug}-${city.esSlug}`;
       pages.push({
@@ -132,6 +132,28 @@ export function generateEsPages(): EsPage[] {
       city2EsSlug: city2.esSlug,
       city2DataSlug: city2.dataSlug,
       city2Label: city2.label,
+    });
+  }
+
+  // ─── E. 3-YEAR EXPERIENCE PAGES (5 pages) ────────────────────────────────
+  // ingeniero-software × 5 cities with 3 years experience
+  const swRole = ES_ROLES.find((r) => r.esSlug === "ingeniero-software")!;
+  for (const city of ES_CITIES) {
+    const slug = `salario-ingeniero-software-${city.esSlug}-3-anos`;
+    pages.push({
+      slug,
+      type: "experience",
+      h1: `Salario de ${swRole.labelDe} en ${city.label} con 3 años de experiencia (${YEAR})`,
+      title: `Sueldo Ingeniero de Software ${city.label} con 3 años experiencia — ${YEAR}`,
+      description: `¿Cuánto cobra un ${swRole.labelDe} en ${city.label} con 3 años de experiencia? Consulta el rango salarial para perfil junior-mid y comprueba si estás cobrando lo que mereces.`,
+      roleEsSlug: swRole.esSlug,
+      roleDataSlug: swRole.dataSlug,
+      roleLabel: swRole.label,
+      cityEsSlug: city.esSlug,
+      cityDataSlug: city.dataSlug,
+      cityLabel: city.label,
+      experienceYears: 3,
+      experienceLabel: "3 años de experiencia",
     });
   }
 

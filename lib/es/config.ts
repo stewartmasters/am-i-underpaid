@@ -118,6 +118,14 @@ export const ES_ROLES: EsRole[] = [
     plural: "analistas financieros",
     category: "Finanzas",
   },
+  {
+    dataSlug: "operations-manager",
+    esSlug: "director-operaciones",
+    label: "Director de Operaciones",
+    labelDe: "director de operaciones",
+    plural: "directores de operaciones",
+    category: "Operaciones",
+  },
 ];
 
 export const ES_CITIES: EsCity[] = [
