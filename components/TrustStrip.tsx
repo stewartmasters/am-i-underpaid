@@ -6,14 +6,14 @@ import Image from "next/image";
 // Glassdoor, Indeed, and Levels.fyi are NOT shown — they are not licensed for
 // branding display and/or are not primary data sources.
 const SOURCES = [
-  // Eurostat: free reuse with attribution (EC copyright notice)
-  { src: "/logos/eurostat.png",  alt: "Eurostat", width: 120, height: 32 },
-  // ONS: Open Government Licence v3.0
-  { src: "/logos/ons.png",       alt: "ONS",      width: 80,  height: 32 },
-  // Destatis: public domain / open data
-  { src: "/logos/destatis.png",  alt: "Destatis", width: 100, height: 32 },
-  // INE: public domain / open data
-  { src: "/logos/ine.png",       alt: "INE",      width: 60,  height: 32 },
+  { src: "/logos/eurostat.png", alt: "Eurostat", width: 120, height: 32 },
+  { src: "/logos/ons.png",      alt: "ONS",      width: 80,  height: 32 },
+  { src: "/logos/destatis.png", alt: "Destatis", width: 100, height: 32 },
+  { src: "/logos/ine.png",      alt: "INE",      width: 60,  height: 32 },
+  { src: "/logos/bfs.jpg",      alt: "BFS",      width: 80,  height: 32 },
+  { src: "/logos/scb.png",      alt: "SCB",      width: 80,  height: 32 },
+  { src: "/logos/istat.png",    alt: "Istat",    width: 80,  height: 32 },
+  { src: "/logos/gus.png",      alt: "GUS",      width: 80,  height: 32 },
 ];
 
 export default function TrustStrip() {
