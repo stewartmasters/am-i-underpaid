@@ -3,7 +3,16 @@ node_modules/
 
 # next.js
 .next/
+.next*/
 out/
+tsconfig.tsbuildinfo
+
+# loose asset files in root
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.gif
 
 # env files
 .env*
