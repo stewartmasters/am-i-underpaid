@@ -29,7 +29,7 @@ export type LocationSlug =
   | "amsterdam"
   | "paris" | "france"
   | "berlin" | "germany"
-  | "barcelona" | "madrid" | "spain"
+  | "barcelona" | "madrid" | "spain" | "valencia" | "sevilla" | "bilbao"
   | "zurich" | "switzerland"
   | "lisbon" | "portugal"
   | "stockholm" | "sweden"
@@ -119,6 +119,9 @@ export const LOCATIONS: Location[] = [
   { slug: "barcelona", label: "Barcelona", country: "Spain",          currency: "€", multiplier: 0.88 },
   { slug: "madrid",    label: "Madrid",    country: "Spain",          currency: "€", multiplier: 0.82 },
   { slug: "spain",     label: "Spain",     country: "Spain",          currency: "€", multiplier: 0.80 },
+  { slug: "valencia",  label: "Valencia",  country: "Spain",          currency: "€", multiplier: 0.78 },
+  { slug: "sevilla",   label: "Sevilla",   country: "Spain",          currency: "€", multiplier: 0.75 },
+  { slug: "bilbao",    label: "Bilbao",    country: "Spain",          currency: "€", multiplier: 0.80 },
   // Switzerland — calibrated from Swiss Federal Statistical Office data; CHF
   { slug: "zurich",       label: "Zurich",       country: "Switzerland", currency: "CHF ", multiplier: 1.72 },
   { slug: "switzerland",  label: "Switzerland",  country: "Switzerland", currency: "CHF ", multiplier: 1.60 },
