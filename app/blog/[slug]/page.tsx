@@ -61,7 +61,10 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
-      <div className="mt-12 bg-orange-50 rounded-2xl p-8 text-center space-y-3 border border-orange-100">
+      {/* Ad slot: after article content, before CTA — natural break */}
+      <div className="mt-10 mb-2" data-ad-slot="blog-post-after-content" aria-hidden="true" />
+
+      <div className="mt-4 bg-orange-50 rounded-2xl p-8 text-center space-y-3 border border-orange-100">
         <h2 className="text-lg font-bold text-gray-900">Find out if you&apos;re underpaid</h2>
         <p className="text-sm text-gray-500">Enter your role, location, and salary. Takes 30 seconds.</p>
         <Link href="/" className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-xl transition-colors">Check my salary →</Link>

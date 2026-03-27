@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type SalaryResult, formatSalary, getSeniorityLabel, type ConfidenceLevel, CONFIDENCE_LABELS } from "@/lib/salary-data";
 import { track } from "@/lib/analytics";
+
+const SAVE_KEY = "salary_verdict_saved";
 
 interface Props {
   result: SalaryResult;
@@ -67,6 +69,39 @@ function buildShareText(verdict: SalaryResult["verdict"], percentile: number, de
 export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, locationLabel, confidenceLevel }: Props) {
   const [copied, setCopied] = useState(false);
   const [copiedText, setCopiedText] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  // Check if already saved on mount
+  useEffect(() => {
+    try {
+      const item = localStorage.getItem(SAVE_KEY);
+      if (item) {
+        const parsed = JSON.parse(item);
+        if (parsed.verdict === result.verdict && parsed.roleSlug === result.roleSlug && parsed.locationSlug === result.locationSlug) {
+          setSaved(true);
+        }
+      }
+    } catch {}
+  }, [result]);
+
+  const handleSave = () => {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({
+        verdict: result.verdict,
+        percentile: result.percentile,
+        median: result.median,
+        delta: result.delta,
+        currency: result.currency,
+        roleSlug: result.roleSlug,
+        locationSlug: result.locationSlug,
+        roleLabel,
+        locationLabel,
+        savedAt: new Date().toISOString(),
+      }));
+      setSaved(true);
+      track("result_saved" as Parameters<typeof track>[0]);
+    } catch {}
+  };
 
   const config = VERDICT_CONFIG[result.verdict];
   const { currency, low, median, high, percentile, delta } = result;
@@ -228,9 +263,18 @@ export default function SalaryResult({ result, yearsOfExp, onReset, roleLabel, l
       </div>
 
       {/* Actions */}
-      <button onClick={onReset} className="w-full bg-gray-900 text-white py-3 px-6 rounded-xl font-semibold hover:bg-gray-800 transition-colors">
-        Check another role
-      </button>
+      <div className="space-y-2">
+        <button onClick={onReset} className="w-full bg-gray-900 text-white py-3 px-6 rounded-xl font-semibold hover:bg-gray-800 transition-colors">
+          Check another role
+        </button>
+        <button
+          onClick={handleSave}
+          disabled={saved}
+          className="w-full border border-gray-200 text-gray-500 py-2.5 px-6 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-default"
+        >
+          {saved ? "✓ Result saved to this browser" : "Save result to re-check later"}
+        </button>
+      </div>
 
       <p className="text-xs text-gray-400 text-center">
         Based on public salary benchmarks and structured modelling.{" "}

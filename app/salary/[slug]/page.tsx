@@ -295,6 +295,9 @@ export default async function SalaryPage({ params }: Props) {
               <Link href="/" className="inline-block mt-1 text-sm font-semibold text-orange-500 hover:underline">Back to main tool →</Link>
             </div>
 
+            {/* Ad slot: before FAQ — natural content break, non-intrusive */}
+            <div data-ad-slot="salary-guide-before-faq" aria-hidden="true" />
+
             <div className="space-y-5">
               <h2 className="text-xl font-bold text-gray-900">Frequently asked questions</h2>
               <div className="space-y-3">

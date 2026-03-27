@@ -112,14 +112,17 @@ export function generateSeoPages(): SeoPage[] {
     });
   }
 
-  // Seniority variation pages (high-priority role/location combos only)
-  const SENIORITY_COMBOS = [
-    { role: "software-engineer", location: "london" },
-    { role: "software-engineer", location: "berlin" },
-    { role: "product-manager",   location: "london" },
-    { role: "data-analyst",      location: "london" },
-    { role: "frontend-developer", location: "london" },
+  // Seniority variation pages — expanded to top roles × major cities
+  // Generates "junior/mid/senior X salary in Y" pages for high-search-volume combos
+  const SENIORITY_ROLES = [
+    "software-engineer", "product-manager", "data-analyst", "frontend-developer",
+    "backend-developer", "data-scientist", "devops-engineer", "designer",
+    "marketing-manager", "sales-manager",
   ];
+  const SENIORITY_LOCATIONS = ["london", "berlin", "amsterdam", "paris", "dublin", "barcelona"];
+  const SENIORITY_COMBOS = SENIORITY_ROLES.flatMap((role) =>
+    SENIORITY_LOCATIONS.map((location) => ({ role, location }))
+  );
 
   for (const { role, location } of SENIORITY_COMBOS) {
     const r = ROLES.find(x => x.slug === role);
@@ -142,9 +145,9 @@ export function generateSeoPages(): SeoPage[] {
     }
   }
 
-  // "Is X a good salary in Location" pages
+  // "Is X a good salary in Location" pages — expanded to all major locations
   const SALARY_AMOUNTS = [25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 90000, 100000, 120000];
-  const SALARY_Q_LOCATIONS: LocationSlug[] = ["london", "berlin", "amsterdam", "paris", "dublin", "barcelona"];
+  const SALARY_Q_LOCATIONS: LocationSlug[] = ["london", "berlin", "amsterdam", "paris", "dublin", "barcelona", "madrid", "uk", "germany", "france", "spain"];
 
   for (const amount of SALARY_AMOUNTS) {
     for (const locSlug of SALARY_Q_LOCATIONS) {

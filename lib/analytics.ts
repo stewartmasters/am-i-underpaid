@@ -14,6 +14,7 @@ declare global {
 export type AnalyticsEvent =
   | "salary_calculated"
   | "result_shared"
+  | "result_saved"
   | "share_link_copied"
   | "share_text_copied"
   | "share_twitter"
