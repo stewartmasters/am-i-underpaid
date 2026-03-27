@@ -69,20 +69,18 @@ export default function Home() {
             </div>
 
             <div className="space-y-1.5 pt-1">
-              <p className="text-xs text-gray-400 font-medium">Benchmarked against public data from:</p>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <p className="text-xs text-gray-400 font-medium">Built using official public salary datasets:</p>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 {[
-                  { src: "/logos/eurostat.png",  alt: "Eurostat",   width: 72,  height: 20 },
-                  { src: "/logos/ons.png",        alt: "ONS",        width: 48,  height: 20 },
-                  { src: "/logos/glassdoor.svg",  alt: "Glassdoor",  width: 80,  height: 20 },
-                  { src: "/logos/indeed.png",     alt: "Indeed",     width: 56,  height: 20 },
-                  { src: "/logos/levelsfyi.svg",  alt: "Levels.fyi", width: 72,  height: 20 },
-                ].map(({ src, alt, width, height }) => (
+                  { src: "/logos/eurostat.png", alt: "Eurostat", width: 72, height: 20, displayH: 24 },
+                  { src: "/logos/ons.png",       alt: "ONS",      width: 48, height: 20, displayH: 22 },
+                ].map(({ src, alt, width, height, displayH }) => (
                   <Image key={alt} src={src} alt={alt} width={width} height={height}
                     className="opacity-40 grayscale"
-                    style={{ objectFit: "contain", height: "27px", width: "auto" }}
+                    style={{ objectFit: "contain", height: `${displayH}px`, width: "auto" }}
                   />
                 ))}
+                <span className="text-xs text-gray-400 font-medium">+ Destatis · INE · national offices</span>
               </div>
             </div>
 

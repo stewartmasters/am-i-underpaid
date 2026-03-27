@@ -53,7 +53,7 @@ const SECTIONS = [
           <li><strong>London and UK estimates</strong> are calibrated from ONS ASHE data (UK government survey). Eurostat data is not used for these locations.</li>
           <li><strong>Continental European estimates</strong> (Germany, France, Spain, Netherlands, Ireland) are calibrated from Eurostat Labour Cost Survey data. ONS data is not used for these locations.</li>
           <li><strong>Tech-role estimates</strong> in major cities (London, Berlin, Amsterdam, Paris, Dublin) are additionally cross-referenced with Levels.fyi community compensation data, which has strong European tech coverage.</li>
-          <li><strong>Glassdoor and Indeed data</strong> is applied on a per-country basis — UK data from those platforms informs UK estimates only; German data informs German estimates only.</li>
+          <li><strong>Glassdoor salary data</strong> is used as a secondary directional cross-check only — not as a primary benchmark input. It is applied on a per-country basis and weighted at 0.55× vs 0.80–0.90× for government sources. <em>Indeed is not currently integrated.</em></li>
         </ul>
         <p>This mapping is maintained explicitly in our data layer and validated at build time to prevent accidental cross-country mixing.</p>
       </>
@@ -72,7 +72,7 @@ const SECTIONS = [
           <li><strong>INE Encuesta de Estructura Salarial 2022</strong> (ine-ees) — Spain&apos;s national earnings structure survey. CNO-11 occupation codes. Includes Comunidad de Madrid and Cataluña regional breakdown (used for Madrid and Barcelona). Attribution to INE required. <em>Spain only.</em></li>
           <li><strong>Levels.fyi 2024</strong> (levels-fyi) — Manually curated from publicly visible salary ranges on the platform. Representative of larger tech companies and above-market-median employers. Self-reported data has known upward bias — used as an upper-market signal for engineering, product, and data roles in major tech hubs. <em>Not used for non-tech roles.</em></li>
         </ul>
-        <p>Government surveys are weighted highest in our pipeline. Levels.fyi is weighted at approximately 0.65× vs 0.80–0.90× for national statistics sources, reflecting its self-reported nature and sample bias toward top-of-market employers.</p>
+        <p>Government surveys are weighted highest in our pipeline. Levels.fyi is weighted at approximately 0.65× vs 0.80–0.90× for national statistics sources. Glassdoor salary figures are used as a secondary directional cross-check at 0.55× and are not a primary driver of estimates. Indeed is not currently integrated.</p>
       </>
     ),
   },

@@ -174,7 +174,7 @@ export default async function SalaryPage({ params }: Props) {
                   </div>
                   <div className="space-y-0.5">
                     <div className="text-xs text-gray-400">Likely underpaid below</div>
-                    <div className="font-bold text-orange-600 text-sm">{formatSalary(Math.round(range.median * 0.88 / 500) * 500, currency)}</div>
+                    <div className="font-bold text-orange-600 text-sm">{formatSalary(Math.round(range.median * 0.90 / 500) * 500, currency)}</div>
                   </div>
                 </div>
                 <p className="text-xs text-gray-400">Gross annual base salary estimates · 2026 · Public benchmarks + structured modelling · <a href="/methodology" className="text-orange-500 hover:underline">Methodology &#8594;</a></p>

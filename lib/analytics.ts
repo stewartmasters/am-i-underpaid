@@ -18,6 +18,7 @@ export type AnalyticsEvent =
   | "share_text_copied"
   | "share_twitter"
   | "share_linkedin"
+  | "share_whatsapp"
   | "check_another"
   | "cta_hero_click"
   | "scroll_to_tool";

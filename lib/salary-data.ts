@@ -22,7 +22,7 @@ export type RoleSlug =
   | "social-media-manager";
 
 export type LocationSlug = "london" | "madrid" | "barcelona" | "berlin" | "paris" | "amsterdam" | "dublin" | "uk" | "spain" | "germany" | "france" | "europe";
-export type Verdict = "underpaid" | "fair" | "overpaid";
+export type Verdict = "well-below" | "slightly-below" | "fair" | "above";
 
 export interface Role { slug: RoleSlug; label: string; baseSalary: number; category: string; }
 export interface Location { slug: LocationSlug; label: string; country: string; currency: "£" | "€"; multiplier: number; }
@@ -202,8 +202,11 @@ export function calculateSalary(roleSlug: string, locationSlug: string, years: n
 
   const delta = currentSalary - median;
   let verdict: Verdict;
-  if (delta < -median * 0.08) verdict = "underpaid";
-  else if (delta > median * 0.08) verdict = "overpaid";
+  // Neutral band is ±15% to avoid false negatives.
+  // "Well below" requires >20% gap; "slightly below" is 10–20% gap.
+  if (delta < -median * 0.20) verdict = "well-below";
+  else if (delta < -median * 0.10) verdict = "slightly-below";
+  else if (delta > median * 0.15) verdict = "above";
   else verdict = "fair";
 
   const currency = location?.currency ?? "€";
