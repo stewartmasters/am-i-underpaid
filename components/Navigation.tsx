@@ -10,7 +10,7 @@ export default function Navigation() {
     <nav className="border-b border-gray-100 bg-white/90 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
         <Link href="/" className="font-bold text-gray-900 text-lg tracking-tight flex-shrink-0">
-          am i underpaid<span className="text-orange-500">?</span>
+          Salary<span className="text-orange-500">Verdict</span>
         </Link>
         <div className="flex items-center gap-6 text-sm">
           <Link

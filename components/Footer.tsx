@@ -29,10 +29,10 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div className="space-y-3">
             <div className="font-bold text-gray-900 text-base">
-              am i underpaid<span className="text-orange-500">?</span>
+              Salary<span className="text-orange-500">Verdict</span>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">
-              Free salary benchmarking tool for European professionals. Check your market rate in 30 seconds.
+              Free salary benchmarking for European professionals. Find out if you&apos;re underpaid in 30 seconds.
             </p>
             <p className="text-xs text-gray-400">
               Based on public benchmarks, government wage data, and structured market modelling.
@@ -84,10 +84,12 @@ export default function Footer() {
 
         <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-400">
-            © {year} salaryverdict.com — Salary estimates are modelled from public benchmarks and do not represent guaranteed earnings.
+            © {year} SalaryVerdict — Salary estimates are modelled from public benchmarks and do not represent guaranteed earnings.
           </p>
           <div className="flex items-center gap-4 text-xs text-gray-400">
             <Link href="/methodology" className="hover:text-orange-500 transition-colors">How we calculate</Link>
+            <span>·</span>
+            <Link href="/privacy" className="hover:text-orange-500 transition-colors">Privacy policy</Link>
             <span>·</span>
             <Link href="/sitemap.xml" className="hover:text-orange-500 transition-colors">Sitemap</Link>
           </div>

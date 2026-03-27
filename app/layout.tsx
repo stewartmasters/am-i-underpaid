@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import CookieConsent from "@/components/CookieConsent";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,8 +17,8 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com"
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Am I Underpaid? — Free Salary Checker",
-    template: "%s — Am I Underpaid?",
+    default: "SalaryVerdict — Find Out If You're Underpaid",
+    template: "%s — SalaryVerdict",
   },
   description:
     "Find out instantly if you're underpaid. Enter your role, location, and salary. Get your market rate and percentile in seconds. No signup required.",
@@ -29,30 +30,29 @@ export const metadata: Metadata = {
     "average salary",
     "salary comparison",
     "underpaid",
+    "salary verdict",
   ],
   alternates: {
     canonical: BASE_URL,
   },
   openGraph: {
     type: "website",
-    siteName: "Am I Underpaid?",
-    title: "Am I Underpaid? — Free Salary Checker",
+    siteName: "SalaryVerdict",
+    title: "SalaryVerdict — Find Out If You're Underpaid",
     description:
       "Find out instantly if you're underpaid. Enter your role, location, and salary. Get your market rate and percentile in seconds.",
     url: BASE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Am I Underpaid? — Free Salary Checker",
-    description: "Find out instantly if you're underpaid. Takes 30 seconds.",
+    title: "SalaryVerdict — Find Out If You're Underpaid",
+    description: "Find out if you're underpaid in 30 seconds. Free, no signup.",
   },
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true },
   },
-  // Add your Google Search Console verification code here once you have it:
-  // verification: { google: "YOUR_GSC_VERIFICATION_CODE" },
 };
 
 export default function RootLayout({
@@ -63,7 +63,7 @@ export default function RootLayout({
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Am I Underpaid?",
+    name: "SalaryVerdict",
     url: BASE_URL,
     description: "Free salary checker. Find out instantly if you're underpaid.",
     potentialAction: {
@@ -84,14 +84,16 @@ export default function RootLayout({
         <Navigation />
         <main>{children}</main>
         <Footer />
-        {/* Netlify Forms registration — scanned at deploy time; submission handled via fetch in client components */}
+        <CookieConsent />
+        {/* Netlify Forms registration — scanned at deploy time */}
         <form name="salary-leads" data-netlify="true" hidden aria-hidden="true">
           <input type="email" name="email" />
           <input type="hidden" name="verdict" />
           <input type="hidden" name="role" />
           <input type="hidden" name="location" />
         </form>
-        {/* Google Analytics */}
+        {/* Google Analytics 4 — Consent Mode v2 */}
+        {/* analytics_storage defaults to denied until user accepts the cookie banner */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-H8XR1C8DXG"
           strategy="afterInteractive"
@@ -99,8 +101,13 @@ export default function RootLayout({
         <Script id="google-analytics" strategy="afterInteractive">{`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
+          gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            wait_for_update: 500
+          });
           gtag('js', new Date());
-          gtag('config', 'G-H8XR1C8DXG');
+          gtag('config', 'G-H8XR1C8DXG', { send_page_view: false });
         `}</Script>
       </body>
     </html>

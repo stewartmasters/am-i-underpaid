@@ -452,19 +452,38 @@ export default function SalaryResult({
           </div>
         )}
 
-        {/* ─── ABOVE MARKET: SHARE CTA ─── */}
+        {/* ─── ABOVE MARKET: ACTIONS ─── */}
         {result.verdict === "above" && (
-          <div className="px-5 py-4 bg-emerald-50 border-b border-emerald-100">
-            <p className="text-sm font-semibold text-emerald-800 mb-1">Show your friends how you compare</p>
-            <p className="text-xs text-emerald-700 mb-3">
-              You&apos;re in the top {100 - percentile}% for your role. Share your result and see where they stand.
-            </p>
-            <button
-              onClick={handleCopyCard}
-              className="w-full flex items-center justify-center gap-2 text-sm font-bold bg-emerald-700 text-white py-2.5 px-4 rounded-xl hover:bg-emerald-800 transition-colors"
-            >
-              {copiedCard ? "✓ Copied!" : "Copy result and share →"}
-            </button>
+          <div className="px-5 py-5 bg-emerald-50 border-b border-emerald-100 space-y-4">
+            <div>
+              <p className="text-sm font-semibold text-emerald-800 mb-0.5">You&apos;re ahead — use it.</p>
+              <p className="text-xs text-emerald-700">
+                Top {100 - percentile}% for your role. That&apos;s leverage in your next negotiation, promotion case,
+                or job offer. Here&apos;s how to make it count.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-2">
+              <button
+                onClick={handleCopyCard}
+                className="w-full flex items-center justify-center gap-2 text-sm font-bold bg-emerald-700 text-white py-2.5 px-4 rounded-xl hover:bg-emerald-800 transition-colors"
+              >
+                {copiedCard ? "✓ Copied!" : "Share your result with a friend →"}
+              </button>
+              <Link
+                href="/blog/salary-negotiation-tips"
+                className="flex items-center justify-center text-xs font-medium border border-emerald-200 bg-white text-emerald-700 py-2.5 px-3 rounded-lg hover:bg-emerald-50 transition-colors text-center"
+              >
+                How to negotiate from a position of strength →
+              </Link>
+              {result.roleSlug && (
+                <Link
+                  href={`/salary/${result.roleSlug}`}
+                  className="flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-gray-600 py-2.5 px-3 rounded-lg hover:border-emerald-200 hover:text-emerald-700 transition-colors text-center"
+                >
+                  {roleLabel ? `See what the top 25% of ${roleLabel}s earn →` : "See what top earners in your role make →"}
+                </Link>
+              )}
+            </div>
           </div>
         )}
 

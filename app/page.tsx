@@ -34,20 +34,6 @@ const CURATED_GUIDES = [
   { role: "business-analyst",           location: "paris",     roleLabel: "Business Analyst",           locationLabel: "Paris" },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote: "Found out I was €12k below market. Had the conversation two weeks later. Got the raise.",
-    name: "Software Engineer, London",
-  },
-  {
-    quote: "Brought the data to my annual review. My manager couldn't argue with official benchmarks.",
-    name: "Product Manager, Berlin",
-  },
-  {
-    quote: "The fastest way I've found to know if it's worth pushing for more.",
-    name: "Data Analyst, Amsterdam",
-  },
-];
 
 export default function Home() {
   return (
@@ -75,24 +61,16 @@ export default function Home() {
               Compare your salary against official government wage data across 12 European locations. Get your verdict in 30 seconds — no signup, no email.
             </p>
 
-            {/* Social proof */}
-            <div className="flex items-center gap-2 pt-1">
-              <div className="flex -space-x-1.5">
-                {["bg-orange-400", "bg-blue-400", "bg-emerald-400", "bg-purple-400"].map((c, i) => (
-                  <div key={i} className={`w-6 h-6 rounded-full border-2 border-white ${c}`} />
-                ))}
-              </div>
-              <p className="text-sm text-gray-500">
-                <strong className="text-gray-700">50,000+</strong> checks done across Europe
-              </p>
-            </div>
-
-            {/* Testimonials */}
-            <div className="space-y-2.5">
-              {TESTIMONIALS.map(({ quote, name }) => (
-                <div key={name} className="bg-gray-50 rounded-xl px-4 py-3">
-                  <p className="text-xs text-gray-600 leading-relaxed">&ldquo;{quote}&rdquo;</p>
-                  <p className="text-xs text-gray-400 mt-1 font-medium">— {name}</p>
+            {/* Factual trust stats */}
+            <div className="grid grid-cols-3 gap-4 pt-2">
+              {[
+                { value: "21",   label: "Role types" },
+                { value: "12",   label: "Locations" },
+                { value: "600+", label: "Salary guides" },
+              ].map(({ value, label }) => (
+                <div key={label} className="text-center">
+                  <div className="text-2xl font-extrabold text-gray-900">{value}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{label}</div>
                 </div>
               ))}
             </div>
