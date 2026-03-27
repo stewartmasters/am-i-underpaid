@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 
 const inter = Inter({
@@ -81,9 +79,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.png" />
       </head>
       <body className="bg-white text-gray-900 min-h-screen font-sans">
-        <Navigation />
-        <main>{children}</main>
-        <Footer />
+        {children}
         <CookieConsent />
         {/* Netlify Forms registration — scanned at deploy time */}
         <form name="salary-leads" data-netlify="true" hidden aria-hidden="true">
