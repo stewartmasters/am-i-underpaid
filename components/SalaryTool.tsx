@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ROLES, LOCATIONS, calculateSalary, getConfidenceLevel, type SalaryResult, type ConfidenceLevel } from "@/lib/salary-data";
+import { ROLES, LOCATIONS, calculateSalary, getConfidenceLevel, type SalaryResult, type RoleSlug, type ConfidenceLevel } from "@/lib/salary-data";
 import SalaryResultComponent from "./SalaryResult";
 import { track } from "@/lib/analytics";
+import { getSkillsForRole, type SkillSlug } from "@/lib/skills-data";
 
 interface Props {
   defaultRole?: string;
@@ -26,6 +27,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
   const [location, setLocation] = useState(defaultLocation);
   const [years, setYears] = useState(5);
   const [currentSalary, setCurrentSalary] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<SkillSlug[]>([]);
   const [result, setResult] = useState<SalaryResult | null>(null);
   const [meta, setMeta] = useState<{ roleLabel?: string; locationLabel?: string; confidence?: ConfidenceLevel }>({});
   const [error, setError] = useState("");
@@ -46,6 +48,15 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
 
   const selectedLocation = LOCATIONS.find((l) => l.slug === location);
   const currencySymbol = selectedLocation ? selectedLocation.currency.trim() : "";
+  const availableSkills = role ? getSkillsForRole(role as RoleSlug) : [];
+
+  const toggleSkill = (slug: SkillSlug) => {
+    setSelectedSkills((prev) => {
+      if (prev.includes(slug)) return prev.filter((s) => s !== slug);
+      if (prev.length >= 3) return prev;
+      return [...prev, slug];
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,6 +78,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
     setCurrentSalary("");
     setError("");
     setMeta({});
+    setSelectedSkills([]);
     track("check_another");
   };
 
@@ -95,6 +107,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
         roleLabel={meta.roleLabel}
         locationLabel={meta.locationLabel}
         confidenceLevel={meta.confidence}
+        selectedSkills={selectedSkills}
       />
     );
   }
@@ -125,7 +138,7 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
         <label className="block text-sm font-semibold text-gray-700">Job title</label>
         <select
           value={role}
-          onChange={(e) => setRole(e.target.value)}
+          onChange={(e) => { setRole(e.target.value); setSelectedSkills([]); }}
           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer"
         >
           <option value="">Select your role...</option>
@@ -197,6 +210,51 @@ export default function SalaryTool({ defaultRole = "", defaultLocation = "" }: P
         </div>
         <p className="text-xs text-gray-400">Gross annual base salary, before bonus or equity</p>
       </div>
+
+      {availableSkills.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-semibold text-gray-700">
+              Key skills <span className="text-gray-400 font-normal">(optional, up to 3)</span>
+            </label>
+            {selectedSkills.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setSelectedSkills([])}
+                className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {availableSkills.map((skill) => {
+              const isSelected = selectedSkills.includes(skill.slug);
+              const isDisabled = !isSelected && selectedSkills.length >= 3;
+              return (
+                <button
+                  key={skill.slug}
+                  type="button"
+                  onClick={() => toggleSkill(skill.slug)}
+                  disabled={isDisabled}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
+                    isSelected
+                      ? "bg-orange-500 border-orange-500 text-white"
+                      : isDisabled
+                      ? "bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed"
+                      : "bg-white border-gray-200 text-gray-600 hover:border-orange-300 hover:text-orange-600"
+                  }`}
+                >
+                  {skill.label}
+                </button>
+              );
+            })}
+          </div>
+          {selectedSkills.length === 3 && (
+            <p className="text-xs text-gray-400">Maximum 3 skills selected.</p>
+          )}
+        </div>
+      )}
 
       {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
 

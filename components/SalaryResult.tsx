@@ -12,6 +12,7 @@ import {
   CONFIDENCE_LABELS,
 } from "@/lib/salary-data";
 import { getCompanyTypeComparison } from "@/lib/company-type-data";
+import { calculateSkillsPremium, type SkillSlug } from "@/lib/skills-data";
 import { track } from "@/lib/analytics";
 
 const SAVE_KEY = "salary_verdict_saved";
@@ -24,6 +25,7 @@ interface Props {
   roleLabel?: string;
   locationLabel?: string;
   confidenceLevel?: ConfidenceLevel;
+  selectedSkills?: SkillSlug[];
 }
 
 interface VerdictConfig {
@@ -136,6 +138,7 @@ export default function SalaryResult({
   roleLabel,
   locationLabel,
   confidenceLevel,
+  selectedSkills = [],
 }: Props) {
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCard, setCopiedCard] = useState(false);
@@ -526,7 +529,7 @@ export default function SalaryResult({
         {/* ─── COMPANY TYPE COMPARISON ─── */}
         {result.roleSlug && result.locationSlug && (() => {
           const roleCategory = ROLES.find((r) => r.slug === result.roleSlug)?.category ?? "Engineering";
-          const comparisons = getCompanyTypeComparison(result.marketMedian, roleCategory, result.currency);
+          const comparisons = getCompanyTypeComparison(result.median, roleCategory, result.currency);
           const maxSalary = comparisons[0].salary;
 
           return (
@@ -577,6 +580,56 @@ export default function SalaryResult({
               </div>
               <p className="text-xs text-gray-400 leading-relaxed">
                 Base salary estimates only. Equity, bonuses, and benefits vary significantly by company and stage.
+              </p>
+            </div>
+          );
+        })()}
+
+        {/* ─── SKILLS PREMIUM ─── */}
+        {selectedSkills.length > 0 && result.roleSlug && result.locationSlug && (() => {
+          const { totalPremium, additionalSalary, breakdown } = calculateSkillsPremium(
+            selectedSkills,
+            result.roleSlug as Parameters<typeof calculateSkillsPremium>[1],
+            result.locationSlug as Parameters<typeof calculateSkillsPremium>[2],
+            currentSalary,
+          );
+          if (breakdown.length === 0) return null;
+          const pctDisplay = Math.round(totalPremium * 100);
+          const adjustedSalary = currentSalary + additionalSalary;
+
+          return (
+            <div className="px-5 py-5 space-y-3 border-t border-gray-100">
+              <h3 className="font-bold text-gray-900 text-base">Your skills premium</h3>
+              <div className="bg-orange-50 rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <p className="text-sm text-gray-600">
+                      {breakdown.map((b) => b.skill.label).join(" + ")}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      Skills premium estimate for your role and location
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-extrabold text-orange-600">+{pctDisplay}%</p>
+                    <p className="text-xs text-gray-400">+{formatSalary(additionalSalary, result.currency)}</p>
+                  </div>
+                </div>
+                <div className="border-t border-orange-100 pt-3 flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Adjusted personal market rate</span>
+                  <span className="text-sm font-bold text-gray-900">{formatSalary(adjustedSalary, result.currency)}</span>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                {breakdown.map(({ skill, premium }) => (
+                  <div key={skill.slug} className="flex items-center justify-between text-xs text-gray-500">
+                    <span>{skill.label}</span>
+                    <span className="font-semibold text-gray-700">+{Math.round(premium * 100)}%</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Estimates based on Levels.fyi Europe 2024 and LinkedIn Salary Insights. Premiums vary by company and market conditions.
               </p>
             </div>
           );
