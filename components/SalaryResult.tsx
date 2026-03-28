@@ -13,6 +13,7 @@ import {
 } from "@/lib/salary-data";
 import { getCompanyTypeComparison } from "@/lib/company-type-data";
 import { calculateSkillsPremium, type SkillSlug } from "@/lib/skills-data";
+import { getGenderPayGap } from "@/lib/gender-pay-gap";
 import { track } from "@/lib/analytics";
 
 const SAVE_KEY = "salary_verdict_saved";
@@ -631,6 +632,30 @@ export default function SalaryResult({
               <p className="text-xs text-gray-400 leading-relaxed">
                 Estimates based on Levels.fyi Europe 2024 and LinkedIn Salary Insights. Premiums vary by company and market conditions.
               </p>
+            </div>
+          );
+        })()}
+
+        {/* ─── GENDER PAY GAP ─── */}
+        {result.roleSlug && result.locationSlug && (() => {
+          const roleCategory = ROLES.find((r) => r.slug === result.roleSlug)?.category ?? "";
+          const gpg = getGenderPayGap(result.locationSlug, roleCategory);
+          if (!gpg) return null;
+          return (
+            <div className="px-5 py-4 border-t border-gray-100 flex items-start gap-3">
+              <span className="text-base mt-0.5 flex-shrink-0" aria-hidden="true">⚖️</span>
+              <div className="space-y-1 min-w-0">
+                <p className="text-xs font-semibold text-gray-700">
+                  Gender pay gap — {gpg.countryName}
+                </p>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  Women in {gpg.categoryLabel} earn roughly{" "}
+                  <strong className="text-gray-700">{gpg.gapPct}% less</strong> than men
+                  on average in {gpg.countryName}. The market median above reflects
+                  all genders combined.
+                </p>
+                <p className="text-xs text-gray-400">Source: {gpg.sourceLabel}</p>
+              </div>
             </div>
           );
         })()}
