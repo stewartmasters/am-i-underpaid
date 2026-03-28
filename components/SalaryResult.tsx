@@ -7,9 +7,11 @@ import {
   formatSalary,
   getSeniorityLabel,
   getSeniorityBands,
+  ROLES,
   type ConfidenceLevel,
   CONFIDENCE_LABELS,
 } from "@/lib/salary-data";
+import { getCompanyTypeComparison } from "@/lib/company-type-data";
 import { track } from "@/lib/analytics";
 
 const SAVE_KEY = "salary_verdict_saved";
@@ -517,6 +519,65 @@ export default function SalaryResult({
                   You&apos;re at senior level — the top of the standard market progression for this role.
                 </p>
               )}
+            </div>
+          );
+        })()}
+
+        {/* ─── COMPANY TYPE COMPARISON ─── */}
+        {result.roleSlug && result.locationSlug && (() => {
+          const roleCategory = ROLES.find((r) => r.slug === result.roleSlug)?.category ?? "Engineering";
+          const comparisons = getCompanyTypeComparison(result.marketMedian, roleCategory, result.currency);
+          const maxSalary = comparisons[0].salary;
+
+          return (
+            <div className="px-5 py-5 space-y-3 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-gray-900 text-base">What different employers pay</h3>
+                {roleLabel && locationLabel && (
+                  <span className="text-xs text-gray-400">{roleLabel} · {locationLabel}</span>
+                )}
+              </div>
+              <div className="space-y-2">
+                {comparisons.map(({ type, label, description, salary, isBaseline, equity, equityNote }) => {
+                  const barPct = Math.round((salary / maxSalary) * 100);
+                  return (
+                    <div key={type} className={`rounded-xl p-3 ${isBaseline ? "bg-orange-50 ring-1 ring-orange-200" : "bg-gray-50"}`}>
+                      <div className="flex items-start justify-between mb-1.5 gap-2">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className={`text-sm font-bold ${isBaseline ? "text-orange-700" : "text-gray-700"}`}>
+                              {label}
+                            </span>
+                            {isBaseline && (
+                              <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded-full">
+                                market median
+                              </span>
+                            )}
+                            {equity && (
+                              <span className="text-xs text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full font-medium">
+                                + equity
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-400 mt-0.5 truncate">{description}</p>
+                        </div>
+                        <span className={`text-sm font-bold flex-shrink-0 ${isBaseline ? "text-orange-700" : "text-gray-600"}`}>
+                          {formatSalary(salary, result.currency)}
+                        </span>
+                      </div>
+                      <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${isBaseline ? "bg-orange-400" : "bg-gray-300"}`}
+                          style={{ width: `${barPct}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Base salary estimates only. Equity, bonuses, and benefits vary significantly by company and stage.
+              </p>
             </div>
           );
         })()}
