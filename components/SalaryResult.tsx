@@ -6,6 +6,7 @@ import {
   type SalaryResult,
   formatSalary,
   getSeniorityLabel,
+  getSeniorityBands,
   type ConfidenceLevel,
   CONFIDENCE_LABELS,
 } from "@/lib/salary-data";
@@ -445,6 +446,80 @@ export default function SalaryResult({
             Base salary only. Bonus, equity, and benefits not included.
           </p>
         </div>
+
+        {/* ─── CAREER TRAJECTORY ─── */}
+        {result.roleSlug && result.locationSlug && (() => {
+          const bands = getSeniorityBands(result.roleSlug, result.locationSlug);
+          const levels = [
+            { key: "junior", label: "Junior",    data: bands.junior, years: "0–2 yrs" },
+            { key: "mid",    label: "Mid-level", data: bands.mid,    years: "3–6 yrs" },
+            { key: "senior", label: "Senior",    data: bands.senior, years: "7+ yrs"  },
+          ] as const;
+          const currentLevel = yearsOfExp !== undefined ? getSeniorityLabel(yearsOfExp).toLowerCase().replace("-level", "") : null;
+          const maxMedian = bands.senior.median;
+          const currentBandIndex = levels.findIndex((l) => l.key === currentLevel);
+          const nextBand = currentBandIndex >= 0 && currentBandIndex < levels.length - 1
+            ? levels[currentBandIndex + 1]
+            : null;
+          const nextPct = nextBand
+            ? Math.round(((nextBand.data.median - levels[currentBandIndex].data.median) / levels[currentBandIndex].data.median) * 100)
+            : null;
+
+          return (
+            <div className="px-5 py-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-gray-900 text-base">Career trajectory</h3>
+                {roleLabel && locationLabel && (
+                  <span className="text-xs text-gray-400">{roleLabel} · {locationLabel}</span>
+                )}
+              </div>
+              <div className="space-y-2.5">
+                {levels.map(({ key, label, data, years }) => {
+                  const isCurrentLevel = key === currentLevel;
+                  const barPct = Math.round((data.median / maxMedian) * 100);
+                  return (
+                    <div key={key} className={`rounded-xl p-3 ${isCurrentLevel ? "bg-orange-50 ring-1 ring-orange-200" : "bg-gray-50"}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm font-bold ${isCurrentLevel ? "text-orange-700" : "text-gray-700"}`}>
+                            {label}
+                          </span>
+                          <span className="text-xs text-gray-400">{years}</span>
+                          {isCurrentLevel && (
+                            <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded-full">
+                              you
+                            </span>
+                          )}
+                        </div>
+                        <span className={`text-sm font-bold ${isCurrentLevel ? "text-orange-700" : "text-gray-600"}`}>
+                          {formatSalary(data.median, bands.currency)}
+                        </span>
+                      </div>
+                      <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${isCurrentLevel ? "bg-orange-400" : "bg-gray-300"}`}
+                          style={{ width: `${barPct}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {nextBand && nextPct !== null && (
+                <p className="text-xs text-gray-500 leading-relaxed border-l-2 border-orange-200 pl-3">
+                  {nextBand.label} market midpoint is{" "}
+                  <strong className="text-gray-700">{formatSalary(nextBand.data.median, bands.currency)}</strong>
+                  {" "}— roughly <strong className="text-gray-700">+{nextPct}%</strong> above today&apos;s {levels[currentBandIndex]?.label.toLowerCase()} midpoint.
+                </p>
+              )}
+              {!nextBand && currentLevel === "senior" && (
+                <p className="text-xs text-gray-500 leading-relaxed border-l-2 border-orange-200 pl-3">
+                  You&apos;re at senior level — the top of the standard market progression for this role.
+                </p>
+              )}
+            </div>
+          );
+        })()}
 
         {/* ─── WHY THIS MATTERS (all below verdicts with gap ≥ €1k) ─── */}
         {showWhyItMatters ? (
