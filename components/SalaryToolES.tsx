@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { LOCATIONS, calculateSalary, getConfidenceLevel, type SalaryResult, type ConfidenceLevel } from "@/lib/salary-data";
+import { LOCATIONS, calculateSalary, getConfidenceLevel, type SalaryResult, type ConfidenceLevel, type RoleSlug } from "@/lib/salary-data";
 import { ES_ALL_ROLES, ES_CITIES } from "@/lib/es/config";
 import SalaryResultES from "./SalaryResultES";
 import { track } from "@/lib/analytics";
+import { getSkillsForRole, type SkillSlug } from "@/lib/skills-data";
 
 interface Props {
   defaultRoleDataSlug?: string;
@@ -16,9 +17,20 @@ export default function SalaryToolES({ defaultRoleDataSlug = "", defaultCityData
   const [cityDataSlug, setCityDataSlug] = useState(defaultCityDataSlug);
   const [years, setYears] = useState(5);
   const [currentSalary, setCurrentSalary] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<SkillSlug[]>([]);
   const [result, setResult] = useState<SalaryResult | null>(null);
   const [meta, setMeta] = useState<{ roleLabel?: string; cityLabel?: string; confidence?: ConfidenceLevel }>({});
   const [error, setError] = useState("");
+
+  const availableSkills = roleDataSlug ? getSkillsForRole(roleDataSlug as RoleSlug) : [];
+
+  const toggleSkill = (slug: SkillSlug) => {
+    setSelectedSkills((prev) => {
+      if (prev.includes(slug)) return prev.filter((s) => s !== slug);
+      if (prev.length >= 3) return prev;
+      return [...prev, slug];
+    });
+  };
 
   // Group ES roles by category for the dropdown
   const categories = Array.from(new Set(ES_ALL_ROLES.map((r) => r.category)));
@@ -51,6 +63,7 @@ export default function SalaryToolES({ defaultRoleDataSlug = "", defaultCityData
     setCurrentSalary("");
     setError("");
     setMeta({});
+    setSelectedSkills([]);
     track("check_another");
   };
 
@@ -70,6 +83,7 @@ export default function SalaryToolES({ defaultRoleDataSlug = "", defaultCityData
         roleLabel={meta.roleLabel}
         cityLabel={meta.cityLabel}
         confidenceLevel={meta.confidence}
+        selectedSkills={selectedSkills}
       />
     );
   }
@@ -80,7 +94,7 @@ export default function SalaryToolES({ defaultRoleDataSlug = "", defaultCityData
         <label className="block text-sm font-semibold text-gray-700">Puesto de trabajo</label>
         <select
           value={roleDataSlug}
-          onChange={(e) => setRoleDataSlug(e.target.value)}
+          onChange={(e) => { setRoleDataSlug(e.target.value); setSelectedSkills([]); }}
           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer"
         >
           <option value="">Selecciona tu puesto...</option>
@@ -141,6 +155,45 @@ export default function SalaryToolES({ defaultRoleDataSlug = "", defaultCityData
         />
         <p className="text-xs text-gray-400">Salario bruto anual, sin bonus ni variables</p>
       </div>
+
+      {availableSkills.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-semibold text-gray-700">
+              Habilidades clave <span className="text-gray-400 font-normal">(opcional, máx. 3)</span>
+            </label>
+            {selectedSkills.length > 0 && (
+              <button type="button" onClick={() => setSelectedSkills([])} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                Borrar
+              </button>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {availableSkills.map((skill) => {
+              const isSelected = selectedSkills.includes(skill.slug);
+              const isDisabled = !isSelected && selectedSkills.length >= 3;
+              return (
+                <button
+                  key={skill.slug}
+                  type="button"
+                  onClick={() => toggleSkill(skill.slug)}
+                  disabled={isDisabled}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
+                    isSelected
+                      ? "bg-orange-500 border-orange-500 text-white"
+                      : isDisabled
+                      ? "bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed"
+                      : "bg-white border-gray-200 text-gray-600 hover:border-orange-300 hover:text-orange-600"
+                  }`}
+                >
+                  {skill.label}
+                </button>
+              );
+            })}
+          </div>
+          {selectedSkills.length === 3 && <p className="text-xs text-gray-400">Máximo 3 habilidades seleccionadas.</p>}
+        </div>
+      )}
 
       {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
 
