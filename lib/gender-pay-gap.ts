@@ -90,10 +90,10 @@ const CATEGORY_LABELS: Record<GapCategory, string> = {
 };
 
 const SOURCE_LABELS: Record<string, string> = {
-  GB: "ONS Gender Pay Gap Service 2023/24",
-  CH: "BFS Lohnstrukturerhebung 2022",
+  GB: "ONS Gender Pay Gap Service 2023/24 (latest available by occupation)",
+  CH: "BFS Lohnstrukturerhebung 2022 (latest available by occupation)",
 };
-const DEFAULT_SOURCE = "Eurostat earn_ses_pub1s 2022";
+const DEFAULT_SOURCE = "Eurostat SES 2022 (latest available by occupation)";
 
 export function getGenderPayGap(
   locationSlug: string,
