@@ -87,8 +87,8 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }} />
-        <link rel="icon" href="/icon.png" />
-        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="icon" href="/logos/logo-a1.png" />
+        <link rel="apple-touch-icon" href="/logos/logo-a1.png" />
       </head>
       <body className="bg-white text-gray-900 min-h-screen font-sans">
         {children}
