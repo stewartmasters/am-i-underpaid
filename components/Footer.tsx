@@ -82,7 +82,18 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="border-t border-gray-200 pt-6 mb-4">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-400">
+            <span className="font-medium text-gray-500">The Verdict network:</span>
+            <a href="https://www.salaryverdict.com" className="hover:text-orange-500 transition-colors">Salary<span className="text-orange-500">Verdict</span></a>
+            <span>·</span>
+            <a href="https://www.spendverdict.com" className="hover:text-orange-500 transition-colors">Spend<span className="text-orange-500">Verdict</span></a>
+            <span>·</span>
+            <span className="text-gray-300">Comp<span className="text-orange-200">Verdict</span> <span className="italic">(coming soon)</span></span>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-200 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-400">
             © {year} SalaryVerdict — Salary estimates are modelled from public benchmarks and do not represent guaranteed earnings.
           </p>
