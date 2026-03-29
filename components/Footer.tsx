@@ -85,9 +85,9 @@ export default function Footer() {
         <div className="border-t border-gray-200 pt-6 mb-4">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-400">
             <span className="font-medium text-gray-500">The Verdict network:</span>
-            <span className="text-gray-700">Salary<span className="text-orange-500">Verdict</span></span>
+            <a href="https://www.salaryverdict.com" className="text-gray-700 hover:text-gray-900 transition-colors">Salary<span className="text-orange-500">Verdict</span></a>
             <span>·</span>
-            <a href="https://www.spendverdict.com" className="text-gray-400 hover:text-gray-600 transition-colors">Spend<span style={{ color: "#a78bfa" }}>Verdict</span></a>
+            <a href="https://www.spendverdict.com" className="text-gray-700 hover:text-gray-900 transition-colors">Spend<span style={{ color: "#a78bfa" }}>Verdict</span></a>
             <span>·</span>
             <span className="text-gray-300">Comp<span className="text-gray-300">Verdict</span> <span className="italic">(coming soon)</span></span>
           </div>
