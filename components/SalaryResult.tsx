@@ -592,11 +592,11 @@ export default function SalaryResult({
             selectedSkills,
             result.roleSlug as Parameters<typeof calculateSkillsPremium>[1],
             result.locationSlug as Parameters<typeof calculateSkillsPremium>[2],
-            currentSalary,
+            median,
           );
           if (breakdown.length === 0) return null;
           const pctDisplay = Math.round(totalPremium * 100);
-          const adjustedSalary = currentSalary + additionalSalary;
+          const adjustedSalary = median + additionalSalary;
 
           return (
             <div className="px-5 py-5 space-y-3 border-t border-gray-100">
@@ -617,7 +617,7 @@ export default function SalaryResult({
                   </div>
                 </div>
                 <div className="border-t border-orange-100 pt-3 flex items-center justify-between">
-                  <span className="text-xs text-gray-500">Adjusted personal market rate</span>
+                  <span className="text-xs text-gray-500">Skills-adjusted market rate</span>
                   <span className="text-sm font-bold text-gray-900">{formatSalary(adjustedSalary, result.currency)}</span>
                 </div>
               </div>
