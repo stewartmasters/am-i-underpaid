@@ -76,6 +76,20 @@ export default function Footer() {
               ))}
             </ul>
             <div className="pt-2 space-y-1.5">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">From the makers</p>
+              <a
+                href="https://compverdict.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                style={{ color: "#2563EB" }}
+              >
+                Comp<span className="font-bold">Verdict</span>
+                <span className="text-xs text-gray-400">→</span>
+              </a>
+              <p className="text-xs text-gray-400">Equity &amp; comp benchmarking</p>
+            </div>
+            <div className="pt-1 space-y-1.5">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Data</p>
               <p className="text-xs text-gray-400">Eurostat · ONS · Destatis · INE</p>
             </div>
