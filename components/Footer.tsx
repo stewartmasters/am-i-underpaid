@@ -85,11 +85,11 @@ export default function Footer() {
         <div className="border-t border-gray-200 pt-6 mb-4">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-400">
             <span className="font-medium text-gray-500">The Verdict network:</span>
-            <a href="https://www.salaryverdict.com" className="text-gray-700 hover:text-gray-900 transition-colors">Salary<span className="font-bold text-orange-500">Verdict</span></a>
+            <a href="https://www.salaryverdict.com" className="font-bold text-gray-700 hover:text-gray-900 transition-colors">Salary<span className="text-orange-500">Verdict</span></a>
             <span>·</span>
-            <a href="https://www.spendverdict.com" className="text-gray-700 hover:text-gray-900 transition-colors">Spend<span className="font-bold" style={{ color: "#a78bfa" }}>Verdict</span></a>
+            <a href="https://www.spendverdict.com" className="font-bold text-gray-700 hover:text-gray-900 transition-colors">Spend<span style={{ color: "#a78bfa" }}>Verdict</span></a>
             <span>·</span>
-            <a href="https://compverdict.com" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900 transition-colors">Comp<span className="font-bold" style={{ color: "#2563EB" }}>Verdict</span></a>
+            <a href="https://compverdict.com" target="_blank" rel="noopener noreferrer" className="font-bold text-gray-700 hover:text-gray-900 transition-colors">Comp<span style={{ color: "#2563EB" }}>Verdict</span></a>
           </div>
         </div>
 
