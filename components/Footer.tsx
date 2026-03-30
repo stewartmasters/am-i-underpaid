@@ -75,20 +75,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <div className="pt-2 space-y-1.5">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">From the makers</p>
-              <a
-                href="https://compverdict.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm font-medium transition-colors"
-                style={{ color: "#2563EB" }}
-              >
-                Comp<span className="font-bold">Verdict</span>
-                <span className="text-xs text-gray-400">→</span>
-              </a>
-              <p className="text-xs text-gray-400">Equity &amp; comp benchmarking</p>
-            </div>
             <div className="pt-1 space-y-1.5">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Data</p>
               <p className="text-xs text-gray-400">Eurostat · ONS · Destatis · INE</p>
@@ -103,7 +89,7 @@ export default function Footer() {
             <span>·</span>
             <a href="https://www.spendverdict.com" className="text-gray-700 hover:text-gray-900 transition-colors">Spend<span style={{ color: "#a78bfa" }}>Verdict</span></a>
             <span>·</span>
-            <span className="text-gray-300">Comp<span className="text-gray-300">Verdict</span> <span className="italic">(coming soon)</span></span>
+            <a href="https://compverdict.com" target="_blank" rel="noopener noreferrer" className="transition-colors" style={{ color: "#2563EB" }}>Comp<span className="font-bold" style={{ color: "#2563EB" }}>Verdict</span></a>
           </div>
         </div>
 
