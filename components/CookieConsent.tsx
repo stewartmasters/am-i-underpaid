@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const CONSENT_KEY = "sv_cookie_consent";
@@ -18,6 +19,8 @@ function updateGtagConsent(granted: boolean) {
 }
 
 export default function CookieConsent() {
+  const pathname = usePathname();
+  const isES = pathname?.startsWith("/es") ?? false;
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -47,24 +50,23 @@ export default function CookieConsent() {
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <p className="text-sm text-gray-600 flex-1 leading-relaxed">
-          We use analytics cookies to understand how people use this site. No personal data is
-          collected without consent.{" "}
-          <Link href="/privacy" className="text-orange-500 hover:underline font-medium">
-            Privacy policy
-          </Link>
+          {isES
+            ? <>Usamos cookies de analítica para entender cómo se usa este sitio. No se recogen datos personales sin consentimiento.{" "}<Link href="/es/privacidad" className="text-orange-500 hover:underline font-medium">Política de privacidad</Link></>
+            : <>We use analytics cookies to understand how people use this site. No personal data is collected without consent.{" "}<Link href="/privacy" className="text-orange-500 hover:underline font-medium">Privacy policy</Link></>
+          }
         </p>
         <div className="flex items-center gap-3 flex-shrink-0">
           <button
             onClick={handleDecline}
             className="text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors"
           >
-            Decline
+            {isES ? "Rechazar" : "Decline"}
           </button>
           <button
             onClick={handleAccept}
             className="bg-orange-500 text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-orange-600 transition-colors"
           >
-            Accept analytics
+            {isES ? "Aceptar analítica" : "Accept analytics"}
           </button>
         </div>
       </div>

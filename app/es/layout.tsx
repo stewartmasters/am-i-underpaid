@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Footer from "@/components/Footer";
+import FooterES from "@/components/FooterES";
 import LanguageSelect from "@/components/LanguageSelect";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
@@ -38,7 +38,7 @@ function NavigationES() {
             Blog
           </Link>
           <Link
-            href="/methodology"
+            href="/es/metodologia"
             className="text-gray-500 hover:text-gray-900 transition-colors hidden md:block"
           >
             Metodología
@@ -63,7 +63,7 @@ export default function EsLayout({ children }: { children: React.ReactNode }) {
     <>
       <NavigationES />
       <main lang="es">{children}</main>
-      <Footer />
+      <FooterES />
     </>
   );
 }
