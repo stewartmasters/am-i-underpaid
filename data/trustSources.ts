@@ -4,10 +4,12 @@ export interface TrustSource {
 }
 
 export const TRUST_SOURCES: TrustSource[] = [
-  { src: "/logos/eurostat.png", alt: "Eurostat" },
   { src: "/logos/ons.png",      alt: "ONS" },
   { src: "/logos/destatis.png", alt: "Destatis" },
   { src: "/logos/ine.png",      alt: "INE" },
+  { src: "/logos/eurostat.png", alt: "Eurostat" },
+  { src: "/logos/insee.svg",    alt: "INSEE" },
+  { src: "/logos/cbs.png",      alt: "CBS"  },
   { src: "/logos/bfs.jpg",      alt: "BFS" },
   { src: "/logos/scb.png",      alt: "SCB" },
   { src: "/logos/istat.png",    alt: "Istat" },

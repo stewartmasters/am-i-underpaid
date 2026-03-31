@@ -34,6 +34,18 @@ const CURATED_GUIDES = [
   { role: "business-analyst",           location: "paris",     roleLabel: "Business Analyst",           locationLabel: "Paris" },
 ];
 
+const DATA_SOURCES = [
+  { name: "ONS ASHE",     note: "UK Annual Survey of Hours and Earnings (2023)" },
+  { name: "Destatis VSE", note: "German earnings structure survey (dl-de/by-2-0)" },
+  { name: "INE EES",      note: "Spanish earnings structure survey (2022–23)" },
+  { name: "Eurostat SES", note: "EU earnings structure survey — FR, NL, IE, PL, IT, PT & more" },
+  { name: "INSEE DADS",   note: "French national income statistics (2022–24)" },
+  { name: "CBS",          note: "Netherlands Labour Accounts, cross-referenced with Eurostat" },
+  { name: "BFS LSE",      note: "Swiss earnings structure survey (2022)" },
+  { name: "SCB SES",      note: "Swedish earnings structure survey (2022)" },
+  { name: "Istat SES",    note: "Italian earnings structure survey (2022)" },
+  { name: "GUS BSW",      note: "Polish labour cost survey (2022)" },
+];
 
 export default function Home() {
   return (
@@ -196,6 +208,47 @@ export default function Home() {
               <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* Built on official data */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-gray-100">
+        <div className="grid sm:grid-cols-2 gap-8 items-start">
+          <div className="space-y-3">
+            <h2 className="text-2xl font-bold text-gray-900">
+              Built on official data
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              <span className="inline-block text-xs font-semibold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full">
+                Updated Q1 2026
+              </span>
+              <span className="inline-block text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                Official national datasets
+              </span>
+            </div>
+            <p className="text-sm text-gray-500 leading-relaxed">
+              Every benchmark comes from national statistics agencies — not crowdsourcing, not estimates.
+            </p>
+            <Link
+              href="/methodology"
+              className="inline-block text-sm text-orange-500 font-semibold hover:underline"
+            >
+              See methodology →
+            </Link>
+          </div>
+          <div className="space-y-1.5">
+            {DATA_SOURCES.map(({ name, note }) => (
+              <div
+                key={name}
+                className="flex items-center gap-3 p-2.5 bg-gray-50 rounded-lg"
+              >
+                <span className="text-xs font-bold text-orange-500 flex-shrink-0 w-[140px]">
+                  {name}
+                </span>
+                <span className="text-xs text-gray-400">{note}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
