@@ -110,6 +110,8 @@ export default function FooterES() {
             <a href="https://www.spendverdict.com" className="font-bold text-gray-700 hover:text-gray-900 transition-colors">Spend<span style={{ color: "#a78bfa" }}>Verdict</span></a>
             <span>·</span>
             <a href="https://compverdict.com" target="_blank" rel="noopener noreferrer" className="font-bold text-gray-700 hover:text-gray-900 transition-colors">Comp<span style={{ color: "#2563EB" }}>Verdict</span></a>
+            <span>·</span>
+            <a href="https://pathverdict.com" target="_blank" rel="noopener noreferrer" className="font-bold text-gray-700 hover:text-gray-900 transition-colors">Path<span style={{ color: "#0D9488" }}>Verdict</span></a>
           </div>
         </div>
 
