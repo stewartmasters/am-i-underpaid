@@ -20,12 +20,12 @@ export default function TrustSection({ variant = "full", locale = "en" }: Props)
   const LogoList = () => (
     <>
       {TRUST_SOURCES.map(({ src, alt }) => (
-        <div key={alt} className="h-[28px] w-[76px] flex items-center justify-center flex-shrink-0">
+        <div key={alt} className="h-[33px] w-[88px] flex items-center justify-center flex-shrink-0">
           <Image
             src={src}
             alt={alt}
-            width={76}
-            height={28}
+            width={88}
+            height={33}
             className="opacity-50 grayscale hover:opacity-70 transition-opacity"
             style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", objectFit: "contain", mixBlendMode: "multiply" }}
           />
