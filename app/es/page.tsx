@@ -76,9 +76,7 @@ export default function EsHome() {
             </div>
 
             <div className="space-y-2 pt-1">
-              <p className="text-xs text-gray-500 font-medium">Basado en datos oficiales de salarios:</p>
               <TrustSection variant="minimal" />
-              <p className="text-xs text-gray-400">Cobertura variable según puesto y ubicación.</p>
             </div>
 
             <div className="space-y-2 pt-2">

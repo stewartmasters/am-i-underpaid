@@ -82,9 +82,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-2 pt-1">
-              <p className="text-xs text-gray-500 font-medium">Built using official public salary datasets:</p>
               <TrustSection variant="minimal" />
-              <p className="text-xs text-gray-400">Coverage varies by role and location.</p>
             </div>
 
             <div className="space-y-2 pt-2">

@@ -66,13 +66,20 @@ const SECTIONS = [
       <>
         <p>Our salary pipeline draws on the following publicly available sources, each tagged with its geographic scope and ingestion method:</p>
         <ul>
-          <li><strong>UK ONS ASHE 2024</strong> (ons-uk) — Annual Survey of Hours and Earnings Table 14. SOC 2020 occupation codes. Covers UK national and London regional gross annual pay by occupation for full-time employees. Open Government Licence v3.0. <em>UK locations only.</em></li>
-          <li><strong>Eurostat Structure of Earnings Survey 2022</strong> (eurostat-ses) — EU member state earnings data by ISCO-08 occupation, enterprise size, and country. Covers DE, NL, ES, FR, IE and other states. Updated every 4 years. <em>Continental European markets.</em></li>
-          <li><strong>Destatis Verdienststrukturerhebung 2022</strong> (destatis-vse) — Germany&apos;s national earnings structure survey aligned with EU SES. KldB 2010 occupation codes. Includes Berlin federal state breakdown. Data licence Germany dl-de/by-2-0. <em>Germany only.</em></li>
-          <li><strong>INE Encuesta de Estructura Salarial 2022</strong> (ine-ees) — Spain&apos;s national earnings structure survey. CNO-11 occupation codes. Includes Comunidad de Madrid and Cataluña regional breakdown (used for Madrid and Barcelona). Attribution to INE required. <em>Spain only.</em></li>
+          <li><strong>UK ONS ASHE 2025</strong> (ons-uk) — Annual Survey of Hours and Earnings. SOC 2020 occupation codes. Covers UK national and London regional gross annual pay by occupation for full-time employees. Open Government Licence v3.0. <em>UK locations only.</em></li>
+          <li><strong>Eurostat Structure of Earnings Survey 2022</strong> (eurostat-ses) — EU member state earnings data by ISCO-08 occupation, enterprise size, and country. Covers DE, NL, ES, FR, IE and other states. Published every 4 years; next edition 2026. <em>Continental European markets.</em></li>
+          <li><strong>Destatis Verdienststrukturerhebung 2024</strong> (destatis-vse) — Germany&apos;s national earnings structure survey. KldB 2010 occupation codes. Includes Berlin federal state breakdown. Data licence Germany dl-de/by-2-0. <em>Germany only.</em></li>
+          <li><strong>INE Encuesta de Estructura Salarial 2024</strong> (ine-ees) — Spain&apos;s national wage structure survey. CNO-11 occupation codes. Includes Comunidad de Madrid and Cataluña regional breakdown (used for Madrid and Barcelona). Attribution to INE required. <em>Spain only.</em></li>
+          <li><strong>CBS Arbeidsrekening 2024</strong> (cbs-nl) — Netherlands national accounts labour statistics. Covers gross earnings by occupation and sector. <em>Netherlands only.</em></li>
+          <li><strong>CSO Earnings and Labour Costs 2024</strong> (cso-ie) — Ireland&apos;s Central Statistics Office earnings survey. Covers gross annual earnings by occupation. <em>Ireland only.</em></li>
+          <li><strong>INSEE DADS 2024</strong> (insee-fr) — France&apos;s annual earnings declaration data (Déclaration Annuelle des Données Sociales). Covers gross annual pay by occupation and region. <em>France only.</em></li>
+          <li><strong>BFS Lohnstrukturerhebung 2024</strong> (bfs-ch) — Switzerland&apos;s Federal Statistical Office wage structure survey. Covers gross monthly and annual earnings by occupation. <em>Switzerland only.</em></li>
+          <li><strong>SCB Lönestrukturstatistik 2024</strong> (scb-se) — Statistics Sweden earnings survey. Covers gross annual pay by occupation. <em>Sweden only.</em></li>
+          <li><strong>Istat Indagine Retribuzioni 2024</strong> (istat-it) — Italy&apos;s national institute of statistics labour earnings survey. <em>Italy only.</em></li>
+          <li><strong>GUS Struktura Wynagrodzeń 2024</strong> (gus-pl) — Poland&apos;s Central Statistical Office wage structure survey. <em>Poland only.</em></li>
           <li><strong>Levels.fyi 2024</strong> (levels-fyi) — Manually curated from publicly visible salary ranges on the platform. Representative of larger tech companies and above-market-median employers. Self-reported data has known upward bias — used as an upper-market signal for engineering, product, and data roles in major tech hubs. <em>Not used for non-tech roles.</em></li>
         </ul>
-        <p>Government surveys are weighted highest in our pipeline. Levels.fyi is weighted at approximately 0.65× vs 0.80–0.90× for national statistics sources. Glassdoor salary figures are used as a secondary directional cross-check at 0.55× and are not a primary driver of estimates. Indeed is not currently integrated.</p>
+        <p>Government surveys are weighted highest in our pipeline. Levels.fyi is weighted at approximately 0.65× vs 0.80–0.90× for national statistics sources. Glassdoor salary figures are used as a secondary directional cross-check at 0.55× and are not a primary driver of estimates.</p>
       </>
     ),
   },
