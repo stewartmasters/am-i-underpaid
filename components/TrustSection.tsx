@@ -16,6 +16,7 @@ export default function TrustSection({ variant = "full", locale = "en" }: Props)
   });
 
   // Shared logo element — fixed 28px height, max 76px wide, grayscale
+  // mix-blend-mode: multiply removes white padding without editing source files
   const LogoList = () => (
     <>
       {TRUST_SOURCES.map(({ src, alt }) => (
@@ -25,8 +26,8 @@ export default function TrustSection({ variant = "full", locale = "en" }: Props)
             alt={alt}
             width={76}
             height={28}
-            className="opacity-40 grayscale hover:opacity-60 transition-opacity"
-            style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", objectFit: "contain" }}
+            className="opacity-50 grayscale hover:opacity-70 transition-opacity"
+            style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", objectFit: "contain", mixBlendMode: "multiply" }}
           />
         </div>
       ))}

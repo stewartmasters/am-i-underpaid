@@ -142,6 +142,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Built on official data */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 border-t border-gray-100">
+        <div className="grid sm:grid-cols-2 gap-10 items-start">
+          {/* Left */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Built on official data</h2>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="text-xs font-semibold text-orange-600 bg-orange-50 border border-orange-100 px-3 py-1 rounded-full">Updated Q1 2026</span>
+              <span className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Official national datasets</span>
+            </div>
+            <p className="text-sm text-gray-500 leading-relaxed mb-5">
+              Every benchmark comes from national statistics agencies — not crowdsourcing, not estimates.
+            </p>
+            <Link href="/methodology" className="text-sm font-semibold text-orange-500 hover:underline">
+              See methodology →
+            </Link>
+          </div>
+          {/* Right — data source table */}
+          <div className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden">
+            {[
+              { name: "ONS",      note: "UK Annual Survey of Hours and Earnings (ASHE 2025)" },
+              { name: "Eurostat", note: "European earnings statistics — SES 2022" },
+              { name: "Destatis", note: "German Federal Statistical Office earnings data" },
+              { name: "INE",      note: "Spanish Labour Force Survey 2024" },
+              { name: "BFS",      note: "Swiss Federal Statistical Office — LSE 2022" },
+              { name: "SCB",      note: "Statistics Sweden earnings survey 2024" },
+              { name: "Istat",    note: "Italian national labour market statistics" },
+              { name: "GUS",      note: "Polish Central Statistical Office 2024" },
+            ].map(({ name, note }) => (
+              <div key={name} className="flex items-start gap-4 px-4 py-3 bg-white hover:bg-gray-50 transition-colors">
+                <span className="text-sm font-bold text-orange-500 w-24 flex-shrink-0">{name}</span>
+                <span className="text-sm text-gray-400 leading-relaxed">{note}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Blog teaser */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-gray-100">
         <div className="flex items-center justify-between mb-8">
