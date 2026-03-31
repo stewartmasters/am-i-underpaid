@@ -36,8 +36,13 @@ export default function TrustSection({ variant = "full", locale = "en" }: Props)
 
   if (variant === "minimal") {
     return (
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <LogoList />
+      <div className="space-y-2">
+        <p className="text-xs font-medium text-gray-400">
+          {locale === "es" ? "Basado en datos oficiales de:" : "Built on official data from:"}
+        </p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <LogoList />
+        </div>
       </div>
     );
   }
