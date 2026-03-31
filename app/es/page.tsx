@@ -166,6 +166,25 @@ export default function EsHome() {
         </div>
       </section>
 
+      {/* Blog teaser */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-gray-100">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold text-gray-900">Del blog</h2>
+          <Link href="/es/blog" className="text-sm text-orange-500 font-semibold hover:underline">Todos los artículos →</Link>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-6">
+          {[
+            { href: "/es/blog/como-saber-si-cobras-poco", title: "Cómo saber si cobras poco", desc: "La mayoría sospecha que cobra por debajo del mercado pero nunca lo verifica. Aquí tienes cómo comprobarlo — y qué hacer al respecto." },
+            { href: "/es/blog/consejos-negociacion-salarial", title: "7 consejos de negociación salarial que funcionan de verdad", desc: "Negociar tu salario es la acción con mayor retorno que puedes tomar. Aquí tienes 7 consejos prácticos para conseguir más." },
+          ].map(({ href, title, desc }) => (
+            <Link key={href} href={href} className="group block p-5 rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-sm transition-all">
+              <h3 className="font-bold text-gray-900 group-hover:text-orange-600 transition-colors mb-2">{title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* CTA banner */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-8 pb-16">
         <div className="bg-gray-900 rounded-2xl p-8 sm:p-12 text-center space-y-4">

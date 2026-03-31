@@ -65,7 +65,7 @@ export default function FooterES() {
             <ul className="space-y-1.5">
               {[
                 { href: "/es/", label: "Comprobar mi sueldo" },
-                { href: "/blog", label: "Blog" },
+                { href: "/es/blog", label: "Blog" },
                 { href: "/es/metodologia", label: "Metodología" },
                 { href: "/es/salario-ingeniero-software-madrid", label: "Todas las guías" },
               ].map(({ href, label }) => (
@@ -79,6 +79,27 @@ export default function FooterES() {
               <p className="text-xs text-gray-400">INE · Eurostat · Destatis · ONS</p>
             </div>
           </div>
+        </div>
+
+        <div className="border-t border-gray-200 pt-6 mb-6">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Consejos salariales</p>
+          <form name="newsletter-es" data-netlify="true" method="POST" className="flex gap-2 max-w-sm">
+            <input type="hidden" name="form-name" value="newsletter-es" />
+            <input
+              type="email"
+              name="email"
+              placeholder="tu@email.com"
+              required
+              className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-orange-400 text-gray-700 bg-white"
+            />
+            <button
+              type="submit"
+              className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex-shrink-0"
+            >
+              Suscribirse
+            </button>
+          </form>
+          <p className="text-xs text-gray-400 mt-2">Análisis salarial mensual. Sin spam, cancela cuando quieras.</p>
         </div>
 
         <div className="border-t border-gray-200 pt-6 mb-4">

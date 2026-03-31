@@ -100,6 +100,12 @@ export default function RootLayout({
           <input type="hidden" name="role" />
           <input type="hidden" name="location" />
         </form>
+        <form name="newsletter" data-netlify="true" hidden aria-hidden="true">
+          <input type="email" name="email" />
+        </form>
+        <form name="newsletter-es" data-netlify="true" hidden aria-hidden="true">
+          <input type="email" name="email" />
+        </form>
         {/* Google Analytics 4 — Consent Mode v2 */}
         {/* analytics_storage defaults to denied until user accepts the cookie banner */}
         <Script

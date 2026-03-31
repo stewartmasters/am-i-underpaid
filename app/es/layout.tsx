@@ -32,7 +32,7 @@ function NavigationES() {
             Salarios
           </Link>
           <Link
-            href="/blog"
+            href="/es/blog"
             className="text-gray-500 hover:text-gray-900 transition-colors hidden sm:block"
           >
             Blog

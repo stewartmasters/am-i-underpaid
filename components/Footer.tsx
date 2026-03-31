@@ -82,6 +82,27 @@ export default function Footer() {
           </div>
         </div>
 
+        <div className="border-t border-gray-200 pt-6 mb-6">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Get salary tips</p>
+          <form name="newsletter" data-netlify="true" method="POST" className="flex gap-2 max-w-sm">
+            <input type="hidden" name="form-name" value="newsletter" />
+            <input
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+              className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-orange-400 text-gray-700 bg-white"
+            />
+            <button
+              type="submit"
+              className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex-shrink-0"
+            >
+              Subscribe
+            </button>
+          </form>
+          <p className="text-xs text-gray-400 mt-2">Monthly salary insights. No spam, unsubscribe anytime.</p>
+        </div>
+
         <div className="border-t border-gray-200 pt-6 mb-4">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-400">
             <span className="font-medium text-gray-500">The Verdict network:</span>

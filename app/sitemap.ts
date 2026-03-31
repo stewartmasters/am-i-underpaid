@@ -4,6 +4,7 @@ export const dynamic = "force-static";
 import { generateSeoPages } from "@/lib/seo-pages";
 import { generateEsPages } from "@/lib/es/seo-pages-es";
 import { getAllBlogPosts } from "@/lib/blogPosts";
+import { getAllBlogPostsES } from "@/data/blog-posts-es";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
 
@@ -17,8 +18,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: BASE_URL, lastModified: now, changeFrequency: "weekly", priority: 1 },
     { url: `${BASE_URL}/es`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
     { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/es/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.75 },
     { url: `${BASE_URL}/methodology`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/es/metodologia`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE_URL}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE_URL}/es/privacidad`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
     // /check is noindex — intentionally excluded from sitemap
   ];
 
@@ -43,5 +47,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...salaryRoutes, ...esRoutes, ...blogRoutes];
+  const esBlogPosts = getAllBlogPostsES();
+  const esBlogRoutes: MetadataRoute.Sitemap = esBlogPosts.map((p) => ({
+    url: `${BASE_URL}/es/blog/${p.slug}`,
+    lastModified: new Date(p.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...salaryRoutes, ...esRoutes, ...blogRoutes, ...esBlogRoutes];
 }
