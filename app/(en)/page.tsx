@@ -159,6 +159,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Built on official data */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 border-t border-gray-100">
+        <div className="grid sm:grid-cols-2 gap-10 items-start">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Built on official data</h2>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="text-xs font-semibold text-orange-600 bg-orange-50 border border-orange-100 px-3 py-1 rounded-full">Updated Q1 2026</span>
+              <span className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Official national datasets</span>
+            </div>
+            <p className="text-sm text-gray-500 leading-relaxed mb-5">
+              Every benchmark comes from national statistics agencies — not crowdsourcing, not estimates.
+            </p>
+            <Link href="/methodology" className="text-sm font-semibold text-orange-500 hover:underline">
+              See methodology →
+            </Link>
+          </div>
+          <div className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden">
+            {[
+              { name: "ONS",      note: "UK Annual Survey of Hours and Earnings (ASHE 2025)" },
+              { name: "Eurostat", note: "European earnings statistics — SES 2022" },
+              { name: "Destatis", note: "German earnings structure survey (2024)" },
+              { name: "INE",      note: "Spanish earnings structure survey (2024)" },
+              { name: "INSEE",    note: "French national income statistics (2024)" },
+              { name: "CBS",      note: "Netherlands labour accounts (2024)" },
+              { name: "BFS",      note: "Swiss earnings structure survey (2024)" },
+              { name: "SCB",      note: "Statistics Sweden earnings survey (2024)" },
+              { name: "Istat",    note: "Italian national earnings survey (2024)" },
+              { name: "GUS",      note: "Polish Central Statistical Office (2024)" },
+            ].map(({ name, note }) => (
+              <div key={name} className="flex items-start gap-4 px-4 py-3 bg-white hover:bg-gray-50 transition-colors">
+                <span className="text-sm font-bold text-orange-500 w-24 flex-shrink-0">{name}</span>
+                <span className="text-sm text-gray-400 leading-relaxed">{note}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA banner */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-8 pb-16">
         <div className="bg-gray-900 rounded-2xl p-8 sm:p-12 text-center space-y-4">
