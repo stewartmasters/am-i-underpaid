@@ -304,15 +304,13 @@ export function getMarketRange(roleSlug: string, locationSlug: string, years = 5
 }
 
 export function getSeniorityBands(roleSlug: string, locationSlug: string): SeniorityBands {
-  const location = LOCATIONS.find((l) => l.slug === locationSlug);
-  const currency = location?.currency ?? "€";
-  const jMed = computeMedian(roleSlug, locationSlug, 1.5);
-  const mMed = computeMedian(roleSlug, locationSlug, 5);
-  const sMed = computeMedian(roleSlug, locationSlug, 10);
+  const { low: jLow, median: jMed, high: jHigh, currency } = getMarketRange(roleSlug, locationSlug, 1.5);
+  const { low: mLow, median: mMed, high: mHigh } = getMarketRange(roleSlug, locationSlug, 5);
+  const { low: sLow, median: sMed, high: sHigh } = getMarketRange(roleSlug, locationSlug, 10);
   return {
-    junior: { low: roundToNearest(jMed * 0.88, 500), median: jMed, high: roundToNearest(jMed * 1.15, 500), label: "Junior (0–2 yrs)" },
-    mid:    { low: roundToNearest(mMed * 0.88, 500), median: mMed, high: roundToNearest(mMed * 1.15, 500), label: "Mid-level (3–6 yrs)" },
-    senior: { low: roundToNearest(sMed * 0.88, 500), median: sMed, high: roundToNearest(sMed * 1.15, 500), label: "Senior (7+ yrs)" },
+    junior: { low: jLow, median: jMed, high: jHigh, label: "Junior (0–2 yrs)" },
+    mid:    { low: mLow, median: mMed, high: mHigh, label: "Mid-level (3–6 yrs)" },
+    senior: { low: sLow, median: sMed, high: sHigh, label: "Senior (7+ yrs)" },
     currency,
   };
 }
