@@ -247,6 +247,13 @@ async function main() {
   const { slot, dryRun } = parseArgs();
   const theme = pickTheme();
 
+  // Before 2026-05-01 only post the morning slot — ramp up after one month
+  const RAMP_DATE = new Date("2026-05-01T00:00:00Z");
+  if (new Date() < RAMP_DATE && slot !== "morning") {
+    console.log(`⏭  Skipping ${slot} slot until ${RAMP_DATE.toISOString().slice(0, 10)} (ramp-up period)`);
+    return;
+  }
+
   console.log(`\n🗓  Date: ${new Date().toISOString()}`);
   console.log(`⏰  Slot: ${slot}`);
   console.log(`🎯  Theme: ${theme.id}`);

@@ -2,7 +2,9 @@ name: Post to social media
 
 on:
   schedule:
-    - cron: "0 8 * * *"     # once daily at 08:00 UTC
+    - cron: "0 8 * * *"     # morning  — daily from day 1
+    - cron: "0 12 * * *"    # midday   — active from 2026-05-01
+    - cron: "30 16 * * *"   # evening  — active from 2026-05-01
   workflow_dispatch:
     inputs:
       slot:
