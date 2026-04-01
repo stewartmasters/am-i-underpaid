@@ -168,25 +168,6 @@ async function postToX(text: string, dryRun: boolean): Promise<void> {
 // Post to LinkedIn
 // ---------------------------------------------------------------------------
 
-async function getLinkedInAuthorURN(token: string): Promise<string> {
-  // LINKEDIN_AUTHOR_URN can be set explicitly, or we fetch it via userinfo
-  const explicit = process.env.LINKEDIN_AUTHOR_URN;
-  if (explicit) return explicit;
-
-  // Try userinfo endpoint (requires openid + profile scopes)
-  const res = await fetch("https://api.linkedin.com/v2/userinfo", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (res.ok) {
-    const data = (await res.json()) as { sub: string };
-    return `urn:li:person:${data.sub}`;
-  }
-
-  throw new Error(
-    "Could not determine LinkedIn author URN. Please set LINKEDIN_AUTHOR_URN secret as urn:li:person:YOUR_ID"
-  );
-}
-
 async function postToLinkedIn(text: string, dryRun: boolean): Promise<void> {
   if (dryRun) {
     console.log("\n[DRY RUN] LinkedIn post:\n" + text);
@@ -194,7 +175,16 @@ async function postToLinkedIn(text: string, dryRun: boolean): Promise<void> {
   }
 
   const token = requireEnv("LINKEDIN_ACCESS_TOKEN");
-  const author = await getLinkedInAuthorURN(token);
+  // Must be the organisation URN — urn:li:organization:XXXXX
+  // NEVER falls back to personal URN to prevent accidental personal posts
+  const author = requireEnv("LINKEDIN_ORGANIZATION_URN");
+
+  if (!author.startsWith("urn:li:organization:")) {
+    throw new Error(
+      `LINKEDIN_ORGANIZATION_URN must start with 'urn:li:organization:' — got: ${author}. ` +
+      "Do NOT use a personal URN (urn:li:person:) here."
+    );
+  }
 
   const body = {
     author,
