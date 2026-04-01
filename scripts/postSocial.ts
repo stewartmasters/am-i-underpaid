@@ -244,16 +244,31 @@ async function main() {
     process.env.X_ACCESS_TOKEN &&
     process.env.X_ACCESS_TOKEN_SECRET;
 
-  const hasBufferCreds = process.env.BUFFER_ACCESS_TOKEN && process.env.BUFFER_PROFILE_ID;
-
   await Promise.allSettled([
     hasXCreds
       ? postToX(xPost, dryRun).catch((e) => console.error("X error:", e.message))
       : Promise.resolve(console.log("⏭  X credentials not set — skipping")),
-    hasBufferCreds
-      ? postViaBuffer(linkedinPost, dryRun).catch((e) => console.error("Buffer error:", e.message))
-      : Promise.resolve(console.log("⏭  Buffer credentials not set — skipping LinkedIn")),
   ]);
+
+  // Write LinkedIn post to GitHub Actions summary for manual copy-paste
+  const summary = process.env.GITHUB_STEP_SUMMARY;
+  if (summary) {
+    const fs = await import("fs");
+    fs.appendFileSync(summary, [
+      "## LinkedIn post — ready to copy",
+      "",
+      `**Theme:** ${theme.id} | **Slot:** ${slot}`,
+      "",
+      "---",
+      "",
+      linkedinPost,
+      "",
+      "---",
+      "",
+      `> Post to: [SalaryVerdict LinkedIn page](https://www.linkedin.com/company/112585109/)`,
+    ].join("\n"));
+    console.log("📋 LinkedIn post written to Actions summary");
+  }
 
   console.log("\nDone.");
 }
