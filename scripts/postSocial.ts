@@ -168,55 +168,38 @@ async function postToX(text: string, dryRun: boolean): Promise<void> {
 // Post to LinkedIn
 // ---------------------------------------------------------------------------
 
-async function postToLinkedIn(text: string, dryRun: boolean): Promise<void> {
+async function postViaBuffer(text: string, dryRun: boolean): Promise<void> {
   if (dryRun) {
-    console.log("\n[DRY RUN] LinkedIn post:\n" + text);
+    console.log("\n[DRY RUN] LinkedIn post (via Buffer):\n" + text);
     return;
   }
 
-  const token = requireEnv("LINKEDIN_ACCESS_TOKEN");
-  // Must be the organisation URN — urn:li:organization:XXXXX
-  // NEVER falls back to personal URN to prevent accidental personal posts
-  const author = requireEnv("LINKEDIN_ORGANIZATION_URN");
+  const token = requireEnv("BUFFER_ACCESS_TOKEN");
+  const profileId = requireEnv("BUFFER_PROFILE_ID"); // LinkedIn company page profile ID in Buffer
 
-  if (!author.startsWith("urn:li:organization:")) {
-    throw new Error(
-      `LINKEDIN_ORGANIZATION_URN must start with 'urn:li:organization:' — got: ${author}. ` +
-      "Do NOT use a personal URN (urn:li:person:) here."
-    );
-  }
+  const params = new URLSearchParams({
+    text,
+    "profile_ids[]": profileId,
+    now: "true", // post immediately rather than adding to queue
+  });
 
-  const body = {
-    author,
-    lifecycleState: "PUBLISHED",
-    specificContent: {
-      "com.linkedin.ugc.ShareContent": {
-        shareCommentary: { text },
-        shareMediaCategory: "NONE",
-      },
-    },
-    visibility: {
-      "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC",
-    },
-  };
-
-  const res = await fetch("https://api.linkedin.com/v2/ugcPosts", {
+  const res = await fetch("https://api.bufferapp.com/1/updates/create.json", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      "X-Restli-Protocol-Version": "2.0.0",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify(body),
+    body: params.toString(),
   });
 
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`LinkedIn API error ${res.status}: ${err}`);
+    throw new Error(`Buffer API error ${res.status}: ${err}`);
   }
 
-  const data = (await res.json()) as { id: string };
-  console.log(`✅ Posted to LinkedIn: ${data.id}`);
+  const data = (await res.json()) as { updates: Array<{ id: string }> };
+  const id = data.updates?.[0]?.id ?? "unknown";
+  console.log(`✅ Posted to LinkedIn via Buffer: ${id}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -261,13 +244,15 @@ async function main() {
     process.env.X_ACCESS_TOKEN &&
     process.env.X_ACCESS_TOKEN_SECRET;
 
+  const hasBufferCreds = process.env.BUFFER_ACCESS_TOKEN && process.env.BUFFER_PROFILE_ID;
+
   await Promise.allSettled([
     hasXCreds
       ? postToX(xPost, dryRun).catch((e) => console.error("X error:", e.message))
       : Promise.resolve(console.log("⏭  X credentials not set — skipping")),
-    postToLinkedIn(linkedinPost, dryRun).catch((e) =>
-      console.error("LinkedIn error:", e.message)
-    ),
+    hasBufferCreds
+      ? postViaBuffer(linkedinPost, dryRun).catch((e) => console.error("Buffer error:", e.message))
+      : Promise.resolve(console.log("⏭  Buffer credentials not set — skipping LinkedIn")),
   ]);
 
   console.log("\nDone.");
