@@ -258,8 +258,16 @@ async function main() {
   console.log("\n--- X ---\n" + xPost);
   console.log("\n--- LinkedIn ---\n" + linkedinPost);
 
+  const hasXCreds =
+    process.env.X_API_KEY &&
+    process.env.X_API_SECRET &&
+    process.env.X_ACCESS_TOKEN &&
+    process.env.X_ACCESS_TOKEN_SECRET;
+
   await Promise.allSettled([
-    postToX(xPost, dryRun).catch((e) => console.error("X error:", e.message)),
+    hasXCreds
+      ? postToX(xPost, dryRun).catch((e) => console.error("X error:", e.message))
+      : Promise.resolve(console.log("⏭  X credentials not set — skipping")),
     postToLinkedIn(linkedinPost, dryRun).catch((e) =>
       console.error("LinkedIn error:", e.message)
     ),
