@@ -250,24 +250,34 @@ async function main() {
       : Promise.resolve(console.log("⏭  X credentials not set — skipping")),
   ]);
 
-  // Write LinkedIn post to GitHub Actions summary for manual copy-paste
+  // Write both posts to GitHub Actions summary for manual copy-paste
   const summary = process.env.GITHUB_STEP_SUMMARY;
   if (summary) {
     const fs = await import("fs");
     fs.appendFileSync(summary, [
-      "## LinkedIn post — ready to copy",
+      `## Daily posts — ${new Date().toISOString().slice(0, 10)}`,
       "",
       `**Theme:** ${theme.id} | **Slot:** ${slot}`,
       "",
       "---",
       "",
-      linkedinPost,
+      "### X (Twitter)",
+      "",
+      `> Post to: [@SalaryVerdict](https://x.com/SalaryVerdict)`,
+      "",
+      xPost,
       "",
       "---",
       "",
+      "### LinkedIn",
+      "",
       `> Post to: [SalaryVerdict LinkedIn page](https://www.linkedin.com/company/112585109/)`,
+      "",
+      linkedinPost,
+      "",
+      "---",
     ].join("\n"));
-    console.log("📋 LinkedIn post written to Actions summary");
+    console.log("📋 Posts written to Actions summary");
   }
 
   console.log("\nDone.");
