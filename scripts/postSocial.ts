@@ -26,33 +26,21 @@ const SITE_URL = "https://www.salaryverdict.com";
 
 /** 14 themes — one per day-of-year modulo 14 */
 const THEMES = [
-  { id: "underpaid_check",    prompt: "Ask if the reader knows they are underpaid and invite them to check their salary in 30 seconds with a link to SalaryVerdict." },
-  { id: "salary_negotiation", prompt: "Share one powerful salary negotiation tip for European professionals and link to our salary negotiation blog post." },
-  { id: "eu_salary_fact",     prompt: "Share a surprising fact about salary differences between two European cities (e.g. London vs Berlin, Amsterdam vs Barcelona) and link to SalaryVerdict." },
-  { id: "job_hop",            prompt: "Discuss whether it is better to job-hop or stay put for salary growth in Europe, then link to our when-to-job-hop article." },
-  { id: "remote_work",        prompt: "Share a tip about negotiating salary for remote roles in Europe and link to our remote-work salary negotiation article." },
-  { id: "data_source",        prompt: "Explain that SalaryVerdict uses official government wage data (ONS, Eurostat, Destatis etc.) not crowdsourcing, and why that matters for accuracy." },
-  { id: "role_spotlight",     prompt: "Pick one of these roles and share a salary insight for Europe: Software Engineer, Product Manager, Data Scientist, DevOps Engineer. Link to the relevant SalaryVerdict salary guide." },
-  { id: "cost_of_living",     prompt: "Compare salary vs cost-of-living in two European cities and explain why gross salary alone is misleading. Link to our salary-vs-cost-of-living article." },
-  { id: "competing_offer",    prompt: "Explain how to use a competing job offer to negotiate a raise without burning bridges, then link to our article on the topic." },
-  { id: "percentile_explainer", prompt: "Explain what salary percentile means in plain English and why knowing yours is valuable. Invite readers to find their percentile at SalaryVerdict." },
-  { id: "good_salary",        prompt: "Discuss what counts as a 'good salary' in London in 2026 and link to our 'What is a good salary in London' article." },
-  { id: "avg_europe",         prompt: "Share one insight from average European salaries in 2026 and link to our average salaries in Europe article." },
-  { id: "product_manager",    prompt: "Share a salary insight for Product Managers in Europe and link to our Product Manager salary guide." },
-  { id: "free_no_signup",     prompt: "Remind followers that SalaryVerdict is completely free, takes 30 seconds, and requires no signup or email. Invite them to check their salary." },
+  { id: "underpaid_check",    prompt: "Ask if the reader actually knows whether they are underpaid. Explain that SalaryVerdict lets you enter your role, location, and years of experience and instantly see how your salary compares against official government wage data — telling you whether you are underpaid, at market, or above it. It takes 30 seconds and is free with no signup.", link: SITE_URL },
+  { id: "salary_negotiation", prompt: "Share one practical salary negotiation tip for European professionals. Keep it specific and actionable. Link to the salary negotiation blog post.", link: `${SITE_URL}/blog/salary-negotiation-tips` },
+  { id: "eu_salary_fact",     prompt: "Share a thought-provoking question or observation about how salaries vary between two European cities (e.g. London vs Berlin, Amsterdam vs Barcelona). Do NOT invent specific numbers. Invite people to check their own salary against official data using SalaryVerdict.", link: SITE_URL },
+  { id: "job_hop",            prompt: "Discuss the trade-offs between job-hopping and staying put for salary growth in Europe. Keep it balanced and practical. Link to the when-to-job-hop article.", link: `${SITE_URL}/blog/when-to-job-hop-vs-stay` },
+  { id: "remote_work",        prompt: "Share a practical tip about negotiating salary for remote roles in Europe. Link to the remote work salary negotiation article.", link: `${SITE_URL}/blog/remote-work-salary-negotiation` },
+  { id: "data_source",        prompt: "Explain that SalaryVerdict is built on official government wage data from sources like ONS, Eurostat, and Destatis — not crowdsourcing or self-reported surveys. Explain why this matters for getting an accurate picture. Invite people to check their salary.", link: SITE_URL },
+  { id: "signs_underpaid",    prompt: "Share two or three signs that someone might be underpaid, without inventing salary figures. Link to the signs-you-are-underpaid blog post and invite people to verify using SalaryVerdict.", link: `${SITE_URL}/blog/signs-you-are-underpaid` },
+  { id: "cost_of_living",     prompt: "Explain why comparing salaries across European cities without accounting for cost of living can be misleading. Keep it conceptual — do not invent specific numbers. Link to the salary vs cost of living article.", link: `${SITE_URL}/blog/salary-vs-cost-of-living-europe` },
+  { id: "competing_offer",    prompt: "Explain how professionals can use a competing job offer as leverage in salary negotiations, and the risks to avoid. Link to the competing offer article.", link: `${SITE_URL}/blog/how-to-use-a-competing-offer-in-salary-negotiation` },
+  { id: "percentile_explainer", prompt: "Explain in plain English what a salary percentile means and why knowing where you sit relative to others in your role and location is more useful than just knowing the average. Invite readers to find their percentile free at SalaryVerdict.", link: SITE_URL },
+  { id: "good_salary_london", prompt: "Pose the question of what counts as a good salary in London in 2026 — without making up figures. Acknowledge it depends on role, experience, and lifestyle. Invite readers to check how their salary compares using SalaryVerdict. Link to the what-is-a-good-salary-in-london article.", link: `${SITE_URL}/blog/what-is-a-good-salary-in-london` },
+  { id: "how_to_increase",    prompt: "Share one concrete strategy for increasing your salary — whether through negotiation, career moves, or upskilling. Link to the how-to-increase-your-salary article.", link: `${SITE_URL}/blog/how-to-increase-your-salary` },
+  { id: "product_manager",    prompt: "Share a thought or question about Product Manager salaries in Europe — without inventing specific figures. Invite readers to see how their PM salary compares using SalaryVerdict. Link to the PM salary article.", link: `${SITE_URL}/blog/product-manager-salary-europe-2026` },
+  { id: "free_no_signup",     prompt: "Remind followers that SalaryVerdict is completely free, takes 30 seconds, and requires no signup or email. You enter your role, location, and years of experience and instantly see whether you are underpaid, at market, or above it — based on official government data.", link: SITE_URL },
 ];
-
-/** Blog post URLs for contextual links */
-const BLOG_LINKS: Record<string, string> = {
-  salary_negotiation: `${SITE_URL}/blog/salary-negotiation-tips`,
-  job_hop: `${SITE_URL}/blog/when-to-job-hop-vs-stay`,
-  remote_work: `${SITE_URL}/blog/remote-work-salary-negotiation`,
-  cost_of_living: `${SITE_URL}/blog/salary-vs-cost-of-living-europe`,
-  competing_offer: `${SITE_URL}/blog/how-to-use-a-competing-offer-in-salary-negotiation`,
-  good_salary: `${SITE_URL}/blog/what-is-a-good-salary-in-london`,
-  avg_europe: `${SITE_URL}/blog/average-salaries-europe-2026`,
-  product_manager: `${SITE_URL}/blog/product-manager-salary-europe-2026`,
-};
 
 // ---------------------------------------------------------------------------
 // Arg parsing
@@ -103,7 +91,7 @@ async function generateContent(
 ): Promise<{ xPost: string; linkedinPost: string }> {
   const client = new Anthropic();
 
-  const blogLink = BLOG_LINKS[theme.id] ?? SITE_URL;
+  const blogLink = theme.link;
   const slotTone =
     slot === "morning"
       ? "energetic and motivating — people are starting their day"
@@ -111,13 +99,19 @@ async function generateContent(
       ? "informative and punchy — people are on a lunch break"
       : "reflective and action-oriented — people are wrapping up their workday";
 
-  const systemPrompt = `You are the social media voice for SalaryVerdict (${SITE_URL}), a free salary benchmarking tool for European professionals built on official government wage data.
+  const systemPrompt = `You are the social media voice for SalaryVerdict (${SITE_URL}), a free tool that tells European professionals whether they are underpaid, at market, or above market — based on official government wage data from sources like ONS, Eurostat, and Destatis.
 
-Brand voice: Direct, data-driven, no fluff. We respect our audience's intelligence. We never hype or exaggerate. We're the friend who tells you the truth about your salary.
+How it works: you enter your role, location, and years of experience, and in 30 seconds you get a verdict on where your salary sits relative to the market. No signup, no email, completely free.
+
+IMPORTANT rules:
+- Never invent or state specific salary figures. The tool gives a personalised verdict — you don't publish salary tables.
+- Never imply we crowdsource data or use self-reported surveys. We use official government datasets.
+- Do not overstate what we do. We benchmark — we don't guarantee or promise earnings.
+- Brand voice: direct, honest, data-driven. No hype. We're the friend who gives you a straight answer about your pay.
 
 Tone for this ${slot} post: ${slotTone}.
 
-Always end posts with a clear call to action and relevant URL. Never use hashtags that feel spammy — max 3 relevant hashtags on LinkedIn, 2 on X.`;
+Always end posts with a clear call to action and the relevant URL. Max 2 hashtags on X, max 3 on LinkedIn. No spammy hashtags.`;
 
   const userPrompt = `Write two versions of a social media post for today's theme:
 
