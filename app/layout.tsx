@@ -121,7 +121,7 @@ export default function RootLayout({
             wait_for_update: 500
           });
           gtag('js', new Date());
-          gtag('config', 'G-H8XR1C8DXG', { send_page_view: false });
+          gtag('config', 'G-H8XR1C8DXG');
         `}</Script>
       </body>
     </html>

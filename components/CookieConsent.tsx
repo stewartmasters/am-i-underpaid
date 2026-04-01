@@ -12,10 +12,6 @@ function updateGtagConsent(granted: boolean) {
     analytics_storage: granted ? "granted" : "denied",
     ad_storage: granted ? "granted" : "denied",
   });
-  if (granted) {
-    // Fire the page view that was held pending consent
-    window.gtag("event", "page_view");
-  }
 }
 
 export default function CookieConsent() {
