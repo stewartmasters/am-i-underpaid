@@ -4,6 +4,7 @@ import Link from "next/link";
 import { generateSeoPages, getSeoPage, getRelatedPages, getLocationContext, getRoleContext, getIntroVariant } from "@/lib/seo-pages";
 import { getMarketRange, getSeniorityBands, formatSalary, getConfidenceLevel, CONFIDENCE_LABELS, ROLES, LOCATIONS } from "@/lib/salary-data";
 import SalaryTool from "@/components/SalaryTool";
+import { getSalaryContent, getAllSalaryContentSlugs } from "@/lib/salaryContent";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://salaryverdict.com";
 
@@ -17,13 +18,28 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return generateSeoPages().map((p) => ({ slug: p.slug }));
+  const dataSlugs = generateSeoPages().map((p) => ({ slug: p.slug }));
+  const contentSlugs = getAllSalaryContentSlugs();
+  // Content slugs only added if they don't conflict with existing data pages
+  const dataSlugSet = new Set(dataSlugs.map((s) => s.slug));
+  const newContentSlugs = contentSlugs.filter((s) => !dataSlugSet.has(s.slug));
+  return [...dataSlugs, ...newContentSlugs];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = getSeoPage(slug);
-  if (!page) return {};
+  if (!page) {
+    const post = getSalaryContent(slug);
+    if (!post) return {};
+    return {
+      title: post.title,
+      description: post.description,
+      alternates: { canonical: `/salary/${slug}` },
+      openGraph: { title: post.title, description: post.description, type: "article", publishedTime: post.date },
+      twitter: { card: "summary_large_image", title: post.title, description: post.description },
+    };
+  }
   return {
     title: page.title,
     description: page.description,
@@ -112,7 +128,61 @@ function buildRoleLocationIntro(
 export default async function SalaryPage({ params }: Props) {
   const { slug } = await params;
   const page = getSeoPage(slug);
-  if (!page) notFound();
+
+  // Markdown fallback: AI-generated salary guide content published by the SEO platform
+  if (!page) {
+    const post = getSalaryContent(slug);
+    if (!post) notFound();
+    const articleSchema = {
+      "@context": "https://schema.org", "@type": "Article",
+      headline: post.title, description: post.description,
+      datePublished: post.date, dateModified: post.date,
+      url: `${BASE_URL}/salary/${slug}`,
+      author: { "@type": "Organization", name: "SalaryVerdict" },
+      publisher: { "@type": "Organization", name: "SalaryVerdict", url: BASE_URL },
+    };
+    const breadcrumbSchema = {
+      "@context": "https://schema.org", "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+        { "@type": "ListItem", position: 2, name: "Salaries", item: `${BASE_URL}/salary/software-engineer-london` },
+        { "@type": "ListItem", position: 3, name: post.title, item: `${BASE_URL}/salary/${slug}` },
+      ],
+    };
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+          <nav className="text-sm text-gray-400 mb-8 flex items-center gap-2">
+            <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link>
+            <span>/</span>
+            <Link href="/salary/software-engineer-london" className="hover:text-orange-500 transition-colors">Salaries</Link>
+            <span>/</span>
+            <span className="text-gray-600 truncate">{post.title}</span>
+          </nav>
+          <header className="mb-10 space-y-4">
+            <div className="flex items-center gap-3 text-xs text-gray-400">
+              <time dateTime={post.date}>{new Date(post.date).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })}</time>
+              <span>·</span>
+              <span>{post.readTime}</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">{post.title}</h1>
+            <p className="text-lg text-gray-500">{post.description}</p>
+          </header>
+          <article
+            className="prose prose-gray prose-lg max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-li:text-gray-600 prose-a:text-orange-500 prose-a:no-underline hover:prose-a:underline prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-3"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+          <div className="mt-10 bg-orange-50 rounded-2xl p-8 text-center space-y-3 border border-orange-100">
+            <h2 className="text-lg font-bold text-gray-900">Find out if you&apos;re underpaid</h2>
+            <p className="text-sm text-gray-500">Enter your role, location, and salary. Takes 30 seconds.</p>
+            <Link href="/" className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-xl transition-colors">Check my salary →</Link>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   const related = getRelatedPages(page);
   const roleSlug     = page.roleSlug     ?? "software-engineer";

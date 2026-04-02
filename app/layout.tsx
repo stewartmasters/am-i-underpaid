@@ -40,11 +40,20 @@ export const metadata: Metadata = {
     description:
       "Find out instantly if you're underpaid. Enter your role, location, and salary. Get your market rate and percentile in seconds.",
     url: BASE_URL,
+    images: [
+      {
+        url: "https://salaryverdict.com/og.svg",
+        width: 1200,
+        height: 630,
+        alt: "SalaryVerdict — Find Out If You're Underpaid",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SalaryVerdict — Find Out If You're Underpaid",
     description: "Find out if you're underpaid in 30 seconds. Free, no signup.",
+    images: ["https://salaryverdict.com/og.svg"],
   },
   robots: {
     index: true,
