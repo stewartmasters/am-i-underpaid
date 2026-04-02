@@ -138,7 +138,7 @@ export default async function SalaryPage({ params }: Props) {
       headline: post.title, description: post.description,
       datePublished: post.date, dateModified: post.date,
       url: `${BASE_URL}/salary/${slug}`,
-      author: { "@type": "Organization", name: "SalaryVerdict" },
+      author: { "@type": "Organization", name: "SalaryVerdict", url: BASE_URL },
       publisher: { "@type": "Organization", name: "SalaryVerdict", url: BASE_URL },
     };
     const breadcrumbSchema = {
