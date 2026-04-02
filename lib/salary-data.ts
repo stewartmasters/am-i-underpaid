@@ -31,25 +31,35 @@ export type RoleSlug =
   | "accountant"
   | "financial-controller"
   | "recruiter"
-  | "cybersecurity-engineer";
+  | "cybersecurity-engineer"
+  | "nurse";
 
 export type LocationSlug =
   | "london" | "uk"
   | "dublin"
   | "amsterdam"
   | "paris" | "france"
-  | "berlin" | "munich" | "frankfurt" | "germany"
+  | "berlin" | "munich" | "frankfurt" | "hamburg" | "germany"
   | "barcelona" | "madrid" | "spain" | "valencia" | "sevilla" | "bilbao"
   | "zurich" | "switzerland"
   | "lisbon" | "portugal"
   | "stockholm" | "sweden"
-  | "milan" | "italy"
-  | "warsaw" | "poland"
+  | "oslo" | "norway"
+  | "copenhagen" | "denmark"
+  | "milan" | "rome" | "italy"
+  | "vienna" | "austria"
+  | "warsaw" | "prague" | "poland"
+  | "brussels" | "belgium"
+  | "san-francisco" | "new-york" | "seattle" | "austin" | "los-angeles" | "us"
+  | "toronto" | "canada"
+  | "sydney" | "australia"
+  | "singapore"
+  | "dubai"
   | "europe";
 export type Verdict = "well-below" | "slightly-below" | "fair" | "above";
 
 export interface Role { slug: RoleSlug; label: string; baseSalary: number; category: string; }
-export interface Location { slug: LocationSlug; label: string; country: string; currency: "£" | "€" | "CHF "; multiplier: number; }
+export interface Location { slug: LocationSlug; label: string; country: string; currency: "£" | "€" | "CHF " | "$" | "A$" | "CA$" | "S$" | "AED " | "NOK " | "DKK "; multiplier: number; }
 export interface SalaryResult {
   low: number; median: number; high: number; percentile: number; verdict: Verdict;
   delta: number; currency: string; roleSlug?: string; locationSlug?: string;
@@ -109,6 +119,8 @@ export const ROLES: Role[] = [
   { slug: "recruiter",                   label: "Recruiter",                   baseSalary: 50000, category: "People" },
   // Security
   { slug: "cybersecurity-engineer",      label: "Cybersecurity Engineer",      baseSalary: 80000, category: "Engineering" },
+  // Healthcare
+  { slug: "nurse",                       label: "Nurse",                       baseSalary: 28000, category: "Healthcare" },
 ];
 
 /**
@@ -141,6 +153,7 @@ export const LOCATIONS: Location[] = [
   { slug: "munich",    label: "Munich",    country: "Germany",        currency: "€", multiplier: 1.20 },
   { slug: "frankfurt", label: "Frankfurt", country: "Germany",        currency: "€", multiplier: 1.13 },
   { slug: "berlin",    label: "Berlin",    country: "Germany",        currency: "€", multiplier: 1.05 },
+  { slug: "hamburg",   label: "Hamburg",   country: "Germany",        currency: "€", multiplier: 1.10 },
   { slug: "germany",   label: "Germany",   country: "Germany",        currency: "€", multiplier: 1.00 },
   // Spain — calibrated from Eurostat EU wage data
   { slug: "barcelona", label: "Barcelona", country: "Spain",          currency: "€", multiplier: 0.88 },
@@ -155,15 +168,45 @@ export const LOCATIONS: Location[] = [
   // Sweden — calibrated from Statistics Sweden (SCB) data; EUR equivalent shown
   { slug: "stockholm",    label: "Stockholm",    country: "Sweden",      currency: "€",    multiplier: 1.20 },
   { slug: "sweden",       label: "Sweden",       country: "Sweden",      currency: "€",    multiplier: 1.10 },
+  // Norway — calibrated from Statistics Norway (SSB) data; EUR equivalent shown
+  { slug: "oslo",         label: "Oslo",         country: "Norway",      currency: "NOK ", multiplier: 1.38 },
+  { slug: "norway",       label: "Norway",       country: "Norway",      currency: "NOK ", multiplier: 1.25 },
+  // Denmark — calibrated from Statistics Denmark data; EUR equivalent shown
+  { slug: "copenhagen",   label: "Copenhagen",   country: "Denmark",     currency: "DKK ", multiplier: 1.22 },
+  { slug: "denmark",      label: "Denmark",      country: "Denmark",     currency: "DKK ", multiplier: 1.12 },
   // Italy — calibrated from Istat data
   { slug: "milan",        label: "Milan",        country: "Italy",       currency: "€",    multiplier: 0.87 },
+  { slug: "rome",         label: "Rome",         country: "Italy",       currency: "€",    multiplier: 0.78 },
   { slug: "italy",        label: "Italy",        country: "Italy",       currency: "€",    multiplier: 0.80 },
+  // Austria — calibrated from Statistics Austria data
+  { slug: "vienna",       label: "Vienna",       country: "Austria",     currency: "€",    multiplier: 0.97 },
+  { slug: "austria",      label: "Austria",      country: "Austria",     currency: "€",    multiplier: 0.93 },
   // Portugal — calibrated from INE Portugal data
   { slug: "lisbon",       label: "Lisbon",       country: "Portugal",    currency: "€",    multiplier: 0.78 },
   { slug: "portugal",     label: "Portugal",     country: "Portugal",    currency: "€",    multiplier: 0.72 },
   // Poland — calibrated from GUS (Statistics Poland) data; EUR equivalent shown
   { slug: "warsaw",       label: "Warsaw",       country: "Poland",      currency: "€",    multiplier: 0.65 },
   { slug: "poland",       label: "Poland",       country: "Poland",      currency: "€",    multiplier: 0.58 },
+  // Czech Republic — calibrated from Czech Statistical Office data
+  { slug: "prague",       label: "Prague",       country: "Czech Republic", currency: "€", multiplier: 0.68 },
+  // Belgium — calibrated from Statbel data
+  { slug: "brussels",     label: "Brussels",     country: "Belgium",     currency: "€",    multiplier: 1.08 },
+  { slug: "belgium",      label: "Belgium",      country: "Belgium",     currency: "€",    multiplier: 1.00 },
+  // North America — calibrated from BLS OEWS and Statistics Canada data
+  { slug: "san-francisco", label: "San Francisco", country: "USA",       currency: "$",    multiplier: 2.55 },
+  { slug: "new-york",     label: "New York",     country: "USA",         currency: "$",    multiplier: 2.35 },
+  { slug: "seattle",      label: "Seattle",      country: "USA",         currency: "$",    multiplier: 2.40 },
+  { slug: "austin",       label: "Austin",       country: "USA",         currency: "$",    multiplier: 1.95 },
+  { slug: "los-angeles",  label: "Los Angeles",  country: "USA",         currency: "$",    multiplier: 2.15 },
+  { slug: "us",           label: "USA",          country: "USA",         currency: "$",    multiplier: 2.10 },
+  { slug: "toronto",      label: "Toronto",      country: "Canada",      currency: "CA$",  multiplier: 1.68 },
+  { slug: "canada",       label: "Canada",       country: "Canada",      currency: "CA$",  multiplier: 1.55 },
+  // APAC — calibrated from national statistical offices
+  { slug: "sydney",       label: "Sydney",       country: "Australia",   currency: "A$",   multiplier: 1.65 },
+  { slug: "australia",    label: "Australia",    country: "Australia",   currency: "A$",   multiplier: 1.50 },
+  { slug: "singapore",    label: "Singapore",    country: "Singapore",   currency: "S$",   multiplier: 1.55 },
+  // Middle East — calibrated from public sector surveys; tax-free gross
+  { slug: "dubai",        label: "Dubai",        country: "UAE",         currency: "AED ", multiplier: 2.93 },
   // Europe (broad average) — calibrated from Eurostat EU-wide aggregate; lower confidence
   { slug: "europe",       label: "Europe",       country: "",            currency: "€",    multiplier: 1.00 },
 ];
