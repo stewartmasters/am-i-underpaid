@@ -530,6 +530,7 @@ export default function SalaryResult({
         {/* ─── COMPANY TYPE COMPARISON ─── */}
         {result.roleSlug && result.locationSlug && (() => {
           const roleCategory = ROLES.find((r) => r.slug === result.roleSlug)?.category ?? "Engineering";
+          if (roleCategory === "Healthcare") return null;
           const comparisons = getCompanyTypeComparison(result.median, roleCategory, result.currency);
           const maxSalary = comparisons[0].salary;
 

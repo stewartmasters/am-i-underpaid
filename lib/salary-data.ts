@@ -97,7 +97,7 @@ export const ROLES: Role[] = [
   { slug: "finance-analyst",             label: "Finance Analyst",             baseSalary: 63000, category: "Finance" },
   { slug: "business-analyst",            label: "Business Analyst",            baseSalary: 65000, category: "Strategy" },
   // Growth / Marketing
-  { slug: "growth-manager",              label: "Growth Manager",              baseSalary: 68000, category: "Growth" },
+  { slug: "growth-manager",              label: "Growth Manager",              baseSalary: 68000, category: "Marketing" },
   { slug: "content-manager",             label: "Content Manager",             baseSalary: 52000, category: "Marketing" },
   { slug: "performance-marketing-manager", label: "Performance Marketing Manager", baseSalary: 65000, category: "Marketing" },
   { slug: "social-media-manager",        label: "Social Media Manager",        baseSalary: 48000, category: "Marketing" },
