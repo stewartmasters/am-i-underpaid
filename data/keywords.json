@@ -9,7 +9,7 @@
     "used": true,
     "role": null,
     "location": null,
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-002",
@@ -21,7 +21,7 @@
     "used": true,
     "role": null,
     "location": null,
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-003",
@@ -33,7 +33,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-004",
@@ -45,7 +45,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-005",
@@ -57,7 +57,7 @@
     "used": false,
     "role": "software-engineer",
     "location": null,
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-006",
@@ -69,7 +69,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-007",
@@ -81,7 +81,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-008",
@@ -93,7 +93,7 @@
     "used": true,
     "role": null,
     "location": null,
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-009",
@@ -105,7 +105,7 @@
     "used": true,
     "role": null,
     "location": null,
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-010",
@@ -117,7 +117,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-011",
@@ -129,7 +129,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-012",
@@ -141,7 +141,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-013",
@@ -153,7 +153,7 @@
     "used": false,
     "role": null,
     "location": "europe",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-014",
@@ -165,7 +165,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-015",
@@ -177,7 +177,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-016",
@@ -189,7 +189,7 @@
     "used": false,
     "role": null,
     "location": "london",
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-017",
@@ -201,7 +201,7 @@
     "used": false,
     "role": null,
     "location": "berlin",
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-018",
@@ -213,7 +213,7 @@
     "used": false,
     "role": null,
     "location": "barcelona",
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-019",
@@ -225,7 +225,7 @@
     "used": false,
     "role": "software-engineer",
     "location": null,
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-020",
@@ -237,7 +237,7 @@
     "used": false,
     "role": null,
     "location": "madrid",
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-021",
@@ -249,7 +249,7 @@
     "used": false,
     "role": null,
     "location": "amsterdam",
-    "wordCountTarget": 900
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-022",
@@ -261,7 +261,7 @@
     "used": false,
     "role": "software-engineer",
     "location": "london",
-    "wordCountTarget": 1300
+    "wordCountTarget": 2000
   },
   {
     "id": "kw-023",
@@ -273,7 +273,7 @@
     "used": true,
     "role": "software-engineer",
     "location": "europe",
-    "wordCountTarget": 1400
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-024",
@@ -285,7 +285,7 @@
     "used": false,
     "role": "product-manager",
     "location": "berlin",
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-025",
@@ -297,7 +297,7 @@
     "used": false,
     "role": "product-manager",
     "location": "london",
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-026",
@@ -309,7 +309,7 @@
     "used": false,
     "role": "data-analyst",
     "location": "europe",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-027",
@@ -321,7 +321,7 @@
     "used": false,
     "role": "data-scientist",
     "location": "amsterdam",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-028",
@@ -333,7 +333,7 @@
     "used": false,
     "role": "frontend-developer",
     "location": "london",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-029",
@@ -345,7 +345,7 @@
     "used": false,
     "role": "backend-developer",
     "location": "berlin",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-030",
@@ -357,7 +357,7 @@
     "used": false,
     "role": "growth-manager",
     "location": "paris",
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-031",
@@ -369,7 +369,7 @@
     "used": false,
     "role": "customer-success-manager",
     "location": "dublin",
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-032",
@@ -381,7 +381,7 @@
     "used": false,
     "role": "finance-analyst",
     "location": "london",
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-033",
@@ -393,7 +393,7 @@
     "used": false,
     "role": "hr-manager",
     "location": "barcelona",
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-034",
@@ -405,7 +405,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1300
+    "wordCountTarget": 2000
   },
   {
     "id": "kw-035",
@@ -417,7 +417,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-036",
@@ -429,7 +429,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-037",
@@ -441,7 +441,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-038",
@@ -453,7 +453,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-039",
@@ -465,7 +465,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-040",
@@ -477,7 +477,7 @@
     "used": false,
     "role": null,
     "location": "london",
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-041",
@@ -489,7 +489,7 @@
     "used": false,
     "role": null,
     "location": "berlin",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-042",
@@ -501,7 +501,7 @@
     "used": false,
     "role": null,
     "location": "barcelona",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-043",
@@ -513,7 +513,7 @@
     "used": false,
     "role": null,
     "location": "madrid",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-044",
@@ -525,7 +525,7 @@
     "used": false,
     "role": null,
     "location": "dublin",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-045",
@@ -537,7 +537,7 @@
     "used": false,
     "role": null,
     "location": "paris",
-    "wordCountTarget": 1100
+    "wordCountTarget": 1800
   },
   {
     "id": "kw-046",
@@ -549,7 +549,7 @@
     "used": false,
     "role": null,
     "location": null,
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-047",
@@ -561,7 +561,7 @@
     "used": false,
     "role": "product-manager",
     "location": null,
-    "wordCountTarget": 1000
+    "wordCountTarget": 1700
   },
   {
     "id": "kw-048",
@@ -573,7 +573,7 @@
     "used": true,
     "role": null,
     "location": "europe",
-    "wordCountTarget": 1400
+    "wordCountTarget": 1600
   },
   {
     "id": "kw-049",
@@ -585,7 +585,7 @@
     "used": false,
     "role": "product-manager",
     "location": "europe",
-    "wordCountTarget": 1200
+    "wordCountTarget": 1900
   },
   {
     "id": "kw-050",
@@ -597,6 +597,6 @@
     "used": false,
     "role": null,
     "location": "europe",
-    "wordCountTarget": 1300
+    "wordCountTarget": 2000
   }
 ]

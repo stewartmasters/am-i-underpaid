@@ -144,15 +144,18 @@ SITE CONTEXT:
 - Data is based on public benchmarks (Eurostat, ONS, Glassdoor, Indeed, Levels.fyi)
 
 ARTICLE REQUIREMENTS:
-- Word count: ${targetWords}–${Math.round(targetWords * 1.2)} words
+- Word count: ${targetWords}–${Math.round(targetWords * 1.15)} words. This is a hard requirement — do not stop writing until you have reached ${targetWords} words in the body. Count carefully.
 - Primary keyword in H1 (use naturally, not robotically)
-- 3–5 H2 sections covering the topic thoroughly
-- Include specific, concrete numbers and examples (not vague estimates)
-- Include a FAQ section with 3–4 questions readers actually search for
+- 5–7 substantial H2 sections, each with 2–4 paragraphs of real depth — not one-paragraph stubs
+- Every H2 section must contain at least 150 words of substantive content
+- Include salary data broken down by: seniority level (junior/mid/senior), company type, and where possible by sub-location or industry vertical
+- Include a "How to negotiate if you're underpaid" section with specific, actionable steps
+- Include a FAQ section with 4–5 questions readers actually search for, each with a full answer (not one sentence)
 - Include a CTA section at the end pointing to the salary tool
-- Tone: direct, practical, slightly sharp. Not corporate. Not generic.
+- Tone: direct, practical, slightly sharp. Not corporate. Not generic. Write for a professional who wants real answers, not reassurance.
 - DO NOT write: "In today's fast-paced world", "navigating the complexities of", "it's important to note", or any similar filler
-- DO NOT pad with generic advice. Every paragraph must earn its place.
+- DO NOT produce a data table and call it a section. Prose must accompany every data point.
+- DO NOT stop early. If you are under ${targetWords} words, keep writing — add more depth, more examples, more context.
 ${roleLabel ? `- The article is specifically about ${roleLabel} salaries${locationLabel ? ` in ${locationLabel}` : " in Europe"}` : ""}
 ${locationLabel && !roleLabel ? `- The article is specifically about salaries in ${locationLabel}` : ""}
 
@@ -189,7 +192,7 @@ async function generateWithClaude(prompt: string): Promise<string> {
 
   const message = await client.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 4096,
+    max_tokens: 8192,
     messages: [{ role: "user", content: prompt }],
   });
 
@@ -217,7 +220,7 @@ function validateContent(content: string, kw: KeywordItem): void {
 
   const body = content.split("---").slice(2).join("---");
   const wordCount = body.trim().split(/\s+/).length;
-  const minWords = Math.round(kw.wordCountTarget * 0.7);
+  const minWords = Math.round(kw.wordCountTarget * 0.85);
 
   if (wordCount < minWords) {
     throw new Error(`Content too short: ${wordCount} words (minimum ${minWords})`);
