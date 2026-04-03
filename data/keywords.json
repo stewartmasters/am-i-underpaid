@@ -114,7 +114,7 @@
     "cluster": "salary-negotiation",
     "type": "template",
     "priority": 9,
-    "used": false,
+    "used": true,
     "role": null,
     "location": null,
     "wordCountTarget": 1700
