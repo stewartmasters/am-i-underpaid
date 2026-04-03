@@ -258,7 +258,7 @@
     "cluster": "role-location-salary",
     "type": "salary-guide",
     "priority": 10,
-    "used": false,
+    "used": true,
     "role": "software-engineer",
     "location": "london",
     "wordCountTarget": 2000
