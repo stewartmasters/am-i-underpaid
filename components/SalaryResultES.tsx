@@ -89,7 +89,7 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, onEdit, ro
   const { currency, low, median, high, percentile, delta, recordCount, sourceCount } = result;
   const currentSalary = median + delta;
   const deltaAbs = Math.abs(delta);
-  const deltaStr = formatSalary(Math.round(deltaAbs / 500) * 500, currency);
+  const deltaStr = formatSalary(Math.round(deltaAbs / 500) * 500, currency, true);
   const gapDisplay = Math.round(deltaAbs / 500) * 500 === 0 ? "—" : `${delta > 0 ? "+" : "-"}${deltaStr}`;
   const barPos = Math.max(4, Math.min(94, percentile));
   const isBelow = result.verdict === "well-below" || result.verdict === "slightly-below";
@@ -193,15 +193,15 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, onEdit, ro
         <div className="grid grid-cols-3 gap-2 mt-4">
           <div className="bg-white/70 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-400 font-medium mb-1">Tu salario</div>
-            <div className="font-bold text-gray-900 text-sm sm:text-base leading-tight">{formatSalary(currentSalary, currency)}</div>
+            <div className="font-bold text-gray-900 text-sm leading-tight">{formatSalary(currentSalary, currency, true)}</div>
           </div>
           <div className="bg-white rounded-xl p-3 text-center ring-1 ring-gray-200 shadow-sm">
             <div className="text-xs text-gray-400 font-medium mb-1">Mediana del mercado</div>
-            <div className="font-bold text-gray-900 text-sm sm:text-base leading-tight">{formatSalary(median, currency)}</div>
+            <div className="font-bold text-gray-900 text-sm leading-tight">{formatSalary(median, currency, true)}</div>
           </div>
           <div className="bg-white/70 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-400 font-medium mb-1">Diferencia</div>
-            <div className={`font-bold text-sm sm:text-base leading-tight ${delta > 0 ? "text-emerald-600" : delta < 0 ? config.gapColor : "text-gray-500"}`}>
+            <div className={`font-bold text-sm leading-tight ${delta > 0 ? "text-emerald-600" : delta < 0 ? config.gapColor : "text-gray-500"}`}>
               {gapDisplay}
             </div>
           </div>
@@ -248,13 +248,13 @@ export default function SalaryResultES({ result, yearsOfExp, onReset, onEdit, ro
           <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Horquilla salarial del mercado</h3>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { label: "Bajo", value: formatSalary(low, currency), sub: "Percentil 25" },
-              { label: "Mediana", value: formatSalary(median, currency), sub: "Percentil 50", hl: true },
-              { label: "Alto", value: formatSalary(high, currency), sub: "Percentil 75" },
+              { label: "Bajo", value: formatSalary(low, currency, true), sub: "Percentil 25" },
+              { label: "Mediana", value: formatSalary(median, currency, true), sub: "Percentil 50", hl: true },
+              { label: "Alto", value: formatSalary(high, currency, true), sub: "Percentil 75" },
             ].map(({ label, value, sub, hl }) => (
               <div key={label} className={`rounded-xl p-3 text-center ${hl ? "bg-gray-900 text-white" : "bg-gray-50"}`}>
                 <div className={`text-xs font-medium mb-1 ${hl ? "text-gray-400" : "text-gray-400"}`}>{label}</div>
-                <div className={`font-bold text-sm sm:text-base ${hl ? "text-white" : "text-gray-700"}`}>{value}</div>
+                <div className={`font-bold text-sm ${hl ? "text-white" : "text-gray-700"}`}>{value}</div>
                 <div className={`text-xs mt-0.5 ${hl ? "text-gray-500" : "text-gray-400"}`}>{sub}</div>
               </div>
             ))}

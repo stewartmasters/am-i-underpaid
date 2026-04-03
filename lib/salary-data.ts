@@ -365,7 +365,12 @@ export function getSeniorityLabel(years: number): "Junior" | "Mid-level" | "Seni
   return "Lead";
 }
 
-export function formatSalary(amount: number, currency: string): string {
+export function formatSalary(amount: number, currency: string, compact = false): string {
+  if (compact) {
+    const sym = currency.trim(); // strip trailing space from "CHF ", "NOK ", "DKK ", "AED "
+    if (amount >= 1_000_000) return `${sym}${(amount / 1_000_000).toFixed(1)}M`;
+    if (amount >= 10_000)    return `${sym}${Math.round(amount / 1_000)}k`;
+  }
   return `${currency}${amount.toLocaleString("en-GB")}`;
 }
 

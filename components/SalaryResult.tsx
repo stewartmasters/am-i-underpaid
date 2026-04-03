@@ -219,7 +219,7 @@ export default function SalaryResult({
 
   const currentSalary = median + delta;
   const deltaAbs = Math.abs(delta);
-  const deltaStr = formatSalary(Math.round(deltaAbs / 500) * 500, currency);
+  const deltaStr = formatSalary(Math.round(deltaAbs / 500) * 500, currency, true);
   const gapDisplay =
     Math.round(deltaAbs / 500) * 500 === 0
       ? "—"
@@ -361,19 +361,19 @@ export default function SalaryResult({
         <div className="grid grid-cols-3 gap-2 mt-4">
           <div className="bg-white/70 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-400 font-medium mb-1">Your salary</div>
-            <div className="font-bold text-gray-900 text-sm sm:text-base leading-tight">
-              {formatSalary(currentSalary, currency)}
+            <div className="font-bold text-gray-900 text-sm leading-tight">
+              {formatSalary(currentSalary, currency, true)}
             </div>
           </div>
           <div className="bg-white rounded-xl p-3 text-center ring-1 ring-gray-200 shadow-sm">
             <div className="text-xs text-gray-400 font-medium mb-1">Market midpoint</div>
-            <div className="font-bold text-gray-900 text-sm sm:text-base leading-tight">
-              {formatSalary(median, currency)}
+            <div className="font-bold text-gray-900 text-sm leading-tight">
+              {formatSalary(median, currency, true)}
             </div>
           </div>
           <div className="bg-white/70 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-400 font-medium mb-1">Gap</div>
-            <div className={`font-bold text-sm sm:text-base leading-tight ${delta > 0 ? "text-emerald-600" : delta < 0 ? config.gapColor : "text-gray-500"}`}>
+            <div className={`font-bold text-sm leading-tight ${delta > 0 ? "text-emerald-600" : delta < 0 ? config.gapColor : "text-gray-500"}`}>
               {gapDisplay}
             </div>
           </div>
@@ -428,9 +428,9 @@ export default function SalaryResult({
           </h3>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { label: "Low", value: formatSalary(low, currency), sub: "25th percentile" },
-              { label: "Median", value: formatSalary(median, currency), sub: "50th percentile", hl: true },
-              { label: "High", value: formatSalary(high, currency), sub: "75th percentile" },
+              { label: "Low", value: formatSalary(low, currency, true), sub: "25th percentile" },
+              { label: "Median", value: formatSalary(median, currency, true), sub: "50th percentile", hl: true },
+              { label: "High", value: formatSalary(high, currency, true), sub: "75th percentile" },
             ].map(({ label, value, sub, hl }) => (
               <div
                 key={label}
@@ -439,7 +439,7 @@ export default function SalaryResult({
                 <div className={`text-xs font-medium mb-1 ${hl ? "text-gray-400" : "text-gray-400"}`}>
                   {label}
                 </div>
-                <div className={`font-bold text-sm sm:text-base ${hl ? "text-white" : "text-gray-700"}`}>
+                <div className={`font-bold text-sm ${hl ? "text-white" : "text-gray-700"}`}>
                   {value}
                 </div>
                 <div className={`text-xs mt-0.5 ${hl ? "text-gray-500" : "text-gray-400"}`}>
