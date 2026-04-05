@@ -110,24 +110,25 @@ function buildShareCard(
     roleLabel && locationLabel
       ? `${roleLabel} · ${locationLabel}`
       : roleLabel ?? locationLabel ?? "";
-  const pctLine =
-    percentile <= 50
-      ? `Bottom ${100 - percentile}% for my role`
-      : `Top ${100 - percentile}% for my role`;
+  const topPct = 100 - percentile;
 
   const lines: string[] = [];
   if (verdict === "well-below") {
-    lines.push(`😬 I checked my salary — I'm underpaid by ~${deltaStr}`);
+    lines.push(`😬 Just found out I'm underpaid by ~${deltaStr}.`);
+    lines.push(`Bottom ${topPct}% for my role — and I had no idea.`);
   } else if (verdict === "slightly-below") {
-    lines.push(`😐 I checked my salary — I'm slightly below market`);
+    lines.push(`😐 My salary is slightly below market.`);
+    lines.push(`Not a huge gap — but enough to ask for more.`);
+    lines.push(`Bottom ${topPct}% for my role.`);
   } else if (verdict === "above") {
-    lines.push(`😎 I checked my salary — I'm above market`);
+    lines.push(`😎 I earn more than ${percentile}% of people in my role.`);
+    lines.push(`Negotiated well. Checked it just to be sure.`);
   } else {
-    lines.push(`🙂 I checked my salary — I'm roughly at market rate`);
+    lines.push(`🙂 My salary is right at market rate.`);
+    lines.push(`${ordinal(percentile)}th percentile for my role. Not underpaid — but room to grow.`);
   }
-  lines.push(pctLine);
   if (ctx) lines.push(ctx);
-  lines.push("Check yours → salaryverdict.com");
+  lines.push(`Check yours free → salaryverdict.com`);
   return lines.join("\n");
 }
 
@@ -236,6 +237,12 @@ export default function SalaryResult({
   const fiveYearStr = showWhyItMatters
     ? formatSalary(Math.round((deltaAbs * 5) / 1000) * 1000, currency)
     : null;
+
+  const suggestedIncreasePct =
+    isBelow && currentSalary > 0
+      ? Math.max(1, Math.round(((median - currentSalary) / currentSalary) * 100))
+      : 0;
+  const nextRangeHigh = high; // 75th percentile
 
   const pageUrl =
     typeof window !== "undefined" ? window.location.href : "https://salaryverdict.com";
@@ -534,28 +541,46 @@ export default function SalaryResult({
           const comparisons = getCompanyTypeComparison(result.median, roleCategory, result.currency);
           const maxSalary = comparisons[0].salary;
 
+          const bestForGap = isBelow
+            ? comparisons.find((c) => !c.isBaseline && c.salary > currentSalary)
+            : null;
+
           return (
             <div className="px-5 py-5 space-y-3 border-t border-gray-100">
               <div className="flex items-center justify-between">
-                <h3 className="font-bold text-gray-900 text-base">What different employers pay</h3>
+                <h3 className="font-bold text-gray-900 text-base">
+                  {isBelow ? "Where you should look next" : "What different employers pay"}
+                </h3>
                 {roleLabel && locationLabel && (
                   <span className="text-xs text-gray-400">{roleLabel} · {locationLabel}</span>
                 )}
               </div>
               <div className="space-y-2">
-                {comparisons.map(({ type, label, description, salary, isBaseline, equity, equityNote }) => {
+                {comparisons.map(({ type, label, description, salary, isBaseline, equity }) => {
                   const barPct = Math.round((salary / maxSalary) * 100);
+                  const closesGap = isBelow && !isBaseline && salary > currentSalary;
+                  const wontClose = isBelow && !isBaseline && salary <= currentSalary;
                   return (
-                    <div key={type} className={`rounded-xl p-3 ${isBaseline ? "bg-orange-50 ring-1 ring-orange-200" : "bg-gray-50"}`}>
+                    <div key={type} className={`rounded-xl p-3 ${isBaseline ? "bg-orange-50 ring-1 ring-orange-200" : closesGap ? "bg-emerald-50 ring-1 ring-emerald-200" : "bg-gray-50"}`}>
                       <div className="flex items-start justify-between mb-1.5 gap-2">
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className={`text-sm font-bold ${isBaseline ? "text-orange-700" : "text-gray-700"}`}>
+                            <span className={`text-sm font-bold ${isBaseline ? "text-orange-700" : closesGap ? "text-emerald-700" : "text-gray-700"}`}>
                               {label}
                             </span>
                             {isBaseline && (
                               <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded-full">
                                 market median
+                              </span>
+                            )}
+                            {closesGap && (
+                              <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded-full">
+                                ↑ Closes your gap
+                              </span>
+                            )}
+                            {wontClose && (
+                              <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
+                                ↓ Won&apos;t close it
                               </span>
                             )}
                             {equity && (
@@ -566,13 +591,13 @@ export default function SalaryResult({
                           </div>
                           <p className="text-xs text-gray-400 mt-0.5 truncate">{description}</p>
                         </div>
-                        <span className={`text-sm font-bold flex-shrink-0 ${isBaseline ? "text-orange-700" : "text-gray-600"}`}>
+                        <span className={`text-sm font-bold flex-shrink-0 ${isBaseline ? "text-orange-700" : closesGap ? "text-emerald-700" : "text-gray-600"}`}>
                           {formatSalary(salary, result.currency)}
                         </span>
                       </div>
                       <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full transition-all duration-500 ${isBaseline ? "bg-orange-400" : "bg-gray-300"}`}
+                          className={`h-full rounded-full transition-all duration-500 ${isBaseline ? "bg-orange-400" : closesGap ? "bg-emerald-400" : "bg-gray-300"}`}
                           style={{ width: `${barPct}%` }}
                         />
                       </div>
@@ -580,6 +605,13 @@ export default function SalaryResult({
                   );
                 })}
               </div>
+              {bestForGap && (
+                <p className="text-xs text-gray-600 leading-relaxed border-l-2 border-emerald-300 pl-3">
+                  <strong className="text-gray-800">{bestForGap.label}</strong> typically pays{" "}
+                  <strong className="text-gray-800">{formatSalary(bestForGap.salary - currentSalary, result.currency, true)} more</strong>{" "}
+                  than your current position — a single move could close the gap.
+                </p>
+              )}
               <p className="text-xs text-gray-400 leading-relaxed">
                 Base salary estimates only. Equity, bonuses, and benefits vary significantly by company and stage.
               </p>
@@ -683,6 +715,73 @@ export default function SalaryResult({
           </div>
         )}
 
+        {/* ─── WHAT TO DO NEXT ─── */}
+        {isBelow && (
+          <div className="px-5 py-5 space-y-4 border-t border-gray-100">
+            <h3 className="font-bold text-gray-900 text-base">What to do next</h3>
+            <div className="space-y-2">
+              {[
+                {
+                  icon: "📍",
+                  label: "Where you are",
+                  value: `${ordinal(percentile)} percentile — below ${pctBelow}% of ${roleLabel ? `${roleLabel}s` : "people in your role"}`,
+                },
+                {
+                  icon: "🎯",
+                  label: "First target",
+                  value: `${formatSalary(median, currency)} — the market midpoint. That's what you should be earning.`,
+                },
+                {
+                  icon: "📈",
+                  label: "Suggested ask",
+                  value: suggestedIncreasePct > 0
+                    ? `Ask for ${suggestedIncreasePct}% more in your next review — that closes the gap.`
+                    : "You're close to market rate — a small ask gets you there.",
+                },
+              ].map(({ icon, label, value }) => (
+                <div key={label} className="flex items-start gap-3 bg-gray-50 rounded-xl px-4 py-3">
+                  <span className="text-base flex-shrink-0 mt-0.5" aria-hidden="true">{icon}</span>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">{label}</p>
+                    <p className="text-sm text-gray-700 leading-snug">{value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Your next realistic salary range</p>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-gray-50 rounded-xl p-3 text-center">
+                  <div className="text-xs text-gray-400 font-medium mb-1">You now</div>
+                  <div className="font-bold text-gray-700 text-sm leading-tight">
+                    {formatSalary(currentSalary, currency, true)}
+                  </div>
+                </div>
+                <div className="bg-orange-50 rounded-xl p-3 text-center ring-1 ring-orange-200">
+                  <div className="text-xs text-orange-500 font-bold mb-1">Target</div>
+                  <div className="font-bold text-orange-700 text-sm leading-tight">
+                    {formatSalary(median, currency, true)}
+                  </div>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-3 text-center">
+                  <div className="text-xs text-gray-400 font-medium mb-1">Stretch</div>
+                  <div className="font-bold text-gray-700 text-sm leading-tight">
+                    {formatSalary(nextRangeHigh, currency, true)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Target = market midpoint. Stretch = 75th percentile. A realistic 12–18 month window if you negotiate or move.
+              </p>
+            </div>
+
+            <p className="text-xs text-orange-700 font-medium border-l-2 border-orange-300 pl-3 leading-relaxed">
+              Raise this at your next performance review — or start applying to roles already paying at market rate.
+            </p>
+          </div>
+        )}
+
         {/* ─── ABOVE MARKET: ACTIONS ─── */}
         {result.verdict === "above" && (
           <div className="px-5 py-5 bg-emerald-50 border-b border-emerald-100 space-y-4">
@@ -721,9 +820,13 @@ export default function SalaryResult({
         {/* ─── EMAIL CAPTURE ─── */}
         {!emailSubmitted ? (
           <div className="px-5 py-5 bg-orange-50">
-            <p className="text-sm font-semibold text-gray-900 mb-0.5">Get salary tips by email</p>
+            <p className="text-sm font-bold text-gray-900 mb-0.5">
+              {isBelow ? "Don't stay underpaid." : "Stay ahead of the market."}
+            </p>
             <p className="text-xs text-gray-500 mb-3">
-              Monthly salary insights and negotiation tactics. One email a month. Unsubscribe any time.
+              {isBelow
+                ? "Get the negotiation script and market data to fix it. One email. No spam."
+                : "Monthly benchmarks and salary insights. Know before your next review."}
             </p>
             <form onSubmit={handleEmailSubmit} className="flex gap-2">
               <input
@@ -737,7 +840,7 @@ export default function SalaryResult({
                 type="submit"
                 className="bg-orange-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors whitespace-nowrap flex-shrink-0"
               >
-                Subscribe
+                {isBelow ? "Send it →" : "Keep me posted →"}
               </button>
             </form>
             {emailError && <p className="text-xs text-red-500 mt-1.5">{emailError}</p>}
@@ -745,7 +848,9 @@ export default function SalaryResult({
         ) : (
           <div className="px-5 py-4 bg-orange-50">
             <p className="text-sm font-semibold text-emerald-700">✓ You&apos;re on the list</p>
-            <p className="text-xs text-gray-500 mt-0.5">We&apos;ll send you salary insights once a month.</p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              {isBelow ? "We'll send you the negotiation guide first." : "We'll send you salary insights once a month."}
+            </p>
           </div>
         )}
 
@@ -841,6 +946,30 @@ export default function SalaryResult({
           >
             {saved ? "✓ Saved to this browser" : "Save result to re-check later"}
           </button>
+
+          <div className="pt-2 border-t border-gray-200">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Also check</p>
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href="https://spendverdict.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col border border-gray-200 bg-white rounded-xl px-3 py-2.5 hover:border-orange-200 hover:bg-orange-50 transition-colors"
+              >
+                <span className="text-xs font-bold text-gray-700">SpendVerdict</span>
+                <span className="text-xs text-gray-400 mt-0.5 leading-snug">Can you afford rent where you live?</span>
+              </a>
+              <a
+                href="https://compverdict.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col border border-gray-200 bg-white rounded-xl px-3 py-2.5 hover:border-orange-200 hover:bg-orange-50 transition-colors"
+              >
+                <span className="text-xs font-bold text-gray-700">CompVerdict</span>
+                <span className="text-xs text-gray-400 mt-0.5 leading-snug">Is your job offer actually good?</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* ─── FOOTER DISCLAIMER ─── */}
