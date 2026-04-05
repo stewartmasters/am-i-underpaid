@@ -116,14 +116,11 @@ export default function RootLayout({
           <input type="email" name="email" />
         </form>
         {/* Google Analytics 4 — Consent Mode v2 */}
-        {/* analytics_storage defaults to denied until user accepts the cookie banner */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-H8XR1C8DXG"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">{`
+        {/* Init runs beforeInteractive so window.gtag exists before CookieConsent useEffect fires */}
+        <Script id="google-analytics-init" strategy="beforeInteractive">{`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
+          window.gtag = gtag;
           gtag('consent', 'default', {
             analytics_storage: 'denied',
             ad_storage: 'denied',
@@ -132,6 +129,10 @@ export default function RootLayout({
           gtag('js', new Date());
           gtag('config', 'G-H8XR1C8DXG');
         `}</Script>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-H8XR1C8DXG"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
